@@ -1,0 +1,31 @@
+{% load i18n %}
+
+<div class="form-group filter-with-icon" data-filter="{{ field_name }}">
+    <label class="filter-label">
+        <span class="filter-icon-span">
+            {% if field_name == 'status' or field_name == 'is_active' or field_name == 'is_admin' %}📋
+            {% elif field_name == 'room' %}🚪
+            {% elif field_name == 'user' %}👤
+            {% elif field_name == 'start_time' or field_name == 'created_at' %}📅
+            {% elif field_name == 'floor' %}🏢
+            {% elif field_name == 'capacity_range' or field_name == 'capacity' or field_name == 'attendees' %}🪑
+            {% elif field_name == 'year' %}📅
+            {% elif field_name == 'month' %}🗓️
+            {% elif field_name == 'activity' %}📊
+            {% elif field_name == 'department' %}🏢
+            {% endif %}
+        </span>
+        {{ title }}
+    </label>
+    <select class="form-control search-filter" style="width: 100%;" tabindex="-1" aria-hidden="true"
+        data-name="{{ field_name }}">
+        <option value="">---------</option>
+        {% for choice in choices %}
+        {% if choice.name %}
+        <option data-name="{{ choice.name }}" value="{{ choice.value }}" {% if choice.selected %}selected {% endif %}>
+            {{ choice.display }}
+        </option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</div>

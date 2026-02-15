@@ -1,0 +1,1103 @@
+/* ========================================== */
+/* PREMIUM BOOKING FORM - Ultra Premium Styling */
+/* ========================================== */
+
+:root {
+    --premium-dark-bg: #0a0e1a;
+    --premium-card-bg: #111827;
+    --premium-accent: #2563eb;
+    --premium-accent-glow: rgba(37, 99, 235, 0.3);
+    --premium-success: #10b981;
+    --premium-warning: #f59e0b;
+    --premium-danger: #ef4444;
+    --premium-text: #e2e8f0;
+    --premium-text-muted: #94a3b8;
+    --premium-border: rgba(255, 255, 255, 0.1);
+    --premium-gradient: linear-gradient(135deg, #2563eb 0%, #1a237e 45%, #7c3aed 100%);
+    --premium-purple: #7c3aed;
+}
+
+/* Form Header Banner */
+#content > .premium-header-banner {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+}
+
+/* Form Container - Ultra Premium */
+form.form-container,
+#booking-form {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6),
+                0 0 60px rgba(37, 99, 235, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    padding: 3rem;
+    margin: 2rem 1rem;
+    backdrop-filter: blur(20px);
+    animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+form.form-container::before,
+#booking-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(37, 99, 235, 0.6), 
+        rgba(124, 58, 237, 0.6), 
+        transparent);
+    animation: topShimmer 4s ease-in-out infinite;
+}
+
+@keyframes topShimmer {
+    0%, 100% { opacity: 0.3; transform: translateX(-100%); }
+    50% { opacity: 0.8; transform: translateX(100%); }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fieldset Container */
+fieldset.module,
+.module.aligned {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.08) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    border-radius: 18px;
+    padding: 2.8rem;
+    margin: 0 0 2.5rem 0;
+    box-shadow: 0 12px 40px rgba(37, 99, 235, 0.1),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+fieldset.module::before,
+.module.aligned::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.3), transparent);
+    pointer-events: none;
+}
+
+fieldset.module::after,
+.module.aligned::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.4), rgba(124, 58, 237, 0.2));
+    border-radius: 3px 0 0 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+fieldset.module:hover,
+.module.aligned:hover {
+    border-color: rgba(37, 99, 235, 0.55);
+    background: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.18) 0%,
+        rgba(124, 58, 237, 0.15) 50%,
+        rgba(37, 99, 235, 0.12) 100%);
+    box-shadow: 0 20px 60px rgba(37, 99, 235, 0.18),
+                inset 0 1px 3px rgba(255, 255, 255, 0.15),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+fieldset.module:hover::after,
+.module.aligned:hover::after {
+    opacity: 1;
+}
+
+/* Fieldset Titles - Ultra Premium */
+fieldset.module > h2,
+.module.aligned > h2,
+fieldset > h2 {
+    background: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.5) 0%,
+        rgba(124, 58, 237, 0.45) 100%);
+    color: var(--premium-text);
+    font-weight: 950;
+    font-size: 1.35rem;
+    padding: 1.6rem 2.2rem;
+    border-radius: 16px;
+    margin: -3rem -3rem 2.2rem -3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-bottom: 3px solid rgba(37, 99, 235, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+fieldset.module > h2::before,
+.module.aligned > h2::before {
+    font-size: 1.6rem;
+    animation: iconBounce 2.5s ease-in-out infinite;
+}
+
+/* Form Row */
+.form-row {
+    padding: 1.8rem 0;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.08);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    align-items: start;
+    position: relative;
+}
+
+.form-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.form-row > div {
+    position: relative;
+}
+
+/* Labels - Premium */
+label {
+    color: var(--premium-text);
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 1rem;
+    display: block;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: all 0.3s ease;
+}
+
+label.required:after {
+    content: ' *';
+    color: var(--premium-danger);
+    font-weight: 900;
+    font-size: 1.2rem;
+    margin-left: 0.4rem;
+}
+
+/* Input Fields - Ultra Premium */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+input[type="week"],
+input[type="month"],
+textarea,
+select {
+    background: linear-gradient(180deg, rgba(25, 35, 50, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 2px solid rgba(37, 99, 235, 0.2);
+    border-radius: 16px;
+    color: var(--premium-text);
+    padding: 1.3rem 1.6rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4),
+                0 0 0 0 rgba(37, 99, 235, 0.1);
+    position: relative;
+}
+
+/* Add floating label effect */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.3) 0%, rgba(37, 99, 235, 0.15) 100%);
+    border-color: var(--premium-accent);
+    outline: none;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3),
+                0 0 0 4px rgba(37, 99, 235, 0.25),
+                0 0 30px rgba(37, 99, 235, 0.7);
+    transform: translateY(-3px);
+}
+
+/* Add glow effect on hover */
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="number"]:hover,
+textarea:hover,
+select:hover {
+    border-color: rgba(37, 99, 235, 0.4);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4),
+                0 0 15px rgba(37, 99, 235, 0.2);
+}
+
+/* Checkboxes & Radios */
+input[type="checkbox"],
+input[type="radio"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: var(--premium-accent);
+    margin-right: 0.8rem;
+    margin-top: 0.2rem;
+    transition: all 0.3s ease;
+    vertical-align: middle;
+}
+
+input[type="checkbox"]:hover,
+input[type="radio"]:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px var(--premium-accent-glow));
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    filter: drop-shadow(0 0 6px var(--premium-accent-glow));
+}
+
+/* Error Messages - Ultra Premium */
+.errorlist {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0 2rem 0;
+    list-style: none;
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.errorlist li {
+    color: #fca5a5;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.errorlist li:last-child {
+    margin-bottom: 0;
+}
+
+.errorlist li:before {
+    content: '⚠️';
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+/* Readonly Fields */
+.readonly,
+input[readonly],
+textarea[readonly],
+select[readonly] {
+    background: linear-gradient(180deg, rgba(100, 116, 139, 0.1) 0%, rgba(71, 85, 105, 0.08) 100%);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    color: var(--premium-text-muted);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* ========================================== */
+/* PREMIUM SUBMIT ROW - ULTRA PREMIUM STYLING */
+/* ========================================== */
+
+.premium-submit-row {
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+    border: 2px solid rgba(37, 99, 235, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 3rem 0 0 0;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4),
+                0 0 60px rgba(37, 99, 235, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-submit-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(37, 99, 235, 0.5), 
+        rgba(124, 58, 237, 0.5), 
+        transparent);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.submit-row-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.primary-actions {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.secondary-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Primary Save Button - Ultra Premium */
+.premium-submit-row input[type="submit"][name="_save"],
+.premium-submit-row input[type="submit"].default {
+    background: linear-gradient(135deg, #2563eb 0%, #1a237e 40%, #7c3aed 100%);
+    color: white;
+    border: none;
+    padding: 1.6rem 3.5rem;
+    border-radius: 18px;
+    font-weight: 950;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.5),
+                0 0 40px rgba(37, 99, 235, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-submit-row input[type="submit"][name="_save"]::before,
+.premium-submit-row input[type="submit"].default::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+    transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.premium-submit-row input[type="submit"][name="_save"]:hover::before,
+.premium-submit-row input[type="submit"].default:hover::before {
+    left: 100%;
+}
+
+.premium-submit-row input[type="submit"][name="_save"]:hover,
+.premium-submit-row input[type="submit"].default:hover {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 20px 60px rgba(37, 99, 235, 0.6),
+                0 0 50px rgba(37, 99, 235, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.premium-submit-row input[type="submit"][name="_save"]:active,
+.premium-submit-row input[type="submit"].default:active {
+    transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* Secondary Action Buttons */
+.premium-submit-row input[type="submit"][name="_addanother"],
+.premium-submit-row input[type="submit"][name="_continue"],
+.premium-submit-row input[type="submit"][name="_saveasnew"] {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.1) 100%);
+    border: 2px solid rgba(37, 99, 235, 0.4);
+    color: #e2e8f0;
+    padding: 1.4rem 2.8rem;
+    border-radius: 16px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    position: relative;
+}
+
+.premium-submit-row input[type="submit"][name="_addanother"]:hover,
+.premium-submit-row input[type="submit"][name="_continue"]:hover,
+.premium-submit-row input[type="submit"][name="_saveasnew"]:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.35) 0%, rgba(124, 58, 237, 0.25) 100%);
+    border-color: rgba(37, 99, 235, 0.6);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.premium-submit-row input[type="submit"][name="_addanother"]:active,
+.premium-submit-row input[type="submit"][name="_continue"]:active,
+.premium-submit-row input[type="submit"][name="_saveasnew"]:active {
+    transform: translateY(-1px) scale(0.99);
+}
+
+/* Delete Button - Premium Danger */
+.premium-submit-row .secondary-actions a.deletelink {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%);
+    color: white;
+    padding: 1.4rem 2.8rem;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.premium-submit-row .secondary-actions a.deletelink::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.premium-submit-row .secondary-actions a.deletelink:hover::before {
+    opacity: 1;
+}
+
+.premium-submit-row .secondary-actions a.deletelink:hover {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 16px 45px rgba(239, 68, 68, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.premium-submit-row .secondary-actions a.deletelink:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Button Loading State */
+.premium-submit-row input[type="submit"].loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.premium-submit-row input[type="submit"].loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .submit-row-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+    
+    .primary-actions {
+        justify-content: center;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .secondary-actions {
+        justify-content: center;
+    }
+    
+    .premium-submit-row input[type="submit"] {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Primary Submit Button */
+input[type="submit"][name="_save"],
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]) {
+    background: linear-gradient(135deg, #2563eb 0%, #1a237e 40%, #7c3aed 100%);
+    color: white;
+    border: none;
+    padding: 1.4rem 3.2rem;
+    border-radius: 16px;
+    font-weight: 950;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5),
+                0 0 30px rgba(37, 99, 235, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    position: relative;
+    overflow: hidden;
+}
+
+input[type="submit"][name="_save"]::before {
+    content: '💾';
+    font-size: 1.3rem;
+    display: inline-block;
+}
+
+input[type="submit"][name="_save"]::after,
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"])::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+input[type="submit"][name="_save"]:hover::after,
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]):hover::after {
+    left: 100%;
+}
+
+input[type="submit"][name="_save"]:hover,
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]):hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 16px 45px rgba(37, 99, 235, 0.6),
+                0 0 40px rgba(37, 99, 235, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+input[type="submit"][name="_save"]:active,
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]):active {
+    transform: translateY(-1px) scale(0.97);
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35);
+}
+
+/* Secondary buttons */
+input[type="submit"][name="_continue"],
+input[type="submit"][name="_addanother"] {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+    border: 1.5px solid rgba(37, 99, 235, 0.4);
+    color: var(--premium-text);
+    padding: 1.2rem 2.6rem;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    position: relative;
+}
+
+input[type="submit"][name="_continue"]::before {
+    content: '⤵️';
+    font-size: 1.1rem;
+}
+
+input[type="submit"][name="_addanother"]::before {
+    content: '➕';
+    font-size: 1.1rem;
+}
+
+input[type="submit"][name="_continue"]:hover,
+input[type="submit"][name="_addanother"]:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.28) 0%, rgba(124, 58, 237, 0.22) 100%);
+    border-color: var(--premium-accent);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+input[type="submit"][name="_continue"]:active,
+input[type="submit"][name="_addanother"]:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Delete button */
+.submit-row a.deletelink,
+a.deletelink {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%);
+    color: white;
+    padding: 1.2rem 2.6rem;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.95rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-left: auto;
+    position: relative;
+}
+
+.submit-row a.deletelink::before,
+a.deletelink::before {
+    content: '🗑️';
+    font-size: 1.1rem;
+}
+
+.submit-row a.deletelink:hover,
+a.deletelink:hover {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 40px rgba(239, 68, 68, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.submit-row a.deletelink:active,
+a.deletelink:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Help text enhancement */
+.helptext,
+p.help {
+    color: var(--premium-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    margin-top: 0.8rem;
+    padding: 0.9rem 1.2rem;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.08) 100%);
+    border-left: 3.5px solid var(--premium-accent);
+    border-radius: 0 10px 10px 0;
+    display: block;
+    font-style: italic;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ========================================== */
+/* PREMIUM ICONS STYLING */
+/* ========================================== */
+
+/* Icon styling for form fields */
+.field-title::before {
+    content: '📌';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-description::before {
+    content: '📝';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-room::before {
+    content: '🚪';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-user::before {
+    content: '👤';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-attendees_count::before {
+    content: '👥';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-status::before {
+    content: '🔔';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-start_time::before {
+    content: '⏱️';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-end_time::before {
+    content: '⏹️';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-recurrence_rule::before {
+    content: '🔁';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-created_at::before {
+    content: '📅';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.field-updated_at::before {
+    content: '✏️';
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+/* Fieldset headers with icons - animated */
+fieldset.premium-fieldset > h2 {
+    position: relative;
+    padding-left: 2rem;
+}
+
+fieldset.premium-fieldset > h2::before {
+    position: absolute;
+    left: 0;
+    animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+/* Help text with icons */
+.helptext::before {
+    content: attr(data-icon);
+    margin-right: 0.5rem;
+}
+
+/* Status badge icons */
+.status-confirmed::before {
+    content: '✓ ';
+    font-weight: 900;
+}
+
+.status-pending::before {
+    content: '⏳ ';
+    font-weight: 900;
+}
+
+.status-cancelled::before {
+    content: '✗ ';
+    font-weight: 900;
+}
+
+.status-completed::before {
+    content: '✔ ';
+    font-weight: 900;
+}
+
+/* Button icons */
+input[type="submit"]::before {
+    content: '💾 ';
+    margin-right: 0.5rem;
+}
+
+input[name="_continue"]::before {
+    content: '⤵️ ';
+}
+
+input[name="_addanother"]::before {
+    content: '➕ ';
+}
+
+a.deletelink::before {
+    content: '🗑️ ';
+    margin-right: 0.5rem;
+}
+
+/* Icon hover effects */
+.title-with-icon:hover,
+.room-badge:hover,
+.user-badge:hover,
+.status-badge:hover {
+    transform: scale(1.05);
+}
+
+/* Spinning animation for loading icons */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.icon-loading {
+    animation: spin 2s linear infinite;
+}
+
+/* ========================================== */
+/* JAZZMIN TABS - PREMIUM STYLING */
+/* ========================================== */
+
+/* Tab container styling */
+.nav-tabs {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 16px 16px 0 0;
+    padding: 1rem;
+    margin-bottom: 0;
+    display: flex;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.nav-tabs .nav-link {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    color: var(--premium-text-muted);
+    padding: 0.8rem 1.6rem;
+    border-radius: 10px 10px 0 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-tabs .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--premium-gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-tabs .nav-link:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.1) 100%);
+    border-color: var(--premium-accent);
+    transform: translateY(-2px);
+}
+
+.nav-tabs .nav-link:hover::before {
+    transform: scaleX(1);
+}
+
+.nav-tabs .nav-link.active {
+    background: var(--premium-gradient);
+    border-color: var(--premium-accent);
+    color: white;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+}
+
+.nav-tabs .nav-link.active::before {
+    transform: scaleX(1);
+}
+
+/* Tab content */
+.tab-content {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.tab-pane {
+    animation: fadeInTab 0.4s ease-out;
+}
+
+@keyframes fadeInTab {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================== */
+/* FORM HEADER BANNER */
+/* ========================================== */
+
+#booking-form::before,
+form.form-container::before {
+    content: '✨ Premium Booking Editor ✨';
+    display: block;
+    text-align: center;
+    background: var(--premium-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+/* ========================================== */
+/* PREMIUM OBJECT TOOLS */
+/* ========================================== */
+
+ul.object-tools {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    list-style: none;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.06) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.08);
+}
+
+ul.object-tools li {
+    margin: 0;
+}
+
+ul.object-tools a {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.85) 0%, rgba(124, 58, 237, 0.8) 100%);
+    color: white;
+    padding: 1rem 1.8rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 800;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    position: relative;
+}
+
+ul.object-tools a::before {
+    content: '⚙️';
+    font-size: 1.1rem;
+}
+
+ul.object-tools a:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.4);
+}
+
+/* ========================================== */
+/* PREMIUM BREADCRUMBS */
+/* ========================================== */
+
+.breadcrumbs {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(124, 58, 237, 0.1) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 12px;
+    padding: 1.2rem 1.8rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.breadcrumbs a {
+    color: var(--premium-accent);
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    color: #60a5fa;
+    text-shadow: 0 0 15px var(--premium-accent-glow);
+}

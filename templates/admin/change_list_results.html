@@ -1,0 +1,49 @@
+{% load i18n static jazzmin %}
+
+{% if result_hidden_fields %}
+<div class="hiddenfields">
+    {% for item in result_hidden_fields %}{{ item }}{% endfor %}
+</div>
+{% endif %}
+
+{% if results %}
+    <div class="card">
+        <div class="card-body table-responsive p-0">
+            <table id="result_list" class="table table-striped">
+                <thead>
+                    <tr>
+                        {% for header in result_headers %}
+                        <th class="{% header_class header forloop %}" tabindex="0" rowspan="1" colspan="1" data-column-index="{{ forloop.counter0 }}">
+                            <div class="th-inner">
+                                {% if header.sortable %}
+                                    <span class="th-filter-icon" role="button" tabindex="0" title="{% trans 'Filter' %}" aria-label="{% trans 'Filter' %}"><i class="fa fa-filter" aria-hidden="true"></i></span>
+                                    <a href="{{ header.url_primary }}" class="th-title">{{ header.text|capfirst }}</a>
+                                {% else %}
+                                    <span class="th-title">{{ header.text|capfirst }}</span>
+                                {% endif %}
+                                {% if header.sorted %}
+                                    <span class="th-sort-controls">
+                                        <a href="{{ header.url_remove }}" class="th-sort-clear" title="{% trans 'Remove sort' %}"><i class="fa fa-times"></i></a>
+                                        {% if header.ascending %}
+                                            <i class="fa fa-sort-amount-down th-sort-icon" aria-hidden="true"></i>
+                                        {% else %}
+                                            <i class="fa fa-sort-amount-up th-sort-icon" aria-hidden="true"></i>
+                                        {% endif %}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr role="row" class="{% cycle 'even' 'odd' %}">
+                        {% for item in result %}{{ item }}{% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}

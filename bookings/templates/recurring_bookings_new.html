@@ -1,0 +1,1125 @@
+{% extends "base.html" %}
+
+{% block title %}Rezerwacje Cykliczne{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .recurring-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .recurring-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a237e;
+            margin-bottom: 0.5rem;
+        }
+
+        .recurring-header p {
+            color: #667eea;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .form-card {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 2rem;
+        }
+
+        .form-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-weight: 800;
+            display: flex;
+            align-items-center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section-title {
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items-center;
+            gap: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+        }
+
+        .input-group-text {
+            background: rgba(2, 6, 23, 0.30) !important;
+            border: 1px solid rgba(255,255,255,0.10);
+            color: rgba(226, 232, 240, 0.92);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-submit-recurring {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit-recurring:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .results-card {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            min-height: 400px;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+            font-weight: 800;
+            display: flex;
+            align-items-center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .booking-result-item {
+            padding: 1rem;
+            border-left: 5px solid #667eea;
+            background: #f8f9fa;
+            margin-bottom: 0.75rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .booking-result-item:hover {
+            background: #f0f2f5;
+            transform: translateX(5px);
+        }
+
+        .booking-result-item strong {
+            color: #1a237e;
+        }
+
+        .booking-result-item small {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .alert-success-custom {
+            background: linear-gradient(135deg, #11998e20 0%, #38ef7d20 100%);
+            border: 2px solid #11998e;
+            border-radius: 10px;
+            padding: 1.5rem;
+            color: #0d6552;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            gap: 1rem;
+        }
+
+        .spinner-custom {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #667eea20;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Premium styling improvements */
+        .recurring-form-container {
+            background:
+                radial-gradient(900px 420px at 15% 0%, rgba(37, 99, 235, 0.30), rgba(0,0,0,0) 60%),
+                radial-gradient(700px 360px at 90% 15%, rgba(124, 58, 237, 0.26), rgba(0,0,0,0) 55%),
+                linear-gradient(180deg, rgba(17, 24, 39, 0.82) 0%, rgba(15, 23, 42, 0.90) 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+            backdrop-filter: blur(10px);
+        }
+
+        .recurring-form-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(56, 189, 248, 0.10);
+            border-radius: 50%;
+        }
+
+        .recurring-form-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-section-title {
+            color: white;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.3px;
+        }
+
+        .form-divider {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .form-group-card {
+            background: rgba(2, 6, 23, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .form-group-card:hover {
+            background: rgba(2, 6, 23, 0.28);
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .recurring-form-container .form-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .recurring-form-container .form-control,
+        .recurring-form-container .form-select {
+            background: rgba(2, 6, 23, 0.35);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            transition: all 0.3s ease;
+            color: rgba(226, 232, 240, 0.92);
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .recurring-form-container .form-control:focus,
+        .recurring-form-container .form-select:focus {
+            background: rgba(2, 6, 23, 0.42);
+            border-color: rgba(37, 99, 235, 0.55);
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.18);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .recurring-form-container input[type="number"] {
+            background: rgba(2, 6, 23, 0.35);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(226, 232, 240, 0.92);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .recurring-form-container input[type="number"]:focus {
+            background: rgba(2, 6, 23, 0.42);
+            border-color: rgba(37, 99, 235, 0.55);
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.18);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group-text {
+            background: rgba(2, 6, 23, 0.30) !important;
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(226, 232, 240, 0.92);
+            border-radius: 8px 0 0 8px;
+            padding: 1rem 1.2rem;
+            font-size: 1.1rem;
+        }
+
+        .input-group .form-select {
+            border-radius: 0 8px 8px 0;
+            border-left: none;
+        }
+
+        .btn-submit-recurring {
+            background: var(--premium-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1.2rem 2rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit-recurring::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-submit-recurring:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit-recurring:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 50px rgba(37, 99, 235, 0.28);
+        }
+
+        .btn-back-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+        }
+
+        .btn-back-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+
+        .recurring-header h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .recurring-header p {
+            color: rgba(226, 232, 240, 0.70);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .results-card {
+            background:
+                radial-gradient(900px 420px at 15% 0%, rgba(17, 99, 235, 0.20), rgba(0,0,0,0) 60%),
+                radial-gradient(700px 360px at 90% 15%, rgba(124, 58, 237, 0.16), rgba(0,0,0,0) 55%),
+                linear-gradient(180deg, rgba(17, 24, 39, 0.82) 0%, rgba(15, 23, 42, 0.90) 100%);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+            backdrop-filter: blur(10px);
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(56, 189, 248, 0.08);
+            border-radius: 50%;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 20px 20px 0 0;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .booking-result-item {
+            padding: 1.5rem;
+            border-left: 5px solid rgba(37, 99, 235, 0.7);
+            background: rgba(2, 6, 23, 0.22);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: rgba(226, 232, 240, 0.92);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .booking-result-item:hover {
+            background: rgba(2, 6, 23, 0.35);
+            transform: translateX(8px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .booking-result-item strong {
+            color: rgba(226, 232, 240, 0.95);
+            font-size: 1.1rem;
+        }
+
+        .booking-result-item small {
+            color: rgba(56, 189, 248, 0.9);
+            font-weight: 600;
+        }
+
+        .alert-success-custom {
+            background: linear-gradient(135deg, #11998e20 0%, #38ef7d20 100%);
+            border: 2px solid #11998e;
+            border-radius: 12px;
+            padding: 2rem;
+            color: #38ef7d;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .spinner-custom {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(56, 189, 248, 0.2);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .empty-state {
+            padding: 3rem;
+            color: rgba(226, 232, 240, 0.6);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.7;
+        }
+
+        #resultsContainer {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+
+        /* Enhanced spacing for better readability */
+        .row.g-3 > * {
+            padding-top: 1.5rem;
+        }
+
+        .row.g-3 {
+            margin-top: -1.5rem;
+        }
+
+        /* Premium interactive diagram styles */
+        .booking-timeline {
+            position: relative;
+            padding: 2rem 0;
+            margin: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 21px;
+            top: 8px;
+            width: 21px;
+            height: 21px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            z-index: 2;
+        }
+
+        .timeline-content {
+            background: rgba(2, 6, 23, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .timeline-content:hover {
+            background: rgba(2, 6, 23, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-date {
+            color: rgba(56, 189, 248, 0.9);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            color: rgba(226, 232, 240, 0.95);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-details {
+            color: rgba(226, 232, 240, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Calendar heatmap visualization */
+        .calendar-heatmap {
+            background: rgba(2, 6, 23, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .heatmap-title {
+            color: rgba(226, 232, 240, 0.95);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .calendar-day.empty {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .calendar-day.has-booking {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(124, 58, 237, 0.6));
+            color: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .calendar-day.has-booking:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.5);
+        }
+
+        /* Statistics cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(2, 6, 23, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(2, 6, 23, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(226, 232, 240, 0.7);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Progress indicator */
+        .progress-container {
+            background: rgba(2, 6, 23, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-title {
+            color: rgba(226, 232, 240, 0.95);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            color: rgba(226, 232, 240, 0.7);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="recurring-header">
+    <h1>🔄 Rezerwacje Cykliczne</h1>
+    <p>Zaplanuj powtarzające się spotkania raz - system zrobi resztę</p>
+</div>
+
+<div class="row g-4">
+    <!-- Formularz tworzenia -->
+    <div class="col-lg-6">
+        <div class="recurring-form-container">
+            <div class="recurring-form-inner">
+                <form id="recurringForm">
+                {% csrf_token %}
+
+                <!-- Sekcja 1: Sala i Użytkownik -->
+                <div class="form-section-title">
+                    <i class="bi bi-person-badge"></i> Dane Organizatora
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="roomId" class="form-label">Sala Konferencyjna</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-door-open"></i></span>
+                            <select class="form-select" id="roomId" required data-no-enhance>
+                                <option value="">-- Wybierz salę --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="userId" class="form-label">Organizator</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <select class="form-select" id="userId" required data-no-enhance>
+                                <option value="">-- Wybierz użytkownika --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-divider"></div>
+
+                <!-- Sekcja 2: Szczegóły -->
+                <div class="form-section-title">
+                    <i class="bi bi-chat-dots"></i> Szczegóły Spotkania
+                </div>
+                <div class="form-group-card">
+                    <label for="title" class="form-label">Tytuł spotkania</label>
+                    <input type="text" class="form-control" id="title" placeholder="Np. Cotygodniowe standup" required>
+                </div>
+
+                <div class="form-group-card">
+                    <label for="description" class="form-label">Opis i Agenda (opcjonalnie)</label>
+                    <textarea class="form-control" id="description" rows="3" placeholder="Dodaj detale, agendę lub cele spotkania..."></textarea>
+                </div>
+
+                <div class="form-divider"></div>
+
+                <!-- Sekcja 3: Czas i powtarzalność -->
+                <div class="form-section-title">
+                    <i class="bi bi-calendar-event"></i> Czas i Powtarzalność
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="startTime" class="form-label">Początek</label>
+                        <input type="text" class="form-control" id="startTime" required data-flatpickr="datetime" placeholder="Wybierz datę i godzinę" autocomplete="off">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="endTime" class="form-label">Koniec</label>
+                        <input type="text" class="form-control" id="endTime" required data-flatpickr="datetime" placeholder="Wybierz datę i godzinę" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="frequency" class="form-label">Wzór powtarzania</label>
+                        <select class="form-select" id="frequency" required>
+                            <option value="">-- Wybierz --</option>
+                            <option value="daily">🔹 Codziennie</option>
+                            <option value="weekly">📅 Co tydzień</option>
+                            <option value="biweekly">📅 Co dwa tygodnie</option>
+                            <option value="monthly">📆 Co miesiąc</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="occurrences" class="form-label">Liczba powtórzeń</label>
+                        <input type="number" class="form-control" id="occurrences" value="4" min="1" max="52">
+                    </div>
+                </div>
+
+                <div class="form-divider"></div>
+
+                <!-- Sekcja 4: Uczestnicy -->
+                <div class="form-section-title">
+                    <i class="bi bi-people"></i> Uczestnicy
+                </div>
+                <div class="form-group-card">
+                    <label for="attendees" class="form-label">Przewidywana liczba osób</label>
+                    <input type="number" class="form-control" id="attendees" value="1" min="1">
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn-submit-recurring">
+                        <i class="bi bi-check-circle me-2"></i> Utwórz Serię Rezerwacji
+                    </button>
+                    <a href="{% url 'dashboard' %}" class="btn-back-link">
+                        <i class="bi bi-arrow-left me-2"></i>Powrót do Dashboardu
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- Wyniki -->
+    <div class="col-lg-6">
+        <div class="results-card">
+            <div class="results-header">
+                <i class="bi bi-list-check"></i> Rezultat
+            </div>
+            <div class="p-4" id="resultsContainer" style="min-height: 300px; max-height: 600px; overflow-y: auto;">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <p>Tutaj pojawią się wyniki po wysłaniu formularza.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicjalizacja daty (domyślnie następna godzina)
+    const now = new Date();
+    now.setMinutes(0, 0, 0);
+    now.setHours(now.getHours() + 1);
+    
+    const startInput = document.getElementById('startTime');
+    const endInput = document.getElementById('endTime');
+    
+    startInput.value = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    now.setHours(now.getHours() + 1);
+    endInput.value = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+
+    if (window.initFlatpickrs) {
+        window.initFlatpickrs(document);
+    }
+
+    loadData();
+    setupForm();
+});
+
+async function loadData() {
+    try {
+        const [roomsRes, usersRes] = await Promise.all([
+            fetch('{% url "get_rooms_api" %}'),
+            fetch('{% url "get_users_api" %}')
+        ]);
+        
+        if (roomsRes.ok) {
+            const rooms = await roomsRes.json();
+            const select = document.getElementById('roomId');
+            rooms.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r.id;
+                opt.textContent = `${r.name} (poj. ${r.capacity})`;
+                select.appendChild(opt);
+            });
+        }
+
+        if (usersRes.ok) {
+            const users = await usersRes.json();
+            const select = document.getElementById('userId');
+            users.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u.id;
+                opt.textContent = `${u.name} (${u.department})`;
+                select.appendChild(opt);
+            });
+        }
+
+        // Enhance selects only after options are loaded (prevents broken dropdown UX)
+        document.querySelectorAll('#roomId, #userId').forEach((el) => el.removeAttribute('data-no-enhance'));
+        if (window.initEnhancedSelects) {
+            window.initEnhancedSelects(document);
+        }
+    } catch (e) {
+        console.error('Błąd ładowania danych:', e);
+    }
+}
+
+function setupForm() {
+    const form = document.getElementById('recurringForm');
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const data = {
+            room_id: parseInt(document.getElementById('roomId').value),
+            user_id: parseInt(document.getElementById('userId').value),
+            title: document.getElementById('title').value,
+            description: document.getElementById('description').value,
+            start_time: document.getElementById('startTime').value,
+            end_time: document.getElementById('endTime').value,
+            frequency: document.getElementById('frequency').value,
+            occurrences: parseInt(document.getElementById('occurrences').value),
+            attendees_count: parseInt(document.getElementById('attendees').value)
+        };
+
+        const container = document.getElementById('resultsContainer');
+        container.innerHTML = '<div class="spinner-container"><div class="spinner-custom"></div><p style="color: #667eea; font-weight: 600;">Tworzenie rezerwacji...</p></div>';
+
+        try {
+            const response = await fetch('{% url "create_recurring" %}', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showSuccess(result);
+                form.reset();
+            } else {
+                showError(result.error || 'Nieznany błąd');
+            }
+        } catch (error) {
+            showError('Błąd połączenia z serwerem.');
+        }
+    });
+}
+
+function showSuccess(data) {
+    const container = document.getElementById('resultsContainer');
+    let html = '<div class="alert-success-custom"><strong>✅ ' + (data.message || 'Sukces!') + '</strong></div>';
+
+    if (data.bookings && data.bookings.length > 0) {
+        // Statistics cards
+        html += '<div class="stats-container">';
+        html += '<div class="stat-card"><div class="stat-number">' + data.bookings.length + '</div><div class="stat-label">Utworzono rezerwacji</div></div>';
+        html += '<div class="stat-card"><div class="stat-number">' + getUniqueRooms(data.bookings) + '</div><div class="stat-label">Sali</div></div>';
+        html += '<div class="stat-card"><div class="stat-number">' + getTotalHours(data.bookings) + '</div><div class="stat-label">Godzin</div></div>';
+        html += '<div class="stat-card"><div class="stat-number">' + getTotalAttendees(data.bookings) + '</div><div class="stat-label">Uczestników</div></div>';
+        html += '</div>';
+
+        // Progress indicator
+        html += '<div class="progress-container">';
+        html += '<div class="progress-title">Postęp tworzenia rezerwacji</div>';
+        html += '<div class="progress-bar-container"><div class="progress-bar" style="width: 100%"></div></div>';
+        html += '<div class="progress-text">Wszystkie rezerwacje zostały pomyślnie utworzone</div>';
+        html += '</div>';
+
+        // Calendar heatmap
+        html += '<div class="calendar-heatmap">';
+        html += '<div class="heatmap-title">📅 Kalendarz rezerwacji</div>';
+        html += generateCalendarHeatmap(data.bookings);
+        html += '</div>';
+
+        // Interactive timeline
+        html += '<div class="booking-timeline">';
+        html += '<div class="timeline-line"></div>';
+        html += '<div style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 1.2rem; margin-bottom: 2rem;">📋 Szczegóły rezerwacji</div>';
+        
+        data.bookings.forEach((booking, idx) => {
+            const start = new Date(booking.start_time);
+            const dateStr = start.toLocaleDateString('pl-PL', { weekday: 'short', month: 'short', day: 'numeric' });
+            const timeStr = start.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+            
+            html += `<div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">${dateStr} • ${timeStr}</div>
+                            <div class="timeline-title">${booking.title}</div>
+                            <div class="timeline-details">📍 ${booking.room_name || 'Sala'} • 👥 ${booking.attendees_count || 1} osób • ⏱ ${getDuration(booking.start_time, booking.end_time)}</div>
+                        </div>
+                    </div>`;
+        });
+        
+        html += '</div>';
+    }
+
+    container.innerHTML = html;
+}
+
+function getUniqueRooms(bookings) {
+    const rooms = new Set(bookings.map(b => b.room_name || 'unknown'));
+    return rooms.size;
+}
+
+function getTotalHours(bookings) {
+    let totalMinutes = 0;
+    bookings.forEach(booking => {
+        totalMinutes += getDurationInMinutes(booking.start_time, booking.end_time);
+    });
+    return Math.round(totalMinutes / 60 * 10) / 10;
+}
+
+function getTotalAttendees(bookings) {
+    return bookings.reduce((sum, booking) => sum + (booking.attendees_count || 1), 0);
+}
+
+function getDuration(start, end) {
+    const minutes = getDurationInMinutes(start, end);
+    if (minutes < 60) {
+        return `${minutes} min`;
+    }
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
+}
+
+function getDurationInMinutes(start, end) {
+    const startTime = new Date(start);
+    const endTime = new Date(end);
+    return Math.round((endTime - startTime) / (1000 * 60));
+}
+
+function generateCalendarHeatmap(bookings) {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    const lastDay = new Date(currentYear, currentMonth + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startDayOfWeek = firstDay.getDay();
+    
+    // Get dates that have bookings
+    const bookingDates = new Set();
+    bookings.forEach(booking => {
+        const bookingDate = new Date(booking.start_time);
+        if (bookingDate.getMonth() === currentMonth && bookingDate.getFullYear() === currentYear) {
+            bookingDates.add(bookingDate.getDate());
+        }
+    });
+    
+    let html = '<div class="calendar-grid">';
+    
+    // Empty cells for days before month starts
+    for (let i = 0; i < startDayOfWeek; i++) {
+        html += '<div class="calendar-day empty"></div>';
+    }
+    
+    // Days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const hasBooking = bookingDates.has(day);
+        const isToday = day === today.getDate();
+        html += `<div class="calendar-day ${hasBooking ? 'has-booking' : 'empty'}" 
+                     title="${hasBooking ? 'Masz rezerwację tego dnia' : 'Brak rezerwacji'}"
+                     style="${isToday ? 'border: 2px solid rgba(56, 189, 248, 0.8);' : ''}">
+                     ${day}
+                 </div>`;
+    }
+    
+    html += '</div>';
+    
+    // Month and year label
+    const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 
+                       'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+    html += `<div style="text-align: center; color: rgba(226, 232, 240, 0.7); font-size: 0.9rem; margin-top: 1rem;">
+                ${monthNames[currentMonth]} ${currentYear}
+             </div>`;
+    
+    return html;
+}
+
+function showError(message) {
+    const container = document.getElementById('resultsContainer');
+    container.innerHTML = `<div style="background: #ff6b6b20; border: 2px solid #ff6b6b; border-radius: 10px; padding: 1.5rem; color: #d32f2f; font-weight: 600;">
+        <strong>❌ Błąd:</strong> ${message}
+    </div>`;
+}
+</script>
+{% endblock %}

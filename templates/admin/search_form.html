@@ -1,0 +1,42 @@
+{% load i18n static admin_list jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+<div class="col-12 pb-4" id="change-list-filters">
+    <form id="changelist-search" class="changelist-search-premium form-inline" method="GET">
+        {% block filters %}
+            {% if cl.has_filters %}
+                <div class="filters-row">
+                    {% for spec in cl.filter_specs %}{% jazzmin_list_filter cl spec %}{% endfor %}
+                </div>
+            {% endif %}
+        {% endblock %}
+
+        {% if cl.search_fields or cl.has_filters %}
+            <div class="search-row">
+                {% if cl.search_fields %}
+                    <label for="searchbar" class="search-label">Szukaj</label>
+                    <input class="form-control search-input-premium" type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" placeholder="Wpisz szukaną frazę…">
+                {% endif %}
+                <div class="search-actions">
+                    <button type="submit" class="btn btn-search-premium {{ jazzmin_ui.button_classes.primary }}">Szukaj</button>
+                    {% if show_result_count %}
+                        <span class="small quiet result-count">
+                            {% blocktrans count counter=cl.result_count %}{{ counter }} wynik{% plural %}{{ counter }} wyników{% endblocktrans %}
+                            (<a href="?{% if cl.is_popup %}_popup=1{% endif %}">
+                                {% if cl.show_full_result_count %}
+                                    {% blocktrans with full_result_count=cl.full_result_count %}{{ full_result_count }} łącznie{% endblocktrans %}
+                                {% else %}
+                                    {% trans "Pokaż wszystko" %}
+                                {% endif %}
+                            </a>)
+                        </span>
+                    {% endif %}
+                    {% admin_extra_filters cl as extra_filters %}
+                    {% for pair in extra_filters.items %}
+                        {% if pair.0 != search_var %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">{% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </form>
+</div>

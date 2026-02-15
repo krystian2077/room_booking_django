@@ -1,0 +1,145 @@
+{% extends "admin/change_list.html" %}
+{% load i18n static admin_list jazzmin %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* ——— Styl dla przycisku DODAJ rezerwację ——— */
+    .app-bookings.model-booking .page-actions .btn-add-booking {
+        padding: 0.6rem 1.25rem;
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+        transition: all 0.2s ease;
+    }
+
+    .app-bookings.model-booking .page-actions .btn-add-booking:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.45);
+    }
+
+    /* ——— Nagłówki tabeli (Premium) ——— */
+    #changelist .card {
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    #changelist #result_list thead th {
+        background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+        color: #f8fafc;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-size: 0.75rem;
+        padding: 1rem 1rem;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    #changelist #result_list thead th .th-inner {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Dropdown filtrowania z ikonki */
+    .th-filter-dropdown {
+        position: fixed;
+        z-index: 9999;
+        min-width: 200px;
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        padding: 0.5rem 0;
+    }
+
+    .th-filter-dropdown__item {
+        display: block;
+        width: 100%;
+        padding: 0.6rem 1rem;
+        text-align: left;
+        border: none;
+        background: none;
+        color: #e2e8f0;
+        cursor: pointer;
+    }
+
+    .th-filter-dropdown__item:hover {
+        background: rgba(37, 99, 235, 0.2);
+    }
+
+    .th-filter-dropdown__item.is-selected {
+        background: rgba(37, 99, 235, 0.15);
+        font-weight: 600;
+    }
+
+    .th-filter-icon {
+        cursor: pointer;
+        opacity: 0.6;
+        transition: 0.2s;
+    }
+
+    .th-filter-icon:hover {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+{% if column_filters is not None and changelist_base_url %}
+{{ column_filters|json_script:"admin-column-filters" }}
+<script>
+    (function () {
+        var scriptEl = document.getElementById('admin-column-filters');
+        var baseUrl = '{{ changelist_base_url|escapejs }}';
+        if (!scriptEl || !baseUrl) return;
+        var columnFilters;
+        try { columnFilters = JSON.parse(scriptEl.textContent); } catch (e) { return; }
+
+        function openFilterDropdown(iconEl, colIndex) {
+            var data = columnFilters[colIndex];
+            if (!data || !data.choices || !data.choices.length) return;
+            var existing = document.getElementById('th-filter-dropdown');
+            if (existing) existing.remove();
+            var rect = iconEl.getBoundingClientRect();
+            var dropdown = document.createElement('div');
+            dropdown.id = 'th-filter-dropdown';
+            dropdown.className = 'th-filter-dropdown';
+            dropdown.style.left = rect.left + 'px';
+            dropdown.style.top = (rect.bottom + 4) + 'px';
+            data.choices.forEach(function (choice) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'th-filter-dropdown__item' + (choice.selected ? ' is-selected' : '');
+                btn.textContent = choice.display;
+                btn.addEventListener('click', function () {
+                    var qs = choice.query_string ? ('?' + choice.query_string) : '';
+                    window.location = baseUrl + qs;
+                });
+                dropdown.appendChild(btn);
+            });
+            document.body.appendChild(dropdown);
+            function close() { dropdown.remove(); document.removeEventListener('click', close); }
+            setTimeout(function () { document.addEventListener('click', close); }, 0);
+            dropdown.addEventListener('click', function (e) { e.stopPropagation(); });
+        }
+
+        document.getElementById('changelist').addEventListener('click', function (e) {
+            var icon = e.target.closest('.th-filter-icon');
+            if (!icon) return;
+            e.preventDefault();
+            e.stopPropagation();
+            var th = icon.closest('th');
+            if (th) {
+                var colIndex = parseInt(th.getAttribute('data-column-index'), 10);
+                if (!isNaN(colIndex)) openFilterDropdown(icon, colIndex);
+            }
+        });
+    })();
+</script>
+{% endif %}
+{% endblock %}

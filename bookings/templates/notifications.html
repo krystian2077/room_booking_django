@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Powiadomienia{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">🔔 Twoje powiadomienia</h4>
+                <button id="refresh-notifs" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-clockwise"></i> Odśwież
+                </button>
+            </div>
+            <div class="card-body p-0">
+                <div id="notifications-list" class="list-group list-group-flush">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Ładowanie...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Funkcja pomocnicza do pobierania CSRF token z cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    async function loadNotifications() {
+        const list = document.getElementById('notifications-list');
+        try {
+            // Pobierz WSZYSTKIE powiadomienia (bez user_id)
+            const response = await fetch('{% url "get_notifications_api" %}');
+            const data = await response.json();
+            
+            if (data.notifications.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-bell-slash" style="font-size: 3rem;"></i>
+                        <p class="mt-2">Brak nowych powiadomień</p>
+                    </div>`;
+                return;
+            }
+
+            list.innerHTML = data.notifications.map(n => `
+                <div class="list-group-item list-group-item-action p-3" id="notif-${n.id}">
+                    <div class="d-flex w-100 justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <i class="bi bi-person-circle" style="color: rgba(37, 99, 235, 0.8);"></i>
+                                <span class="badge bg-primary">${n.user_name}</span>
+                            </div>
+                            <h6 class="mb-1 fw-bold">${n.message}</h6>
+                        </div>
+                        <small class="text-muted">${new Date(n.created_at).toLocaleString()}</small>
+                    </div>
+                    <div class="mt-2 d-flex justify-content-end">
+                        <button onclick="markAsRead(${n.id})" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-check2"></i> Przeczytane
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            list.innerHTML = '<div class="alert alert-danger m-3">Błąd ładowania powiadomień.</div>';
+        }
+    }
+
+    async function markAsRead(id) {
+        try {
+            const url = `{% url "mark_notification_read" 0 %}`.replace('0', id);
+            const csrftoken = getCookie('csrftoken');
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                const element = document.getElementById(`notif-${id}`);
+                element.style.transition = 'opacity 0.3s';
+                element.style.opacity = '0';
+                setTimeout(() => {
+                    element.remove();
+                    // Jeśli nie ma więcej powiadomień, załaduj ponownie
+                    const list = document.getElementById('notifications-list');
+                    if (list.children.length === 0) {
+                        loadNotifications();
+                    }
+                    // Odśwież licznik powiadomień w navbar
+                    if (typeof updateNotificationCount === 'function') {
+                        updateNotificationCount();
+                    }
+                }, 300);
+            } else {
+                console.error('Server response:', result);
+                alert('Błąd podczas oznaczania jako przeczytane: ' + (result.error || 'Nieznany błąd'));
+            }
+        } catch (error) {
+            console.error('Błąd:', error);
+            alert('Błąd podczas oznaczania jako przeczytane');
+        }
+    }
+
+    document.getElementById('refresh-notifs').addEventListener('click', loadNotifications);
+    loadNotifications();
+</script>
+{% endblock %}

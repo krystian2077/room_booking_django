@@ -1,0 +1,509 @@
+{% extends "admin/change_list.html" %}
+{% load i18n static admin_list admin_urls jazzmin %}
+
+{% block object-tools-items %}
+{% if has_add_permission %}
+{% url cl.opts|admin_urlname:'add' as add_url %}
+<a href="{% add_preserved_filters add_url is_popup to_field %}" class="btn btn-primary btn-add-room">
+    <i class="fa fa-plus-circle"></i> &nbsp; Dodaj salę
+</a>
+{% endif %}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* ——— Przycisk Dodaj salę (bardziej widoczny) ——— */
+    .app-bookings.model-room .page-actions .btn-add-room,
+    .btn-add-room {
+        padding: 0.6rem 1.25rem;
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 10px;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+        border: none;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .app-bookings.model-room .page-actions .btn-add-room:hover,
+    .btn-add-room:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    }
+
+    /* ——— Układ filtrów + Szukaj pod spodem ——— */
+    #change-list-filters .changelist-search-premium {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    #change-list-filters .filters-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 0.75rem 1rem;
+    }
+
+    #change-list-filters .search-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem 1.25rem;
+        padding: 1rem 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    #change-list-filters .search-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin: 0;
+    }
+
+    #change-list-filters .search-input-premium {
+        min-width: 260px;
+        min-height: 44px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(30, 41, 59, 0.6);
+        color: #e2e8f0;
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    #change-list-filters .search-input-premium::placeholder {
+        color: #64748b;
+    }
+
+    #change-list-filters .search-input-premium:focus {
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+        outline: none;
+    }
+
+    #change-list-filters .btn-search-premium {
+        padding: 0.5rem 1.25rem;
+        font-weight: 600;
+        border-radius: 10px;
+    }
+
+    #change-list-filters .result-count {
+        color: #94a3b8;
+        font-size: 0.85rem;
+    }
+
+    /* ——— Pasek nagłówka tabeli (premium, czytelny, estetyczny) ——— */
+    #changelist .module.filtered {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    #changelist .card {
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+
+    #changelist #result_list {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    #changelist #result_list thead {
+        box-shadow: 0 2px 0 0 rgba(255, 255, 255, 0.04);
+    }
+
+    #changelist #result_list thead th {
+        background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+        color: #f8fafc;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-size: 0.75rem;
+        padding: 1rem 1rem;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        border-right: 1px solid rgba(255, 255, 255, 0.04);
+        position: relative;
+    }
+
+    #changelist #result_list thead th:first-child {
+        border-top-left-radius: 12px;
+    }
+
+    #changelist #result_list thead th:last-child {
+        border-right: none;
+        border-top-right-radius: 12px;
+    }
+
+    #changelist #result_list thead th::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 2px;
+        width: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+        pointer-events: none;
+    }
+
+    #changelist #result_list thead th a {
+        color: #f8fafc;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    #changelist #result_list thead th a:hover {
+        color: #e2e8f0;
+    }
+
+    #changelist #result_list thead th .fa,
+    #changelist #result_list thead th [class^="fa-"] {
+        opacity: 0.85;
+    }
+
+    /* Nagłówek w jednej linii – bez rozjeżdżania przy sortowaniu */
+    #changelist #result_list thead th .th-inner {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        min-height: 1.5em;
+        white-space: nowrap;
+    }
+
+    #changelist #result_list thead th .th-title {
+        flex: 0 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #changelist #result_list thead th .th-sort-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        flex-shrink: 0;
+    }
+
+    #changelist #result_list thead th .th-sort-clear {
+        color: inherit;
+        opacity: 0.8;
+        padding: 0.15rem;
+        line-height: 1;
+    }
+
+    #changelist #result_list thead th .th-sort-clear:hover {
+        opacity: 1;
+    }
+
+    #changelist #result_list thead th .th-sort-icon {
+        font-size: 0.7em;
+        opacity: 0.9;
+    }
+
+    /* Ikonki filtrowania przy każdej kolumnie */
+    #changelist #result_list thead th .th-filter-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        flex-shrink: 0;
+        opacity: 0.75;
+        cursor: pointer;
+    }
+
+    #changelist #result_list thead th .th-filter-icon .fa-filter {
+        font-size: 0.7rem;
+    }
+
+    #changelist #result_list thead th a:hover+.th-sort-controls .th-filter-icon,
+    #changelist #result_list thead th .th-inner:hover .th-filter-icon {
+        opacity: 1;
+    }
+
+    #changelist #result_list tbody tr {
+        transition: background 0.15s ease;
+    }
+
+    #changelist #result_list tbody tr:hover {
+        background: rgba(37, 99, 235, 0.06);
+    }
+
+    #changelist #result_list tbody tr.even {
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    #changelist #result_list tbody tr.even:hover {
+        background: rgba(37, 99, 235, 0.06);
+    }
+
+    #changelist #result_list tbody td {
+        padding: 0.85rem 0.75rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* ——— Listy rozwijane filtrów (status, floor, capacity_range itd.) ——— */
+    #change-list-filters .form-group {
+        margin-bottom: 0.85rem;
+        margin-right: 1rem;
+    }
+
+    #change-list-filters .form-group label {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        margin-bottom: 0.35rem;
+    }
+
+    #change-list-filters select.form-control.search-filter,
+    #change-list-filters .select2-container--default .select2-selection--single {
+        min-height: 42px;
+        padding: 0.5rem 0.85rem;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(30, 41, 59, 0.6);
+        color: #e2e8f0;
+        font-weight: 500;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #change-list-filters select.form-control.search-filter:focus,
+    #change-list-filters .select2-container--default.select2-container--focus .select2-selection--single {
+        border-color: rgba(99, 102, 241, 0.6);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        outline: none;
+    }
+
+    #change-list-filters .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #e2e8f0;
+        line-height: 1.5;
+    }
+
+    #change-list-filters .select2-container--default .select2-selection__arrow {
+        height: 40px;
+    }
+
+    /* ——— Rozwinięta lista wyboru (Select2) – ładniejszy wygląd ——— */
+    .select2-dropdown {
+        border-radius: 12px !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        background: #1e293b !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+        padding: 0.5rem 0 !important;
+    }
+
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        background: rgba(15, 23, 42, 0.9) !important;
+        color: #e2e8f0 !important;
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .select2-container--default .select2-search--dropdown .select2-search__field:focus {
+        border-color: rgba(99, 102, 241, 0.5) !important;
+        outline: none !important;
+    }
+
+    .select2-container--default .select2-results__option {
+        padding: 0.6rem 1rem !important;
+        color: #e2e8f0 !important;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background: rgba(99, 102, 241, 0.2) !important;
+        color: #f1f5f9 !important;
+    }
+
+    .select2-container--default .select2-results__option[aria-selected=true] {
+        background: rgba(99, 102, 241, 0.15) !important;
+    }
+
+    .select2-results__options {
+        max-height: 280px;
+    }
+
+    /* Scrollbar w liście rozwijanej – dyskretny */
+    .select2-results__options::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .select2-results__options::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 4px;
+    }
+
+    .select2-results__options::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.35);
+        border-radius: 4px;
+    }
+
+    .select2-results__options::-webkit-scrollbar-thumb:hover {
+        background: rgba(148, 163, 184, 0.5);
+    }
+
+    /* ——— Wybierz akcję + przycisk Wykonaj ——— */
+    .actions-premium {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem 1rem;
+        padding: 0.85rem 1rem;
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .actions-premium .actions-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .actions-premium .actions-label select {
+        min-width: 220px;
+        border-radius: 8px;
+        padding: 0.45rem 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(15, 23, 42, 0.8);
+        color: #e2e8f0;
+    }
+
+    .actions-premium .btn-execute {
+        padding: 0.5rem 1.25rem;
+        font-weight: 700;
+        border-radius: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    /* Dropdown filtrowania z ikonki w nagłówku */
+    .th-filter-dropdown {
+        position: fixed;
+        z-index: 9999;
+        min-width: 200px;
+        max-height: 320px;
+        overflow-y: auto;
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        padding: 0.5rem 0;
+    }
+
+    .th-filter-dropdown__item {
+        display: block;
+        width: 100%;
+        padding: 0.6rem 1rem;
+        text-align: left;
+        border: none;
+        background: none;
+        color: #e2e8f0;
+        font-size: 0.9rem;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .th-filter-dropdown__item:hover {
+        background: rgba(99, 102, 241, 0.2);
+    }
+
+    .th-filter-dropdown__item.is-selected {
+        background: rgba(99, 102, 241, 0.15);
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+{% if column_filters is not None and changelist_base_url %}
+{{ column_filters|json_script:"admin-column-filters" }}
+<script>
+    (function () {
+        var scriptEl = document.getElementById('admin-column-filters');
+        var baseUrl = '{{ changelist_base_url|escapejs }}';
+        if (!scriptEl || !baseUrl) return;
+        var columnFilters;
+        try {
+            columnFilters = JSON.parse(scriptEl.textContent);
+        } catch (e) {
+            return;
+        }
+        function openFilterDropdown(iconEl, colIndex) {
+            var data = columnFilters[colIndex];
+            if (!data || !data.choices || !data.choices.length) return;
+            var existing = document.getElementById('th-filter-dropdown');
+            if (existing) existing.remove();
+            var rect = iconEl.getBoundingClientRect();
+            var dropdown = document.createElement('div');
+            dropdown.id = 'th-filter-dropdown';
+            dropdown.className = 'th-filter-dropdown';
+            dropdown.style.left = rect.left + 'px';
+            dropdown.style.top = (rect.bottom + 4) + 'px';
+            data.choices.forEach(function (choice) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'th-filter-dropdown__item' + (choice.selected ? ' is-selected' : '');
+                btn.textContent = choice.display;
+                btn.addEventListener('click', function () {
+                    var qs = choice.query_string ? ('?' + choice.query_string) : '';
+                    window.location = baseUrl + qs;
+                });
+                dropdown.appendChild(btn);
+            });
+            document.body.appendChild(dropdown);
+            function close() {
+                dropdown.remove();
+                document.removeEventListener('click', close);
+                document.removeEventListener('keydown', onEscape);
+            }
+            function onEscape(e) {
+                if (e.key === 'Escape') close();
+            }
+            setTimeout(function () {
+                document.addEventListener('click', close);
+                document.addEventListener('keydown', onEscape);
+            }, 0);
+            dropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        }
+        document.getElementById('changelist').addEventListener('click', function (e) {
+            var icon = e.target.closest('.th-filter-icon');
+            if (!icon) return;
+            e.preventDefault();
+            e.stopPropagation();
+            var th = icon.closest('th');
+            if (!th) return;
+            var colIndex = parseInt(th.getAttribute('data-column-index'), 10);
+            if (isNaN(colIndex)) return;
+            openFilterDropdown(icon, colIndex);
+        });
+        document.getElementById('changelist').addEventListener('keydown', function (e) {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            var icon = e.target.closest('.th-filter-icon');
+            if (!icon) return;
+            e.preventDefault();
+            e.stopPropagation();
+            var th = icon.closest('th');
+            if (!th) return;
+            var colIndex = parseInt(th.getAttribute('data-column-index'), 10);
+            if (isNaN(colIndex)) return;
+            openFilterDropdown(icon, colIndex);
+        });
+    })();
+</script>
+{% endif %}
+{% endblock %}

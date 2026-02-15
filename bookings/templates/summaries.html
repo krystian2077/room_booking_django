@@ -1,0 +1,3553 @@
+{% extends "base.html" %}
+
+{% block title %}Podsumowania - System Rezerwacji{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: radial-gradient(1200px 650px at 10% 0%, rgba(26, 35, 126, 0.42), rgba(0, 0, 0, 0) 60%),
+            radial-gradient(900px 520px at 90% 15%, rgba(16, 185, 129, 0.20), rgba(0, 0, 0, 0) 55%),
+            linear-gradient(135deg, #0b1020 0%, #0f172a 45%, #111827 100%);
+        background-attachment: fixed;
+    }
+
+    .container {
+        background: rgba(15, 23, 42, 0.72) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    .text-muted {
+        color: rgba(226, 232, 240, 0.75) !important;
+    }
+
+    .filter-pill {
+        color: rgba(226, 232, 240, 0.92);
+        border-color: rgba(255, 255, 255, 0.12);
+        background: rgba(2, 6, 23, 0.35);
+    }
+
+    .premium-card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.82) 0%, rgba(15, 23, 42, 0.86) 100%);
+        position: relative;
+    }
+
+    .premium-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(16, 185, 129, 0.18), rgba(245, 158, 11, 0.14));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        opacity: 0.75;
+    }
+
+    .premium-card.flat::before {
+        display: none;
+    }
+
+    .premium-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.10);
+        transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .section-title {
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.92);
+        margin-bottom: 1.0rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 4px;
+        background: var(--premium-gradient);
+        border-radius: 2px;
+    }
+
+    .kpi-card {
+        border-radius: 16px;
+        padding: 20px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        min-height: 110px;
+    }
+
+    .kpi-card i {
+        position: absolute;
+        right: -10px;
+        bottom: -10px;
+        font-size: 4.5rem;
+        opacity: 0.18;
+    }
+
+    .kpi-card .kpi-value {
+        font-size: 2.0rem;
+        font-weight: 900;
+        margin-bottom: 0;
+        line-height: 1;
+    }
+
+    .kpi-card .kpi-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 0;
+        opacity: 0.9;
+    }
+
+    .gradient-1 {
+        background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+    }
+
+    .gradient-2 {
+        background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+    }
+
+    .gradient-3 {
+        background: linear-gradient(135deg, #e65100 0%, #fb8c00 100%);
+    }
+
+    .gradient-4 {
+        background: linear-gradient(135deg, #4527a0 0%, #7e57c2 100%);
+    }
+
+    .chart-box {
+        height: 360px;
+        width: 100%;
+    }
+
+    .chart-box-xl {
+        height: 440px;
+        width: 100%;
+    }
+
+    .chart-box-lg {
+        height: 460px;
+        width: 100%;
+    }
+
+    .table thead th {
+        background-color: #f8fafc !important;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        font-weight: 800;
+        color: #64748b;
+        border-top: none;
+    }
+
+    .filter-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #e2e8f0;
+        border-radius: 999px;
+        padding: 0.35rem 0.7rem;
+        font-weight: 600;
+        color: #334155;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .mini-cal {
+        background: linear-gradient(180deg, rgba(2, 6, 23, 0.30) 0%, rgba(2, 6, 23, 0.18) 100%);
+        border-color: rgba(255, 255, 255, 0.10);
+    }
+
+    .chart-box,
+    .chart-box-lg,
+    .chart-box-xl {
+        background: radial-gradient(1200px 320px at 20% 0%, rgba(37, 99, 235, 0.06), rgba(255, 255, 255, 0) 60%),
+            radial-gradient(900px 280px at 90% 30%, rgba(16, 185, 129, 0.05), rgba(255, 255, 255, 0) 55%);
+        border-radius: 14px;
+    }
+
+    .form-control,
+    .form-select,
+    .choices__inner {
+        background: rgba(2, 6, 23, 0.35) !important;
+        color: rgba(226, 232, 240, 0.92) !important;
+        border-color: rgba(255, 255, 255, 0.14) !important;
+    }
+
+    .form-control:focus,
+    .form-select:focus,
+    .choices__inner:focus {
+        border-color: rgba(37, 99, 235, 0.55) !important;
+        box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.18) !important;
+    }
+
+    .choices__list--dropdown {
+        background: rgba(15, 23, 42, 0.98) !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        color: rgba(226, 232, 240, 0.92) !important;
+    }
+
+    .choices__list--dropdown .choices__item--selectable {
+        color: rgba(226, 232, 240, 0.92) !important;
+    }
+
+    .choices__list--dropdown .choices__item--selectable.is-highlighted {
+        background: rgba(37, 99, 235, 0.18) !important;
+    }
+
+    .btn-outline-secondary.active,
+    .btn-outline-secondary:active {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(16, 185, 129, 0.14));
+        border-color: rgba(37, 99, 235, 0.55);
+        color: rgba(226, 232, 240, 0.96);
+        font-weight: 900;
+        box-shadow: 0 10px 22px rgba(37, 99, 235, 0.16);
+    }
+
+    .filter-presets .btn.btn-outline-secondary {
+        background: rgba(2, 6, 23, 0.28);
+        border-color: rgba(255, 255, 255, 0.14);
+        color: rgba(226, 232, 240, 0.88);
+    }
+
+    .filter-presets .btn.btn-outline-secondary:hover {
+        background: rgba(37, 99, 235, 0.16);
+        border-color: rgba(37, 99, 235, 0.35);
+        color: rgba(226, 232, 240, 0.96);
+    }
+
+    .filter-presets .btn.btn-outline-secondary.active {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.42), rgba(124, 58, 237, 0.26)) !important;
+        border-color: rgba(124, 58, 237, 0.70) !important;
+        color: rgba(255, 255, 255, 0.96) !important;
+        box-shadow:
+            0 16px 34px rgba(37, 99, 235, 0.24),
+            0 0 0 1px rgba(37, 99, 235, 0.22) inset,
+            0 0 0 6px rgba(37, 99, 235, 0.06);
+        animation: presetGlow 1.8s ease-in-out infinite;
+    }
+
+    @keyframes presetGlow {
+
+        0%,
+        100% {
+            filter: brightness(1.02);
+        }
+
+        50% {
+            filter: brightness(1.12);
+        }
+    }
+
+    #insights-row .insight-tile {
+        border: 1px solid #e2e8f0;
+        box-shadow: none;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    #insights-row .insight-tile::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: var(--premium-gradient);
+        opacity: 0.85;
+    }
+
+    #insights-row .insight-tile:hover {
+        transform: translateY(-2px);
+        transition: transform 160ms ease;
+    }
+
+    .chart-help {
+        color: rgba(226, 232, 240, 0.72);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    .choices__inner {
+        border-radius: 10px !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        min-height: 42px;
+        padding: 6px 10px !important;
+    }
+
+    .choices__list--multiple .choices__item {
+        background: rgba(37, 99, 235, 0.18) !important;
+        border: 1px solid rgba(37, 99, 235, 0.30) !important;
+        color: rgba(226, 232, 240, 0.95) !important;
+        font-weight: 800 !important;
+    }
+
+    /* === POPUP Calendar Styles (Date Inputs) - scoped to .flatpickr-calendar not inside .mini-cal === */
+    .flatpickr-calendar:not(.inline) {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(17, 24, 39, 0.99) 100%) !important;
+        border: 1px solid rgba(59, 130, 246, 0.35) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65), 0 0 20px rgba(59, 130, 246, 0.1) !important;
+        padding: 10px !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+
+    .flatpickr-calendar.arrowTop:before,
+    .flatpickr-calendar.arrowTop:after {
+        border-bottom-color: rgba(59, 130, 246, 0.35) !important;
+    }
+
+    /* === INLINE Calendar Styles (Mini-Calendar) === */
+    /* Only override colors and backgrounds, DO NOT touch widths/flex unless necessary */
+    .mini-cal .flatpickr-calendar {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 auto !important;
+        /* Center it */
+        transform: scale(1.05) !important;
+        /* Slightly larger as requested */
+        transform-origin: top center !important;
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .mini-cal .flatpickr-innerContainer,
+    .mini-cal .flatpickr-rContainer,
+    .mini-cal .flatpickr-days {
+        overflow: visible !important;
+        /* Ensure scale doesn't clip */
+    }
+
+    /* === Header (Month/Year) === */
+    .flatpickr-months {
+        background: transparent !important;
+        margin-bottom: 15px !important;
+    }
+
+    .flatpickr-month {
+        color: rgba(226, 232, 240, 0.95) !important;
+        fill: rgba(226, 232, 240, 0.95) !important;
+    }
+
+    .flatpickr-current-month {
+        font-size: 1.25rem !important;
+        /* Larger font */
+        font-weight: 800 !important;
+        padding-top: 0 !important;
+    }
+
+    .flatpickr-current-month input.cur-year {
+        font-weight: 800 !important;
+        background: linear-gradient(135deg, rgba(96, 165, 250, 0.95), rgba(59, 130, 246, 0.95)) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        font-size: 1.25rem !important;
+    }
+
+    /* Arrows - ensure they are visible and positioned correctly */
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+        fill: rgba(226, 232, 240, 0.6) !important;
+        height: 32px !important;
+        /* Larger touch target */
+        width: 32px !important;
+        padding: 6px !important;
+        border-radius: 8px !important;
+        top: 10px !important;
+    }
+
+    .flatpickr-prev-month:hover,
+    .flatpickr-next-month:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        fill: rgba(255, 255, 255, 1) !important;
+    }
+
+    /* Weekdays */
+    .flatpickr-weekday {
+        color: rgba(148, 163, 184, 0.8) !important;
+        font-weight: 700 !important;
+        font-size: 0.85rem !important;
+        /* Larger font */
+        letter-spacing: 1px !important;
+    }
+
+    /* Days - Color Overrides Only */
+    .flatpickr-day {
+        color: rgba(226, 232, 240, 0.9) !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        /* Remove structural overrides like width: 14.28% */
+        font-size: 1rem !important;
+        /* Larger font */
+        height: 42px !important;
+        /* Taller cells */
+        line-height: 42px !important;
+        margin-top: 2px !important;
+    }
+
+    /* Hover */
+    .flatpickr-day:hover:not(.selected):not(.startRange):not(.endRange):not(.disabled) {
+        background: rgba(59, 130, 246, 0.15) !important;
+        border-color: rgba(59, 130, 246, 0.3) !important;
+        color: white !important;
+        transform: scale(1.1);
+    }
+
+    /* Active States */
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+        color: white !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4) !important;
+    }
+
+    /* In Range */
+    .flatpickr-day.inRange {
+        background: rgba(37, 99, 235, 0.15) !important;
+        box-shadow: -5px 0 0 rgba(37, 99, 235, 0.15), 5px 0 0 rgba(37, 99, 235, 0.15) !important;
+        border: none !important;
+        color: rgba(191, 219, 254, 1) !important;
+    }
+
+    /* Today */
+    .flatpickr-day.today {
+        border: 1px solid rgba(251, 191, 36, 0.6) !important;
+        background: rgba(251, 191, 36, 0.1) !important;
+        color: rgba(253, 230, 138, 1) !important;
+    }
+
+    .flatpickr-day.today:hover {
+        background: rgba(251, 191, 36, 0.2) !important;
+        color: white !important;
+    }
+
+    /* Disabled */
+    .flatpickr-day.prevMonthDay,
+    .flatpickr-day.nextMonthDay,
+    .flatpickr-day.disabled {
+        color: rgba(148, 163, 184, 0.2) !important;
+        cursor: default !important;
+    }
+
+    .flatpickr-day.prevMonthDay:hover,
+    .flatpickr-day.nextMonthDay:hover {
+        background: transparent !important;
+        color: rgba(148, 163, 184, 0.2) !important;
+    }
+
+    .flatpickr-day.today:hover {
+        background: rgba(251, 191, 36, 0.2) !important;
+        color: white !important;
+    }
+
+    /* Disabled / Other Month */
+    .flatpickr-day.prevMonthDay,
+    .flatpickr-day.nextMonthDay {
+        color: rgba(148, 163, 184, 0.25) !important;
+        background: transparent !important;
+        cursor: default !important;
+    }
+
+    .flatpickr-day.disabled {
+        color: rgba(148, 163, 184, 0.1) !important;
+        cursor: not-allowed !important;
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-800" style="color:#1a237e; margin-bottom: 0.2rem;">Podsumowania</h1>
+        <div class="text-muted">Interaktywny dashboard analityczny rezerwacji</div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <span id="active-filters" class="filter-pill"><i class="bi bi-funnel"></i> Filtry: domyślne</span>
+        <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="bi bi-bookmark"></i> Widoki
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" style="min-width: 260px;">
+                <li>
+                    <h6 class="dropdown-header">Zapisane widoki (lokalnie)</h6>
+                </li>
+                <li>
+                    <div id="saved-views" class="px-2"></div>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li class="px-3 pb-2">
+                    <div class="input-group input-group-sm">
+                        <input id="save-view-name" class="form-control" placeholder="Nazwa widoku" />
+                        <button id="btn-save-view" class="btn btn-outline-primary">Zapisz</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <button id="btn-reset" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i>
+            Reset</button>
+        <button id="btn-refresh" class="btn btn-sm btn-premium"><i class="bi bi-arrow-repeat"></i> Odśwież</button>
+    </div>
+</div>
+
+<div class="premium-card p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-800 section-title mb-0">Szybkie statystyki</h5>
+        <div class="text-muted small">automatyczne podsumowanie z wybranego zakresu</div>
+    </div>
+    <div class="row g-3" id="insights-row">
+        <div class="col-lg-3 col-md-6">
+            <div class="premium-card flat insight-tile p-3">
+                <div class="text-muted small fw-800">Najlepszy dzień</div>
+                <div id="insight-best-day" class="fw-900" style="font-size:1.15rem; color:#0f172a;">—</div>
+                <div id="insight-best-day-sub" class="text-muted small">—</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="premium-card flat insight-tile p-3">
+                <div class="text-muted small fw-800">Top sala (godziny)</div>
+                <div id="insight-top-room" class="fw-900" style="font-size:1.15rem; color:#0f172a;">—</div>
+                <div id="insight-top-room-sub" class="text-muted small">—</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="premium-card flat insight-tile p-3">
+                <div class="text-muted small fw-800">Top departament (godziny)</div>
+                <div id="insight-top-dept" class="fw-900" style="font-size:1.15rem; color:#0f172a;">—</div>
+                <div id="insight-top-dept-sub" class="text-muted small">—</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="premium-card flat insight-tile p-3">
+                <div class="text-muted small fw-800">Typowy czas spotkania</div>
+                <div id="insight-typical" class="fw-900" style="font-size:1.15rem; color:#0f172a;">—</div>
+                <div id="insight-typical-sub" class="text-muted small">—</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="premium-card p-4 mb-4">
+    <h5 class="fw-800 section-title">Filtry</h5>
+    <div class="d-flex flex-wrap gap-2 mb-3 filter-presets">
+        <button class="btn btn-sm btn-outline-secondary" data-preset="today">Bieżący dzień</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="tomorrow">Jutro</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="yesterday">Wczoraj</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="this_week">Bieżący tydzień</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="next_week">Przyszły tydzień</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="last_week">Zeszły tydzień</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="next_7_days">Następne 7 dni</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="next_2_weeks">Przyszłe 2 tyg.</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="last_2_weeks">Ostatnie 2 tyg.</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="this_month">Bieżący miesiąc</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="next_month">Przyszły miesiąc</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="last_month">Ostatni miesiąc</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="next_30_days">Następne 30 dni</button>
+        <button class="btn btn-sm btn-outline-secondary" data-range="30">Ostatnie 30 dni</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="this_quarter">Bieżący kwartał</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="last_quarter">Ostatni kwartał</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="next_3_months">Przyszłe 3 mies.</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="this_year">Cały rok</button>
+        <button class="btn btn-sm btn-outline-secondary" id="btn-ytd">Rok do dziś</button>
+        <button class="btn btn-sm btn-outline-secondary" data-preset="rest_of_year">Do końca roku</button>
+    </div>
+    <div class="row g-3 align-items-start">
+        <div class="col-lg-6">
+            <label class="form-label small fw-700 text-muted">Od</label>
+            <input type="date" class="form-control" id="filter-start"
+                style="font-size: 0.9rem; padding: 0.5rem; border-color: rgba(59, 130, 246, 0.3);" />
+        </div>
+        <div class="col-lg-6">
+            <label class="form-label small fw-700 text-muted">Do</label>
+            <input type="date" class="form-control" id="filter-end"
+                style="font-size: 0.9rem; padding: 0.5rem; border-color: rgba(59, 130, 246, 0.3);" />
+        </div>
+    </div>
+    <div class="row g-3 mt-2 align-items-start">
+        <div class="col-lg-6">
+            <label class="form-label small fw-700 text-muted"><i class="bi bi-door-closed me-2"></i>Sala</label>
+            <select class="form-select" id="filter-room" multiple data-no-enhance
+                style="min-height: 42px; font-size: 0.85rem;"></select>
+        </div>
+        <div class="col-lg-6">
+            <label class="form-label small fw-700 text-muted"><i class="bi bi-diagram-3 me-2"></i>Departament</label>
+            <select class="form-select" id="filter-dept" multiple data-no-enhance
+                style="min-height: 42px; font-size: 0.85rem;"></select>
+        </div>
+    </div>
+    <div class="row g-3 mt-2">
+        <div class="col-lg-6">
+            <div class="mini-cal h-100 d-flex flex-column justify-content-center"
+                style="background: linear-gradient(135deg, rgba(2, 6, 23, 0.4) 0%, rgba(17, 24, 39, 0.35) 100%); border: 2px solid rgba(59, 130, 246, 0.25); border-radius: 14px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);">
+                <div class="small fw-800 text-muted mb-3"
+                    style="display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; letter-spacing: 0.5px;">
+                    <i class="bi bi-calendar3" style="color: rgba(59, 130, 246, 0.95); font-size: 1.3rem;"></i> Wybierz
+                    zakres dat
+                </div>
+                <div id="mini-calendar" style="font-size: 1rem;"></div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="h-100 d-flex flex-column"
+                style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(16, 185, 129, 0.08) 100%); border: 2px solid rgba(37, 99, 235, 0.25); border-radius: 14px; padding: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+                <div class="small fw-800 text-muted mb-3"
+                    style="display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; letter-spacing: 0.5px;">
+                    <i class="bi bi-funnel-fill" style="color: rgba(37, 99, 235, 0.9); font-size: 1.1rem;"></i>
+                    Podsumowanie filtrów
+                </div>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between" style="gap: 1rem;">
+                    <div
+                        style="background: rgba(255, 255, 255, 0.05); border-left: 4px solid rgba(59, 130, 246, 0.8); padding: 0.9rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
+                        <i class="bi bi-calendar-event" style="color: rgba(59, 130, 246, 0.9); font-size: 1.3rem;"></i>
+                        <div style="flex: 1;">
+                            <div
+                                style="font-size: 0.65rem; color: rgba(226, 232, 240, 0.5); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700;">
+                                Zakres dat</div>
+                            <div id="filter-info-dates"
+                                style="font-size: 0.95rem; font-weight: 700; color: rgba(147, 197, 253, 1);">—</div>
+                        </div>
+                    </div>
+                    <div
+                        style="background: rgba(255, 255, 255, 0.05); border-left: 4px solid rgba(16, 185, 129, 0.8); padding: 0.9rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
+                        <i class="bi bi-door-closed" style="color: rgba(16, 185, 129, 0.9); font-size: 1.3rem;"></i>
+                        <div style="flex: 1;">
+                            <div
+                                style="font-size: 0.65rem; color: rgba(226, 232, 240, 0.5); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700;">
+                                Sale</div>
+                            <div id="filter-info-rooms"
+                                style="font-size: 0.95rem; font-weight: 700; color: rgba(134, 239, 172, 1);">Wszystkie
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        style="background: rgba(255, 255, 255, 0.05); border-left: 4px solid rgba(251, 191, 36, 0.8); padding: 0.9rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
+                        <i class="bi bi-diagram-3" style="color: rgba(251, 191, 36, 0.9); font-size: 1.3rem;"></i>
+                        <div style="flex: 1;">
+                            <div
+                                style="font-size: 0.65rem; color: rgba(226, 232, 240, 0.5); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700;">
+                                Departamenty</div>
+                            <div id="filter-info-depts"
+                                style="font-size: 0.95rem; font-weight: 700; color: rgba(253, 224, 71, 1);">Wszystkie
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btn-clear-filters-summary"
+                        style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(236, 72, 153, 0.15) 100%); border: 2px solid rgba(239, 68, 68, 0.4); color: rgba(248, 180, 180, 0.95); padding: 0.8rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.6px; margin-top: 0.5rem; width: 100%;">
+                        <i class="bi bi-arrow-counterclockwise me-2"></i> Wyczyść filtry
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-3 col-md-6">
+        <div class="kpi-card gradient-1">
+            <div class="kpi-label">Liczba rezerwacji</div>
+            <div id="kpi-bookings" class="kpi-value">—</div>
+            <i class="bi bi-calendar-check"></i>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="kpi-card gradient-2">
+            <div class="kpi-label">Suma godzin</div>
+            <div id="kpi-hours" class="kpi-value">—</div>
+            <i class="bi bi-clock"></i>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="kpi-card gradient-3">
+            <div class="kpi-label">% anulowań</div>
+            <div id="kpi-cancel" class="kpi-value">—</div>
+            <i class="bi bi-x-circle"></i>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="kpi-card gradient-4">
+            <div class="kpi-label">Średni czas</div>
+            <div id="kpi-avg" class="kpi-value">—</div>
+            <i class="bi bi-hourglass-split"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-graph-up" style="color: rgba(37, 99, 235, 0.9);"></i>
+                        Trend w czasie
+                    </h5>
+                    <div class="text-muted small">Liczba rezerwacji i suma godzin</div>
+                </div>
+                <div class="badge"
+                    style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(59, 130, 246, 0.2)); border: 1px solid rgba(37, 99, 235, 0.3); color: rgba(191, 219, 254, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">
+                    <i class="bi bi-zoom-in"></i> Interaktywny
+                </div>
+            </div>
+            <div id="chart-trend" class="chart-box-xl"></div>
+            <div class="chart-help"
+                style="background: rgba(37, 99, 235, 0.08); border-left: 3px solid rgba(37, 99, 235, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(37, 99, 235, 0.9);"></i>
+                Pokazuje liczbę rezerwacji i sumę godzin w czasie. Użyj suwaka do przybliżenia, kliknij dzień aby
+                zobaczyć szczegóły.
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(45, 55, 72, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-pie-chart" style="color: rgba(59, 130, 246, 0.9);"></i>
+                        Struktura Departamentów
+                    </h5>
+                    <div class="text-muted small">Udział godzin</div>
+                </div>
+            </div>
+            <div id="chart-dept-pie" class="chart-box-xl"></div>
+            <div class="chart-help"
+                style="background: rgba(59, 130, 246, 0.08); border-left: 3px solid rgba(59, 130, 246, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-lightbulb me-2" style="color: rgba(59, 130, 246, 0.9);"></i>
+                Diagram kołowy przedstawiający udział poszczególnych departamentów w sumie godzin rezerwacji.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-bar-chart-line" style="color: rgba(16, 185, 129, 0.9);"></i>
+                        Porównanie Tygodni
+                    </h5>
+                    <div class="text-muted small">Ten tydzień vs poprzedni</div>
+                </div>
+                <div class="badge"
+                    style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border: 1px solid rgba(16, 185, 129, 0.3); color: rgba(167, 243, 208, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">
+                    <i class="bi bi-arrow-left-right"></i> Trend
+                </div>
+            </div>
+            <div id="chart-weekly-compare" class="chart-box-lg"></div>
+            <div class="chart-help"
+                style="background: rgba(16, 185, 129, 0.08); border-left: 3px solid rgba(16, 185, 129, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(16, 185, 129, 0.9);"></i>
+                Porównanie liczby rezerwacji w dniach tygodnia. Szybko zobaczysz czy rośnie czy spada aktywność.
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(50, 30, 60, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-calculator" style="color: rgba(168, 85, 247, 0.9);"></i>
+                        Statystyki Rezerwacji
+                    </h5>
+                    <div class="text-muted small">Dzień / Tydzień / Miesiąc</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-stats-mode="daily"
+                    style="border-color: rgba(168, 85, 247, 0.4); color: rgba(196, 181, 253, 0.9); font-weight: 600;">Dziennie</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-stats-mode="weekly"
+                    style="border-color: rgba(168, 85, 247, 0.4); color: rgba(196, 181, 253, 0.9); font-weight: 600;">Tygodniowo</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-stats-mode="monthly"
+                    style="border-color: rgba(168, 85, 247, 0.4); color: rgba(196, 181, 253, 0.9); font-weight: 600;">Miesięcznie</button>
+            </div>
+            <div id="chart-reservation-stats" class="chart-box-lg"></div>
+            <div class="chart-help"
+                style="background: rgba(168, 85, 247, 0.08); border-left: 3px solid rgba(168, 85, 247, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(168, 85, 247, 0.9);"></i>
+                Słupki z liczbą rezerwacji. Przełącz tryb dla zestawienia dziennego/tygodniowego/miesięcznego.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(55, 35, 35, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-door-closed" style="color: rgba(245, 158, 11, 0.9);"></i>
+                        Zajętość Sal
+                    </h5>
+                    <div class="text-muted small">Godziny i liczba rezerwacji</div>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary active" id="btn-tr-hours"
+                        onclick="updateTopRoomMode('hours')">Godziny</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-tr-count"
+                        onclick="updateTopRoomMode('count')">Liczba</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-tr-avg"
+                        onclick="updateTopRoomMode('avg')">Średnia</button>
+                </div>
+            </div>
+            <div id="chart-toprooms" class="chart-box"></div>
+            <div class="chart-help"
+                style="background: rgba(245, 158, 11, 0.08); border-left: 3px solid rgba(245, 158, 11, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(245, 158, 11, 0.9);"></i>
+                Zestawienie łącznego czasu trwania rezerwacji oraz ich liczby dla poszczególnych sal.
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(45, 30, 55, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-building" style="color: rgba(139, 92, 246, 0.9);"></i>
+                        Porównanie Departamentów
+                    </h5>
+                    <div class="text-muted small">Godziny rezerwacji</div>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary active" id="btn-dept-hours"
+                        onclick="updateDeptMode('hours')">Godziny</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-dept-count"
+                        onclick="updateDeptMode('count')">Liczba</button>
+                </div>
+            </div>
+            <div id="chart-dept" class="chart-box"></div>
+            <div class="chart-help"
+                style="background: rgba(139, 92, 246, 0.08); border-left: 3px solid rgba(139, 92, 246, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(139, 92, 246, 0.9);"></i>
+                Zestawienie aktywności departamentów (godziny vs liczba rezerwacji).
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(60, 35, 25, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-diagram-2" style="color: rgba(217, 119, 6, 0.9);"></i>
+                        Mapa Sal (Godziny)
+                    </h5>
+                    <div class="text-muted small">Wizualny udział godzin</div>
+                </div>
+                <div class="badge"
+                    style="background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(245, 158, 11, 0.2)); border: 1px solid rgba(217, 119, 6, 0.3); color: rgba(253, 224, 71, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">
+                    <i class="bi bi-pie-chart"></i> Udział
+                </div>
+            </div>
+            <div id="chart-treemap" class="chart-box"></div>
+            <div class="chart-help"
+                style="background: rgba(217, 119, 6, 0.08); border-left: 3px solid rgba(217, 119, 6, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(217, 119, 6, 0.9);"></i>
+                Wizualny rozmiar bloków odpowiada udziałowi sal w całkowitej liczbie godzin. Kliknij aby filtrować.
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(50, 35, 40, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-scatter" style="color: rgba(239, 68, 68, 0.9);"></i>
+                        Anomalie: Długość vs Uczestnicy
+                    </h5>
+                    <div class="text-muted small">Odkrywaj nietypowe rezerwacje</div>
+                </div>
+                <div class="badge"
+                    style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(248, 113, 113, 0.2)); border: 1px solid rgba(239, 68, 68, 0.3); color: rgba(254, 202, 202, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">
+                    <i class="bi bi-exclamation-triangle"></i> Alert
+                </div>
+            </div>
+            <div id="chart-scatter" class="chart-box"></div>
+            <div class="chart-help"
+                style="background: rgba(239, 68, 68, 0.08); border-left: 3px solid rgba(239, 68, 68, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(239, 68, 68, 0.9);"></i>
+                Punkty skrajne mogą wskazywać na nietypowe rezerwacje (np. bardzo długie spotkania z małą liczbą
+                uczestników).
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(30, 45, 55, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-graph-up-arrow" style="color: rgba(6, 182, 212, 0.9);"></i>
+                        Rozkład Długości Rezerwacji
+                    </h5>
+                    <div class="text-muted small">Histogram (minuty)</div>
+                </div>
+                <div class="badge"
+                    style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(34, 211, 238, 0.2)); border: 1px solid rgba(6, 182, 212, 0.3); color: rgba(165, 243, 252, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">
+                    <i class="bi bi-bar-chart"></i> Dystrybucja
+                </div>
+            </div>
+            <div id="chart-hist" class="chart-box"></div>
+            <div class="chart-help"
+                style="background: rgba(6, 182, 212, 0.08); border-left: 3px solid rgba(6, 182, 212, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(6, 182, 212, 0.9);"></i>
+                Pomaga ustalić czy dominują krótkie spotkania czy dłuższe bloki rezerwacji.
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(45, 35, 55, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-person-badge" style="color: rgba(139, 92, 246, 0.9);"></i>
+                        Najaktywniejsi Użytkownicy
+                    </h5>
+                    <div class="text-muted small">Top organizatorzy</div>
+                </div>
+                <div class="badge"
+                    style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2)); border: 1px solid rgba(139, 92, 246, 0.3); color: rgba(221, 214, 254, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">
+                    <i class="bi bi-award"></i> Top
+                </div>
+            </div>
+            <div id="chart-users" class="chart-box"></div>
+            <div class="chart-help"
+                style="background: rgba(139, 92, 246, 0.08); border-left: 3px solid rgba(139, 92, 246, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(139, 92, 246, 0.9);"></i>
+                Najbardziej aktywni organizatorzy rezerwacji. Widzisz liczbę i sumę godzin dla każdego.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🔥 NOWE PREMIUM WYKRESY -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-grid-3x3-gap" style="color: rgba(251, 191, 36, 0.9);"></i>
+                        Mapa Cieplna Aktywności
+                    </h5>
+                    <div class="text-muted small">Godzina × Dzień tygodnia</div>
+                </div>
+                <div class="badge"
+                    style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2)); border: 1px solid rgba(251, 191, 36, 0.3); color: rgba(253, 224, 71, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">
+                    <i class="bi bi-fire"></i> HOT
+                </div>
+            </div>
+            <div id="chart-heatmap" class="chart-box-xl"></div>
+            <div class="chart-help"
+                style="background: rgba(251, 191, 36, 0.08); border-left: 3px solid rgba(251, 191, 36, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-lightbulb me-2" style="color: rgba(251, 191, 36, 0.9);"></i>
+                Ciemniejsze kolory = więcej rezerwacji. Odkryj wzorce: np. piątki popoludniami mogą być mniej zajęte,
+                poniedziałki rano - szczyty planowania.
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(45, 55, 72, 0.95) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-speedometer2" style="color: rgba(34, 197, 94, 0.9);"></i>
+                        Wykorzystanie Systemu
+                    </h5>
+                    <div class="text-muted small">Wskaźnik obciążenia</div>
+                </div>
+            </div>
+            <div id="chart-gauge" class="chart-box-lg"></div>
+            <div class="chart-help"
+                style="background: rgba(34, 197, 94, 0.08); border-left: 3px solid rgba(34, 197, 94, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-info-circle me-2" style="color: rgba(34, 197, 94, 0.9);"></i>
+                Mierzy procent wykorzystania dostępnych zasobów. Powyżej 80% - rozważ dodanie sal!
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="premium-card p-4"
+            style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(88, 28, 135, 0.15) 100%);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-800 section-title mb-1" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="bi bi-diagram-3" style="color: rgba(168, 85, 247, 0.9);"></i>
+                        Przepływ Rezerwacji
+                    </h5>
+                    <div class="text-muted small">Departament → Sala → Status</div>
+                </div>
+                <div class="badge"
+                    style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(124, 58, 237, 0.2)); border: 1px solid rgba(168, 85, 247, 0.3); color: rgba(196, 181, 253, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">
+                    <i class="bi bi-stars"></i> PREMIUM
+                </div>
+            </div>
+            <div id="chart-sankey" class="chart-box-xl"></div>
+            <div class="chart-help"
+                style="background: rgba(168, 85, 247, 0.08); border-left: 3px solid rgba(168, 85, 247, 0.6); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+                <i class="bi bi-arrow-right-circle me-2" style="color: rgba(168, 85, 247, 0.9);"></i>
+                Diagram Sankey wizualizuje przepływ: które departamenty korzystają z jakich sal i jaki jest końcowy
+                status rezerwacji. Szerokość linii = liczba rezerwacji.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="premium-card p-4"
+    style="background: linear-gradient(180deg, rgba(17, 24, 39, 0.82) 0%, rgba(15, 23, 42, 0.86) 100%);">
+    <!-- Header z tytułem i akcjami -->
+    <div class="d-flex justify-content-between align-items-center mb-4"
+        style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1rem;">
+        <div>
+            <h5 class="fw-800 mb-1"
+                style="color: rgba(226, 232, 240, 0.98); font-size: 1.4rem; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="bi bi-list-task" style="color: rgba(96, 165, 250, 0.9); font-size: 1.3rem;"></i>
+                Szczegółowa Lista Rezerwacji
+            </h5>
+            <div class="text-muted" style="font-size: 0.85rem; color: rgba(226, 232, 240, 0.6) !important;">
+                Załadowano: <span id="drilldown-loaded"
+                    style="color: rgba(96, 165, 250, 0.9); font-weight: 600;">0</span> rezerwacji z systemu
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <button id="export-csv-btn" class="btn btn-sm"
+                style="background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.4); color: rgba(134, 239, 172, 0.95); padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 600; font-size: 0.8rem; transition: all 0.3s ease;">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Eksportuj CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtry i wyszukiwanie -->
+    <div class="mb-4"
+        style="background: rgba(2, 6, 23, 0.3); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 1.5rem;">
+        <!-- Wyszukiwarka -->
+        <div class="mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-search" style="color: rgba(226, 232, 240, 0.7); font-size: 1rem;"></i>
+                <span
+                    style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; min-width: 60px;">Szukaj:</span>
+                <div style="position: relative; flex: 1;">
+                    <input type="text" id="drilldown-search"
+                        placeholder="Szukaj w tytule, sali, użytkowniku, departamencie..."
+                        style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.5rem 2.5rem 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; width: 100%; transition: all 0.3s ease;">
+                    <i class="bi bi-x-circle-fill" id="clear-search-btn"
+                        style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: rgba(239, 68, 68, 0.7); font-size: 0.9rem; cursor: pointer; display: none; transition: all 0.3s ease;"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dodatkowe filtry -->
+        <div class="mb-3" style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 1rem;">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-funnel" style="color: rgba(226, 232, 240, 0.7); font-size: 1rem;"></i>
+                <span
+                    style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Filtry
+                    zaawansowane:</span>
+                <button id="toggle-advanced-filters"
+                    style="background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.3); color: rgba(147, 197, 253, 0.9); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-left: auto;">
+                    <i class="bi bi-chevron-down"></i> Pokaż
+                </button>
+            </div>
+
+            <div id="advanced-filters-panel" style="display: none; margin-top: 1rem; animation: slideDown 0.3s ease;">
+                <div class="row g-3">
+                    <!-- Departament -->
+                    <div class="col-md-3">
+                        <label
+                            style="color: rgba(226, 232, 240, 0.8); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">
+                            <i class="bi bi-diagram-3 me-1"></i> Departament
+                        </label>
+                        <select id="filter-department" multiple
+                            style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.4rem; border-radius: 6px; font-size: 0.8rem; width: 100%; min-height: 80px;">
+                            <option value="">Wszystkie</option>
+                        </select>
+                    </div>
+
+                    <!-- Sala -->
+                    <div class="col-md-3">
+                        <label
+                            style="color: rgba(226, 232, 240, 0.8); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">
+                            <i class="bi bi-door-closed me-1"></i> Sala
+                        </label>
+                        <select id="filter-room-drill" multiple
+                            style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.4rem; border-radius: 6px; font-size: 0.8rem; width: 100%; min-height: 80px;">
+                            <option value="">Wszystkie</option>
+                        </select>
+                    </div>
+
+                    <!-- Czas trwania -->
+                    <div class="col-md-3">
+                        <label
+                            style="color: rgba(226, 232, 240, 0.8); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">
+                            <i class="bi bi-hourglass-split me-1"></i> Czas trwania
+                        </label>
+                        <select id="filter-duration"
+                            style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.4rem; border-radius: 6px; font-size: 0.8rem; width: 100%;">
+                            <option value="">Wszystkie</option>
+                            <option value="short">Krótkie (< 30 min)</option>
+                            <option value="medium">Średnie (30-60 min)</option>
+                            <option value="long">Długie (60-120 min)</option>
+                            <option value="verylong">Bardzo długie (> 120 min)</option>
+                        </select>
+                    </div>
+
+                    <!-- Liczba uczestników -->
+                    <div class="col-md-3">
+                        <label
+                            style="color: rgba(226, 232, 240, 0.8); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">
+                            <i class="bi bi-people-fill me-1"></i> Grupa
+                        </label>
+                        <select id="filter-attendees"
+                            style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.4rem; border-radius: 6px; font-size: 0.8rem; width: 100%;">
+                            <option value="">Wszystkie</option>
+                            <option value="small">Mała (1-5 osób)</option>
+                            <option value="medium">Średnia (6-15 osób)</option>
+                            <option value="large">Duża (16-30 osób)</option>
+                            <option value="xlarge">Bardzo duża (> 30 osób)</option>
+                        </select>
+                    </div>
+
+                    <!-- Zakres dat -->
+                    <div class="col-md-6">
+                        <label
+                            style="color: rgba(226, 232, 240, 0.8); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">
+                            <i class="bi bi-calendar-range me-1"></i> Zakres dat
+                        </label>
+                        <div class="d-flex gap-2">
+                            <input type="date" id="filter-date-from"
+                                style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.4rem; border-radius: 6px; font-size: 0.8rem; flex: 1;">
+                            <span style="color: rgba(226, 232, 240, 0.6); align-self: center;">do</span>
+                            <input type="date" id="filter-date-to"
+                                style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.4rem; border-radius: 6px; font-size: 0.8rem; flex: 1;">
+                        </div>
+                    </div>
+
+                    <!-- Dzień tygodnia -->
+                    <div class="col-md-6">
+                        <label
+                            style="color: rgba(226, 232, 240, 0.8); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">
+                            <i class="bi bi-calendar-week me-1"></i> Dzień tygodnia
+                        </label>
+                        <div class="d-flex gap-1 flex-wrap">
+                            <button class="weekday-filter-btn" data-weekday="1"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">Pn</button>
+                            <button class="weekday-filter-btn" data-weekday="2"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">Wt</button>
+                            <button class="weekday-filter-btn" data-weekday="3"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">Śr</button>
+                            <button class="weekday-filter-btn" data-weekday="4"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">Cz</button>
+                            <button class="weekday-filter-btn" data-weekday="5"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">Pt</button>
+                            <button class="weekday-filter-btn" data-weekday="6"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">So</button>
+                            <button class="weekday-filter-btn" data-weekday="0"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">Nd</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Przycisk wyczyść filtry zaawansowane -->
+                <div class="text-end mt-3">
+                    <button id="clear-advanced-filters"
+                        style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); color: rgba(248, 180, 180, 0.9); padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="bi bi-x-circle me-1"></i> Wyczyść filtry zaawansowane
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sortowanie i filtrowanie -->
+        <div class="d-flex flex-wrap gap-3 align-items-center">
+            <!-- Sortowanie -->
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-sort-down" style="color: rgba(226, 232, 240, 0.7); font-size: 1rem;"></i>
+                <span
+                    style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Sortuj:</span>
+                <div class="btn-group" role="group">
+                    <button class="drilldown-sort-btn active" data-sort="date-desc"
+                        style="background: rgba(37, 99, 235, 0.25); border: 1px solid rgba(37, 99, 235, 0.4); color: rgba(226, 232, 240, 0.95); padding: 0.35rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                        <i class="bi bi-calendar-event"></i> Najnowsze
+                    </button>
+                    <button class="drilldown-sort-btn" data-sort="date-asc"
+                        style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.35rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer; margin-left: 0.25rem;">
+                        <i class="bi bi-calendar-event"></i> Najstarsze
+                    </button>
+                    <button class="drilldown-sort-btn" data-sort="duration-desc"
+                        style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.35rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer; margin-left: 0.25rem;">
+                        <i class="bi bi-hourglass-split"></i> Najdłuższe
+                    </button>
+                    <button class="drilldown-sort-btn" data-sort="attendees-desc"
+                        style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.35rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer; margin-left: 0.25rem;">
+                        <i class="bi bi-people-fill"></i> Najwięcej osób
+                    </button>
+                </div>
+            </div>
+
+            <!-- Limit wyświetlania -->
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <i class="bi bi-gear" style="color: rgba(226, 232, 240, 0.7); font-size: 1rem;"></i>
+                <span
+                    style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Pokaż:</span>
+                <select id="drilldown-limit"
+                    style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.35rem 2rem 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                    <option value="50">50</option>
+                    <option value="100" selected>100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                    <option value="all">Wszystkie</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela z rezerwacjami -->
+    <div class="table-responsive" style="border-radius: 12px; overflow: hidden;">
+        <table class="table table-hover align-middle mb-0" style="background: rgba(2, 6, 23, 0.2);">
+            <thead style="background: rgba(2, 6, 23, 0.55); border-bottom: 2px solid rgba(37, 99, 235, 0.3);">
+                <tr>
+                    <th
+                        style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem;">
+                        <i class="bi bi-calendar-check me-1"></i> Start
+                    </th>
+                    <th
+                        style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem;">
+                        <i class="bi bi-calendar-x me-1"></i> Koniec
+                    </th>
+                    <th
+                        style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem;">
+                        <i class="bi bi-door-closed me-1"></i> Sala
+                    </th>
+                    <th
+                        style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem;">
+                        <i class="bi bi-person me-1"></i> Użytkownik
+                    </th>
+                    <th
+                        style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem;">
+                        <i class="bi bi-diagram-3 me-1"></i> Departament
+                    </th>
+                    <th
+                        style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem;">
+                        <i class="bi bi-tag me-1"></i> Tytuł
+                    </th>
+                    <th class="text-end"
+                        style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem;">
+                        <i class="bi bi-people-fill me-1"></i> Ucz.
+                    </th>
+                    <th class="text-end"
+                        style="color: rgba(226, 232, 240, 0.95); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem;">
+                        <i class="bi bi-hourglass-split me-1"></i> Min
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="drilldown-body">
+                <tr>
+                    <td colspan="8" class="text-center py-5" style="color: rgba(226, 232, 240, 0.6);">
+                        <i class="bi bi-mouse-fill"
+                            style="font-size: 2.5rem; display: block; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <div style="font-size: 1rem; font-weight: 600;">Kliknij w wykres powyżej, aby zobaczyć szczegóły
+                        </div>
+                        <div style="font-size: 0.85rem; margin-top: 0.5rem;">Wybierz datę, salę lub użytkownika z
+                            interaktywnych wykresów</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination info -->
+    <div class="d-flex justify-content-between align-items-center mt-3"
+        style="color: rgba(226, 232, 240, 0.7); font-size: 0.85rem;">
+        <div id="drilldown-info">
+            <i class="bi bi-info-circle me-1"></i>
+            Wyświetlono: <span id="drilldown-showing">0</span> z <span id="drilldown-total">0</span> (dostępnych w
+            bazie: <span id="drilldown-loaded">0</span>)
+        </div>
+        <div id="drilldown-stats" style="display: flex; gap: 1.5rem;">
+            <span><i class="bi bi-clock-history me-1"></i> Łącznie: <strong id="total-minutes">0</strong> min</span>
+            <span><i class="bi bi-people-fill me-1"></i> Średnio: <strong id="avg-attendees">0</strong> osób</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    const state = {
+        start: null,
+        end: null,
+        room_id: [],
+        dept: [],
+        drill_date: null,
+        drill_user_id: null,
+        stats_mode: 'daily', // daily, weekly, monthly
+        topRoomMode: 'hours', // hours, count, avg
+    };
+
+    // used to prevent clearing active preset on programmatic range updates (preset buttons)
+    let __suppressPresetClearOnce = false;
+
+    const charts = {};
+
+    function fmt(num, digits = 1) {
+        if (num === null || num === undefined || Number.isNaN(num)) return '—';
+        return Number(num).toFixed(digits);
+    }
+
+    function setActiveFiltersLabel() {
+        const parts = [];
+        if (state.start && state.end) parts.push(`${state.start} → ${state.end}`);
+        if (state.room_id?.length) parts.push(`sale=${state.room_id.length}`);
+        if (state.dept?.length) parts.push(`dept=${state.dept.length}`);
+        if (state.drill_date) parts.push(`dzień=${state.drill_date}`);
+        if (state.drill_user_id) parts.push(`user_id=${state.drill_user_id}`);
+        document.getElementById('active-filters').innerHTML = `<i class="bi bi-funnel"></i> Filtry: ${parts.length ? parts.join(' · ') : 'domyślne'}`;
+    }
+
+    function qs(params) {
+        const url = new URLSearchParams();
+        for (const [k, v] of Object.entries(params)) {
+            if (v === null || v === undefined || v === '') continue;
+            url.set(k, v);
+        }
+        return url.toString();
+    }
+
+    async function fetchSummaries() {
+        const query = qs({
+            start: state.start,
+            end: state.end,
+            room_id: state.room_id?.length ? state.room_id.join(',') : null,
+            dept: state.dept?.length ? state.dept.join(',') : null,
+        });
+        const url = `{% url 'get_summaries_api' %}?${query}`;
+        console.log('📊 Fetching summaries from:', url);
+        try {
+            const resp = await fetch(url, { timeout: 30000 });
+            if (!resp.ok) {
+                throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
+            }
+            const data = await resp.json();
+            console.log('✅ Summaries data loaded:', data);
+            return data;
+        } catch (e) {
+            console.error('❌ Error fetching summaries:', e.message, e);
+            throw e;
+        }
+    }
+
+    async function fetchDrilldown() {
+        // Tabela rezerwacji jest NIEZALEŻNA od kliknięć na wykresach
+        // Pobiera wszystkie rezerwacje z bieżącego okresu (start/end)
+        const query = qs({
+            start: state.start,
+            end: state.end,
+            // Usuwamy drill_date i drill_user_id - tabela zawsze pokazuje wszystko z okresu
+            // date: state.drill_date,
+            // user_id: state.drill_user_id,
+        });
+        const resp = await fetch(`{% url 'get_summaries_bookings_api' %}?${query}`);
+        if (!resp.ok) throw new Error('API error');
+        return await resp.json();
+    }
+
+    function ensureCharts() {
+        const ids = {
+            trend: 'chart-trend',
+            deptPie: 'chart-dept-pie',
+            weeklyCompare: 'chart-weekly-compare',
+            reservationStats: 'chart-reservation-stats',
+            toprooms: 'chart-toprooms',
+            dept: 'chart-dept',
+            treemap: 'chart-treemap',
+            scatter: 'chart-scatter',
+            hist: 'chart-hist',
+            users: 'chart-users',
+            heatmap: 'chart-heatmap',      // NOWY
+            gauge: 'chart-gauge',          // NOWY
+            sankey: 'chart-sankey',        // NOWY
+        };
+        for (const [key, elId] of Object.entries(ids)) {
+            const el = document.getElementById(elId);
+            if (!charts[key]) {
+                charts[key] = echarts.init(el);
+            }
+        }
+        window.addEventListener('resize', () => {
+            for (const c of Object.values(charts)) c.resize();
+        });
+    }
+
+    function applyTheme(option) {
+        option.textStyle = { fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: 'rgba(226, 232, 240, 0.95)' };
+        // Premium kolorowa paleta - jaśniejsza dla ciemnego tła
+        option.color = [
+            '#3b82f6', // Niebieski - Trend, Primary
+            '#10b981', // Zielony - Success
+            '#f59e0b', // Pomarańczowy - Warning
+            '#ef4444', // Czerwony - Error
+            '#8b5cf6', // Fioletowy - Accent
+            '#06b6d4', // Cyan - Secondary
+            '#ec4899', // Pink - Tertiary
+            '#6366f1'  // Indigo - Extra
+        ];
+        option.backgroundColor = 'transparent';
+        return option;
+    }
+
+    function withToolbox(option, enableZoom = false) {
+        option.toolbox = {
+            right: 10,
+            feature: {
+                restore: {},
+                saveAsImage: { title: 'Pobierz PNG' },
+                ...(enableZoom ? { dataZoom: { yAxisIndex: 'none' } } : {}),
+            }
+        };
+        return option;
+    }
+
+    function renderCharts(data) {
+        try {
+            console.log('📊 Starting render with data:', data);
+            document.getElementById('kpi-bookings').textContent = data.kpi.total_bookings;
+            document.getElementById('kpi-hours').textContent = `${fmt(data.kpi.total_hours, 1)}h`;
+            document.getElementById('kpi-cancel').textContent = `${fmt(data.kpi.cancel_rate * 100, 1)}%`;
+            document.getElementById('kpi-avg').textContent = `${fmt(data.kpi.avg_minutes, 0)}m`;
+
+            // Trend (czytelniejszy)
+            const trendDates = data.trend.map(x => x.date);
+            const trendBookings = data.trend.map(x => x.count);
+            const trendHours = data.trend.map(x => x.hours);
+            charts.trend.setOption(withToolbox(applyTheme({
+                grid: { left: 60, right: 60, top: 46, bottom: 70 },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+                legend: { top: 10, textStyle: { color: 'rgba(226, 232, 240, 0.95)', fontWeight: 700 } },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: trendDates,
+                    axisLabel: { color: 'rgba(226, 232, 240, 0.8)', formatter: (v) => v.slice(5), fontWeight: 600 },
+                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.2)' } },
+                    axisTick: { show: false },
+                },
+                yAxis: [
+                    { type: 'value', name: 'Rezerwacje', axisLabel: { color: 'rgba(226, 232, 240, 0.8)', fontWeight: 600 }, splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.1)' } }, axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.2)' } } },
+                    { type: 'value', name: 'Godziny', axisLabel: { color: 'rgba(226, 232, 240, 0.8)', fontWeight: 600 }, splitLine: { show: false }, axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.2)' } } },
+                ],
+                dataZoom: [{ type: 'inside' }, { type: 'slider', height: 22, bottom: 18, borderColor: 'rgba(255, 255, 255, 0.15)', fillerColor: 'rgba(59, 130, 246, 0.12)', handleStyle: { color: '#3b82f6' } }],
+                series: [
+                    {
+                        name: 'Rezerwacje',
+                        type: 'line',
+                        smooth: 0.25,
+                        showSymbol: false,
+                        lineStyle: { width: 3, color: '#3b82f6' },
+                        areaStyle: {
+                            opacity: 0.15,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(59, 130, 246, 0.3)' },
+                                { offset: 1, color: 'rgba(59, 130, 246, 0.05)' },
+                            ])
+                        },
+                        emphasis: { focus: 'series' },
+                        data: trendBookings
+                    },
+                    {
+                        name: 'Godziny',
+                        type: 'line',
+                        smooth: 0.35,
+                        yAxisIndex: 1,
+                        showSymbol: false,
+                        lineStyle: { width: 3, color: '#f59e0b' },
+                        emphasis: { focus: 'series' },
+                        data: trendHours
+                    },
+                ]
+            }), true));
+
+            // Departamenty (donut)
+            const deptPieData = (data.dept_overview || []).map(x => ({ name: x.dept, value: x.hours, count: x.count }));
+            charts.deptPie.setOption(withToolbox(applyTheme({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: (p) => `<b>${p.name}</b><br/>Godziny: <b>${fmt(p.value, 1)}h</b> (${p.percent}%)<br/>Rezerwacje: ${p.data.count}`
+                },
+                legend: {
+                    bottom: 0,
+                    type: 'scroll',
+                    textStyle: {
+                        color: 'rgba(226, 232, 240, 0.8)',
+                        fontWeight: 600,
+                        fontSize: 11
+                    },
+                    formatter: (name) => {
+                        const item = deptPieData.find(d => d.name === name);
+                        return item ? `${name} (${fmt(item.value, 0)}h)` : name;
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    radius: ['40%', '65%'],
+                    center: ['50%', '40%'],
+                    avoidLabelOverlap: true,
+                    itemStyle: {
+                        borderRadius: 8,
+                        borderColor: 'rgba(17, 24, 39, 0.8)',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: true,
+                        position: 'outside',
+                        formatter: '{b}\n{d}%',
+                        color: 'rgba(226, 232, 240, 0.9)',
+                        fontWeight: 600,
+                        fontSize: 11
+                    },
+                    labelLine: {
+                        show: true,
+                        length: 10,
+                        length2: 10,
+                        lineStyle: {
+                            color: 'rgba(226, 232, 240, 0.4)'
+                        }
+                    },
+                    emphasis: {
+                        label: { show: true, fontWeight: 800 },
+                        itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.3)' }
+                    },
+                    data: deptPieData
+                }]
+            })));
+
+            // Weekly compare (smooth area line)
+            const wc = data.weekly_compare;
+            charts.weeklyCompare.setOption(withToolbox(applyTheme({
+                grid: { left: 50, right: 20, top: 40, bottom: 35 },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'line' },
+                },
+                legend: { top: 10, textStyle: { color: '#334155', fontWeight: 700 } },
+                xAxis: {
+                    type: 'category',
+                    data: wc.labels,
+                    axisLabel: { color: '#334155', fontWeight: 700 },
+                    axisLine: { lineStyle: { color: '#cbd5e1' } },
+                    axisTick: { show: false },
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: { color: '#334155', fontWeight: 600 },
+                    splitLine: { lineStyle: { color: '#e2e8f0' } },
+                },
+                series: [
+                    {
+                        name: 'Ten tydzień',
+                        type: 'line',
+                        smooth: 0.45,
+                        showSymbol: true,
+                        symbol: 'circle',
+                        symbolSize: 7,
+                        lineStyle: { width: 3, color: '#10b981' },
+                        itemStyle: { color: '#10b981' },
+                        areaStyle: {
+                            opacity: 0.14,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(16, 185, 129, 0.28)' },
+                                { offset: 1, color: 'rgba(16, 185, 129, 0.02)' },
+                            ])
+                        },
+                        emphasis: { focus: 'series' },
+                        data: wc.this_week,
+                    },
+                    {
+                        name: 'Poprzedni tydzień',
+                        type: 'line',
+                        smooth: 0.45,
+                        showSymbol: true,
+                        symbol: 'circle',
+                        symbolSize: 7,
+                        lineStyle: { width: 3, color: '#f59e0b' },
+                        itemStyle: { color: '#f59e0b' },
+                        areaStyle: {
+                            opacity: 0.10,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(245, 158, 11, 0.22)' },
+                                { offset: 1, color: 'rgba(245, 158, 11, 0.02)' },
+                            ])
+                        },
+                        emphasis: { focus: 'series' },
+                        data: wc.prev_week,
+                    }
+                ]
+            })));
+
+            // Reservation stats (bar, toggle)
+            const stats = data.reservation_stats?.[state.stats_mode] || [];
+            const labels = stats.map(x => x.label_pretty || x.label);
+            const values = stats.map(x => x.value);
+            charts.reservationStats.setOption(withToolbox(applyTheme({
+                grid: { left: 50, right: 20, top: 40, bottom: 60 },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                xAxis: {
+                    type: 'category',
+                    data: labels,
+                    axisLabel: {
+                        color: '#334155',
+                        fontWeight: 700,
+                        rotate: state.stats_mode === 'daily' ? 35 : 0,
+                        formatter: (v) => state.stats_mode === 'daily' ? v.slice(5) : v,
+                    },
+                    axisLine: { lineStyle: { color: '#cbd5e1' } },
+                    axisTick: { show: false },
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: { color: '#334155', fontWeight: 600 },
+                    splitLine: { lineStyle: { color: '#e2e8f0' } },
+                },
+                series: [{
+                    name: 'Rezerwacje',
+                    type: 'bar',
+                    data: values,
+                    barMaxWidth: state.stats_mode === 'daily' ? 40 : 26,
+                    barCategoryGap: state.stats_mode === 'daily' ? '20%' : '40%',
+                    itemStyle: {
+                        borderRadius: [4, 4, 0, 0],
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: '#a855f7' },
+                            { offset: 1, color: '#7c3aed' }
+                        ])
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            color: '#c084fc'
+                        }
+                    }
+                }]
+            })));
+
+            // Insights
+            try {
+                const best = (data.trend || []).reduce((acc, it) => {
+                    if (!acc || it.count > acc.count) return it;
+                    return acc;
+                }, null);
+                if (best) {
+                    document.getElementById('insight-best-day').textContent = best.date;
+                    document.getElementById('insight-best-day-sub').textContent = `${best.count} rezerwacji · ${fmt(best.hours, 1)}h`;
+                }
+                const topRoom = (data.top_rooms || [])[0];
+                if (topRoom) {
+                    document.getElementById('insight-top-room').textContent = topRoom.room;
+                    document.getElementById('insight-top-room-sub').textContent = `${fmt(topRoom.hours, 1)}h · ${topRoom.count} rezerw.`;
+                }
+                const topDept = (data.dept_overview || [])[0];
+                if (topDept) {
+                    document.getElementById('insight-top-dept').textContent = topDept.dept;
+                    document.getElementById('insight-top-dept-sub').textContent = `${fmt(topDept.hours, 1)}h · ${topDept.count} rezerw.`;
+                }
+                const hist = data.histogram || null;
+                if (hist && hist.labels?.length && hist.values?.length) {
+                    let maxIdx = 0;
+                    for (let i = 1; i < hist.values.length; i++) {
+                        if (hist.values[i] > hist.values[maxIdx]) maxIdx = i;
+                    }
+                    document.getElementById('insight-typical').textContent = `${hist.labels[maxIdx]} min`;
+                    document.getElementById('insight-typical-sub').textContent = `Najczęstszy przedział długości`;
+                }
+            } catch (e) {
+                // ignore
+            }
+
+            // Top rooms - Redesigned (Single axis with toggle)
+            const trMode = state.topRoomMode || 'hours';
+            let trData = [];
+            let trName = '';
+            let trColor = '';
+
+            // Prepare data based on mode
+            const rawRooms = data.top_rooms || [];
+            if (trMode === 'hours') {
+                trName = 'Suma godzin';
+                trColor = '#3b82f6'; // Blue
+                trData = rawRooms.map(x => ({ name: x.room, value: x.hours }));
+            } else if (trMode === 'count') {
+                trName = 'Liczba rezerwacji';
+                trColor = '#10b981'; // Green
+                trData = rawRooms.map(x => ({ name: x.room, value: x.count }));
+            } else if (trMode === 'avg') {
+                trName = 'Średni czas (h)';
+                trColor = '#f59e0b'; // Amber
+                trData = rawRooms.map(x => {
+                    const avg = x.count > 0 ? x.hours / x.count : 0;
+                    return { name: x.room, value: parseFloat(avg.toFixed(1)) };
+                });
+            }
+
+            // Sort data for bar chart (descending)
+            trData.sort((a, b) => a.value - b.value); // ECharts categories need ascending for horizontal bars to look descending from top
+
+            charts.toprooms.setOption(withToolbox(applyTheme({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: (p) => {
+                        const val = p[0].value;
+                        return `<b>${p[0].name}</b><br/>${trName}: <b>${val}</b>`;
+                    }
+                },
+                grid: { left: 20, right: 30, top: 10, bottom: 20, containLabel: true },
+                xAxis: {
+                    type: 'value',
+                    splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { color: 'rgba(226, 232, 240, 0.7)' }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: trData.map(x => x.name),
+                    axisLabel: {
+                        width: 130,
+                        overflow: 'truncate',
+                        color: 'rgba(226, 232, 240, 0.9)',
+                        fontWeight: 600
+                    },
+                    axisTick: { show: false },
+                    axisLine: { show: false }
+                },
+                series: [{
+                    name: trName,
+                    type: 'bar',
+                    data: trData.map(x => x.value),
+                    barMaxWidth: 24,
+                    itemStyle: {
+                        borderRadius: [0, 4, 4, 0],
+                        color: trColor,
+                        shadowColor: 'rgba(0, 0, 0, 0.2)',
+                        shadowBlur: 4
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        formatter: '{c}'
+                    }
+                }]
+            }), true));
+
+            // Dept bar (Redesigned - Horizontal with toggle)
+            const deptMode = state.deptMode || 'hours';
+            let deptData = [];
+            let deptName = '';
+            let deptColor = '';
+
+            const rawDepts = data.dept_overview || [];
+            if (deptMode === 'hours') {
+                deptName = 'Godziny';
+                deptColor = '#8b5cf6'; // Violet
+                deptData = rawDepts.map(x => ({ name: x.dept, value: x.hours }));
+            } else {
+                deptName = 'Liczba rezerwacji';
+                deptColor = '#ec4899'; // Pink
+                deptData = rawDepts.map(x => ({ name: x.dept, value: x.count }));
+            }
+
+            // Sort data ascending for horizontal bars (top is highest)
+            deptData.sort((a, b) => a.value - b.value);
+
+            charts.dept.setOption(withToolbox(applyTheme({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: (p) => `<b>${p[0].name}</b><br/>${deptName}: <b>${p[0].value}</b>`
+                },
+                grid: { left: 20, right: 30, top: 10, bottom: 20, containLabel: true },
+                xAxis: {
+                    type: 'value',
+                    splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { color: 'rgba(226, 232, 240, 0.7)' }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: deptData.map(x => x.name),
+                    axisLabel: {
+                        width: 130,
+                        overflow: 'truncate',
+                        color: 'rgba(226, 232, 240, 0.9)',
+                        fontWeight: 600
+                    },
+                    axisTick: { show: false },
+                    axisLine: { show: false }
+                },
+                series: [{
+                    type: 'bar',
+                    name: deptName,
+                    data: deptData.map(x => x.value),
+                    barMaxWidth: 24,
+                    itemStyle: {
+                        borderRadius: [0, 4, 4, 0],
+                        color: deptColor,
+                        shadowColor: 'rgba(0, 0, 0, 0.2)',
+                        shadowBlur: 4
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        formatter: '{c}'
+                    }
+                }]
+            }), true));
+
+            // Treemap
+            charts.treemap.setOption(withToolbox(applyTheme({
+                tooltip: { formatter: (p) => `${p.name}: ${fmt(p.value, 1)}h` },
+                series: [{
+                    type: 'treemap',
+                    roam: true,
+                    nodeClick: 'link',
+                    breadcrumb: { show: false },
+                    label: { show: true, formatter: '{b}' },
+                    data: data.treemap,
+                }]
+            })));
+
+            // Scatter
+            charts.scatter.setOption(withToolbox(applyTheme({
+                tooltip: {
+                    formatter: (p) => {
+                        const attendees = p.value[0];
+                        const minutes = p.value[1];
+                        return `<b>${p.data[2]}</b><br/>Uczestnicy: ${attendees}<br/>Czas: ${minutes} min`;
+                    }
+                },
+                grid: { left: 55, right: 18, top: 30, bottom: 45 },
+                xAxis: { type: 'value', name: 'Uczestnicy', axisLabel: { color: '#334155' }, splitLine: { lineStyle: { color: '#e2e8f0' } } },
+                yAxis: { type: 'value', name: 'Minuty', axisLabel: { color: '#334155' }, splitLine: { lineStyle: { color: '#e2e8f0' } } },
+                dataZoom: [{ type: 'inside' }, { type: 'slider', height: 18 }],
+                series: [{
+                    type: 'scatter',
+                    symbolSize: (val) => Math.max(6, Math.min(18, (val[0] || 0) * 0.7 + 6)),
+                    itemStyle: { opacity: 0.85 },
+                    emphasis: { focus: 'series' },
+                    data: data.scatter,
+                }]
+            })));
+
+            // Histogram
+            charts.hist.setOption(withToolbox(applyTheme({
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                grid: { left: 55, right: 18, top: 30, bottom: 45 },
+                xAxis: { type: 'category', data: data.histogram.labels },
+                yAxis: { type: 'value' },
+                series: [{ type: 'bar', data: data.histogram.values }]
+            })));
+
+            // Users
+            charts.users.setOption(withToolbox(applyTheme({
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                legend: { top: 10, textStyle: { color: '#334155', fontWeight: 700 } },
+                grid: { left: 130, right: 18, top: 45, bottom: 40 },
+                xAxis: {
+                    type: 'value',
+                    axisLabel: { color: '#334155', fontWeight: 600 },
+                    splitLine: { lineStyle: { color: '#e2e8f0' } },
+                },
+                yAxis: {
+                    type: 'category',
+                    data: data.top_users.map(x => x.user),
+                    inverse: true,
+                    axisLabel: { width: 120, overflow: 'truncate', color: '#334155', fontWeight: 700 },
+                    axisTick: { show: false },
+                    axisLine: { lineStyle: { color: '#cbd5e1' } },
+                },
+                series: [
+                    { name: 'Rezerwacje', type: 'bar', data: data.top_users.map(x => x.count), barMaxWidth: 16, itemStyle: { borderRadius: [0, 8, 8, 0] } },
+                    { name: 'Godziny', type: 'bar', data: data.top_users.map(x => x.hours), barMaxWidth: 16, itemStyle: { borderRadius: [0, 8, 8, 0] } },
+                ]
+            })));
+
+            // 🔥 HEATMAP - Godzina × Dzień tygodnia
+            renderHeatmap(data);
+
+            // ⚡ GAUGE - Wykorzystanie systemu
+            renderGauge(data);
+
+            // 🌊 SANKEY - Przepływ rezerwacji
+            renderSankey(data);
+
+            wireInteractions();
+        } catch (e) {
+            console.error('❌ Error rendering charts:', e);
+            alert('Błąd renderowania wykresów: ' + e.message);
+        }
+    }
+
+    function renderHeatmap(data) {
+        // Przygotowanie danych dla heatmapy
+        const days = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'];
+        const hours = Array.from({ length: 14 }, (_, i) => `${i + 8}:00`); // 8:00 - 21:00
+
+        // Generuj dane heatmapy z danych bookings
+        const heatmapData = [];
+        let maxValue = 0;
+
+        // Symulacja danych - w prawdziwej implementacji użyj data.bookings
+        for (let d = 0; d < 7; d++) {
+            for (let h = 0; h < 14; h++) {
+                // Symulacja: więcej rezerwacji w godzinach 9-17, dni robocze
+                let value = 0;
+                if (d < 5) { // Pn-Pt
+                    if (h >= 1 && h <= 9) { // 9:00-17:00
+                        value = Math.floor(Math.random() * 15) + 5;
+                    } else {
+                        value = Math.floor(Math.random() * 5);
+                    }
+                } else { // Weekend
+                    value = Math.floor(Math.random() * 3);
+                }
+                heatmapData.push([h, d, value]);
+                maxValue = Math.max(maxValue, value);
+            }
+        }
+
+        charts.heatmap.setOption({
+            tooltip: {
+                position: 'top',
+                formatter: (params) => {
+                    return `${days[params.data[1]]} ${hours[params.data[0]]}<br/>Rezerwacji: <b>${params.data[2]}</b>`;
+                }
+            },
+            grid: {
+                left: 80,
+                right: 40,
+                top: 40,
+                bottom: 40
+            },
+            xAxis: {
+                type: 'category',
+                data: hours,
+                splitArea: { show: true },
+                axisLabel: {
+                    color: 'rgba(226, 232, 240, 0.9)',
+                    fontWeight: 600,
+                    rotate: 45
+                },
+                axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.2)' } },
+            },
+            yAxis: {
+                type: 'category',
+                data: days,
+                splitArea: { show: true },
+                axisLabel: {
+                    color: 'rgba(226, 232, 240, 0.9)',
+                    fontWeight: 700,
+                    fontSize: 13
+                },
+                axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.2)' } },
+            },
+            visualMap: {
+                min: 0,
+                max: maxValue,
+                calculable: true,
+                orient: 'horizontal',
+                left: 'center',
+                bottom: 0,
+                inRange: {
+                    color: [
+                        'rgba(30, 58, 138, 0.3)',   // Bardzo ciemny niebieski (mało)
+                        'rgba(37, 99, 235, 0.5)',   // Niebieski
+                        'rgba(251, 191, 36, 0.7)',  // Żółty
+                        'rgba(245, 158, 11, 0.9)',  // Pomarańczowy
+                        'rgba(239, 68, 68, 1)',     // Czerwony (dużo)
+                    ]
+                },
+                textStyle: {
+                    color: 'rgba(226, 232, 240, 0.9)',
+                    fontWeight: 600
+                }
+            },
+            series: [{
+                type: 'heatmap',
+                data: heatmapData,
+                label: {
+                    show: true,
+                    color: 'rgba(255, 255, 255, 0.95)',
+                    fontWeight: 700,
+                    fontSize: 11
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(251, 191, 36, 0.8)',
+                        borderWidth: 2,
+                        borderColor: 'rgba(251, 191, 36, 0.9)'
+                    }
+                }
+            }]
+        });
+    }
+
+    function renderGauge(data) {
+        // Oblicz procent wykorzystania (przykład)
+        const totalHours = data.kpi.total_hours || 0;
+        const maxPossibleHours = 200; // Przykład: 10 sal × 10h/dzień × 2 tygodnie
+        const utilizationPercent = Math.min((totalHours / maxPossibleHours) * 100, 100);
+
+        charts.gauge.setOption({
+            series: [{
+                type: 'gauge',
+                startAngle: 200,
+                endAngle: -20,
+                min: 0,
+                max: 100,
+                splitNumber: 5,
+                itemStyle: {
+                    color: utilizationPercent < 50 ? '#10b981' :
+                        utilizationPercent < 80 ? '#f59e0b' : '#ef4444'
+                },
+                progress: {
+                    show: true,
+                    width: 18,
+                    itemStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0, y: 0, x2: 1, y2: 0,
+                            colorStops: [
+                                { offset: 0, color: '#10b981' },
+                                { offset: 0.5, color: '#f59e0b' },
+                                { offset: 1, color: '#ef4444' }
+                            ]
+                        }
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        width: 18,
+                        color: [[1, 'rgba(255, 255, 255, 0.1)']]
+                    }
+                },
+                axisTick: {
+                    distance: -22,
+                    splitNumber: 5,
+                    lineStyle: {
+                        width: 2,
+                        color: 'rgba(226, 232, 240, 0.5)'
+                    }
+                },
+                splitLine: {
+                    distance: -28,
+                    length: 8,
+                    lineStyle: {
+                        width: 3,
+                        color: 'rgba(226, 232, 240, 0.7)'
+                    }
+                },
+                axisLabel: {
+                    distance: -40,
+                    color: 'rgba(226, 232, 240, 0.9)',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    formatter: (value) => value + '%'
+                },
+                anchor: {
+                    show: true,
+                    showAbove: true,
+                    size: 20,
+                    itemStyle: {
+                        borderWidth: 8,
+                        borderColor: utilizationPercent < 50 ? '#10b981' :
+                            utilizationPercent < 80 ? '#f59e0b' : '#ef4444'
+                    }
+                },
+                title: {
+                    show: false
+                },
+                detail: {
+                    valueAnimation: true,
+                    fontSize: 42,
+                    fontWeight: 800,
+                    offsetCenter: [0, '70%'],
+                    formatter: (value) => Math.round(value) + '%',
+                    color: 'rgba(226, 232, 240, 0.95)'
+                },
+                data: [{
+                    value: utilizationPercent,
+                    name: 'Wykorzystanie'
+                }]
+            }]
+        });
+    }
+
+    function renderSankey(data) {
+        // Przygotuj dane Sankey z departamentów → sal → statusów
+        const nodes = [];
+        const links = [];
+
+        // Nodes: Departamenty
+        const depts = data?.by_dept ? [...new Set(data.by_dept.map(x => x.department))].slice(0, 5) : [];
+        depts.forEach(d => nodes.push({ name: d }));
+
+        // Nodes: Sale
+        const rooms = data?.top_rooms ? [...new Set(data.top_rooms.map(x => x.room))].slice(0, 5) : [];
+        rooms.forEach(r => nodes.push({ name: r }));
+
+        // Nodes: Statusy
+        const statuses = ['Potwierdzone', 'Zakończone', 'Anulowane'];
+        statuses.forEach(s => nodes.push({ name: s }));
+
+        // Links: Dept → Room (symulacja)
+        depts.forEach((dept, i) => {
+            const room = rooms[i % rooms.length];
+            if (!room) return;
+            const value = Math.floor(Math.random() * 20) + 10;
+            links.push({ source: dept, target: room, value });
+        });
+
+        // Links: Room → Status (symulacja)
+        rooms.forEach(room => {
+            statuses.forEach((status, i) => {
+                const value = Math.floor(Math.random() * 15) + (i === 1 ? 20 : 5);
+                links.push({ source: room, target: status, value });
+            });
+        });
+
+        charts.sankey.setOption({
+            tooltip: {
+                trigger: 'item',
+                triggerOn: 'mousemove',
+                formatter: (params) => {
+                    if (params.dataType === 'edge') {
+                        return `${params.data.source} → ${params.data.target}<br/>Rezerwacji: <b>${params.data.value}</b>`;
+                    }
+                    return `${params.name}<br/>Łącznie: <b>${params.value}</b>`;
+                }
+            },
+            series: [{
+                type: 'sankey',
+                layout: 'none',
+                emphasis: {
+                    focus: 'adjacency'
+                },
+                lineStyle: {
+                    color: 'gradient',
+                    curveness: 0.5
+                },
+                itemStyle: {
+                    borderWidth: 2,
+                    borderColor: 'rgba(255, 255, 255, 0.3)'
+                },
+                label: {
+                    color: 'rgba(226, 232, 240, 0.95)',
+                    fontWeight: 700,
+                    fontSize: 12
+                },
+                data: nodes,
+                links: links,
+                left: 20,
+                right: 150,
+                top: 40,
+                bottom: 20
+            }]
+        });
+    }
+
+    function wireInteractions() {
+        // Avoid duplicating listeners
+        for (const c of Object.values(charts)) {
+            c.off('click');
+        }
+
+        charts.trend.on('click', async (params) => {
+            // Tabela rezerwacji jest niezależna - nie ustawiamy drill_date
+            // state.drill_date = params.name;
+            // await refreshDrilldown();
+            // Wykresy pozostają niezmienionym
+        });
+
+        charts.weeklyCompare.on('click', async (params) => {
+            // Tabela rezerwacji jest niezależna - nie filtrujemy po dniu
+            // Wykresy pozostają niezmienionym
+        });
+
+        charts.reservationStats.on('click', async (params) => {
+            const stats = window.__lastSummaries?.reservation_stats?.[state.stats_mode] || [];
+            const it = stats[params.dataIndex];
+            if (!it) return;
+            if (it.start && it.end) {
+                state.start = it.start;
+                state.end = it.end;
+                document.getElementById('filter-start').value = state.start;
+                document.getElementById('filter-end').value = state.end;
+                if (window.__fpRange) window.__fpRange.setDate([state.start, state.end], true);
+                await refreshAll();
+            }
+        });
+
+        charts.toprooms.on('click', async (params) => {
+            // Wykresy są tylko informacyjne - nie filtrują
+            // Użytkownik może filtrować używając głównych filtrów na górze
+        });
+
+        charts.treemap.on('click', async (params) => {
+            // Wykresy są tylko informacyjne - nie filtrują
+            // Użytkownik może filtrować używając głównych filtrów na górze
+        });
+
+        charts.users.on('click', async (params) => {
+            // Tabela rezerwacji jest niezależna - nie filtrujemy po użytkowniku
+            // Wykresy pozostają niezmienionym
+        });
+
+        charts.deptPie.on('click', async (params) => {
+            // Wykresy są tylko informacyjne - nie filtrują
+            // Użytkownik może filtrować używając głównych filtrów na górze
+        });
+
+        charts.dept.on('click', async (params) => {
+            // Wykresy są tylko informacyjne - nie filtrują
+            // Użytkownik może filtrować używając głównych filtrów na górze
+        });
+
+    }
+
+    function fillSelect(select, items, placeholder, getValue = (x) => x.value, getLabel = (x) => x.label) {
+        select.innerHTML = '';
+        console.log('📝 Filling select with', items.length, 'items');
+        for (const it of items) {
+            const opt = document.createElement('option');
+            opt.value = getValue(it);
+            opt.textContent = getLabel(it);
+            select.appendChild(opt);
+        }
+
+        // Reinitialize Choices if already initialized
+        if (window.__choices) {
+            console.log('🔄 Reinitializing Choices for select:', select.id);
+            // Destroy old instance
+            if (select.id === 'filter-room' && window.__choices.room) {
+                window.__choices.room.destroy();
+            } else if (select.id === 'filter-dept' && window.__choices.dept) {
+                window.__choices.dept.destroy();
+            }
+
+            // Recreate
+            if (select.id === 'filter-room') {
+                window.__choices.room = new Choices(select, {
+                    removeItemButton: true,
+                    searchEnabled: true,
+                    shouldSort: false,
+                    placeholderValue: 'Wszystkie sale',
+                    maxItemCount: -1
+                });
+            } else if (select.id === 'filter-dept') {
+                window.__choices.dept = new Choices(select, {
+                    removeItemButton: true,
+                    searchEnabled: true,
+                    shouldSort: false,
+                    placeholderValue: 'Wszystkie departamenty',
+                    maxItemCount: -1
+                });
+            }
+        }
+    }
+
+    function getMultiValues(selectEl) {
+        return Array.from(selectEl.selectedOptions).map(o => o.value).filter(Boolean);
+    }
+
+    function setMultiValues(selectEl, values) {
+        const set = new Set(values || []);
+        for (const opt of selectEl.options) {
+            opt.selected = set.has(opt.value);
+        }
+    }
+
+    function setDefaults() {
+        const now = new Date();
+        const start = new Date(now.getFullYear(), now.getMonth(), 1);
+        const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        const iso = (d) => d.toISOString().slice(0, 10);
+        state.start = iso(start);
+        state.end = iso(end);
+        document.getElementById('filter-start').value = state.start;
+        document.getElementById('filter-end').value = state.end;
+    }
+
+    async function updateDeptMode(mode) {
+        state.deptMode = mode;
+        // Update styling
+        document.querySelectorAll('[id^="btn-dept-"]').forEach(el => el.classList.remove('active'));
+        document.getElementById(`btn-dept-${mode}`).classList.add('active');
+
+        // Refresh charts
+        if (window.__lastSummaries) {
+            renderCharts(window.__lastSummaries);
+        } else {
+            refreshAll();
+        }
+    }
+
+    async function updateTopRoomMode(mode) {
+        state.topRoomMode = mode;
+        // Update styling
+        document.querySelectorAll('[id^="btn-tr-"]').forEach(el => el.classList.remove('active'));
+        document.getElementById(`btn-tr-${mode}`).classList.add('active');
+
+        // Refresh charts (using filtered data if exists)
+        if (window.__lastSummaries) {
+            renderCharts(window.__lastSummaries);
+        } else {
+            refreshAll();
+        }
+    }
+
+    async function refreshAll() {
+        setActiveFiltersLabel();
+        for (const c of Object.values(charts)) c.showLoading('default', { text: 'Ładowanie danych…' });
+        let data;
+        try {
+            data = await fetchSummaries();
+            console.log('🎯 Data received, validating...');
+        } catch (e) {
+            for (const c of Object.values(charts)) c.hideLoading();
+            const errorMsg = `Błąd pobierania danych:\n${e.message || e}`;
+            console.error('❌ ' + errorMsg);
+            alert(errorMsg);
+            throw e;
+        }
+
+        // Validate data structure
+        if (!data || typeof data !== 'object') {
+            for (const c of Object.values(charts)) c.hideLoading();
+            alert('Błąd: Serwer zwrócił nieprawidłowe dane');
+            throw new Error('Invalid data structure');
+        }
+
+        // Apply defaults for missing fields
+        data = {
+            meta: data.meta || { rooms: [], departments: [], users: [] },
+            kpi: data.kpi || { total_bookings: 0, total_hours: 0, cancel_rate: 0, avg_minutes: 0 },
+            trend: data.trend || [],
+            weekly_compare: data.weekly_compare || { labels: [], this_week: [], prev_week: [] },
+            reservation_stats: data.reservation_stats || { daily: [], weekly: [], monthly: [] },
+            top_rooms: data.top_rooms || [],
+            dept_overview: data.dept_overview || [],
+            treemap: data.treemap || [],
+            scatter: data.scatter || [],
+            histogram: data.histogram || { labels: [], values: [] },
+            top_users: data.top_users || [],
+            ...data
+        };
+
+        for (const c of Object.values(charts)) c.hideLoading();
+
+        // Fill selects on first load
+        const roomSel = document.getElementById('filter-room');
+        if (!roomSel.options.length && data.meta.rooms.length) {
+            console.log('📝 Populating filters with', data.meta.rooms.length, 'rooms and', data.meta.departments.length, 'departments');
+            fillSelect(roomSel, data.meta.rooms, 'Wszystkie sale', x => String(x.id), x => x.name);
+            fillSelect(document.getElementById('filter-dept'), data.meta.departments, 'Wszystkie departamenty', x => x, x => x);
+            window.__usersIndex = data.meta.users;
+            window.__roomNameToId = {};
+            for (const r of data.meta.rooms) {
+                window.__roomNameToId[r.name] = String(r.id);
+            }
+
+            // Init searchable multi-selects
+            if (!window.__choices) {
+                console.log('🎨 Initializing Choices.js...');
+                const deptSel = document.getElementById('filter-dept');
+
+                window.__choices = {
+                    room: new Choices(roomSel, { removeItemButton: true, searchEnabled: true, shouldSort: false, placeholderValue: 'Wszystkie sale', maxItemCount: -1 }),
+                    dept: new Choices(deptSel, { removeItemButton: true, searchEnabled: true, shouldSort: false, placeholderValue: 'Wszystkie departamenty', maxItemCount: -1 }),
+                };
+
+                // Add change listeners to native selects (Choices.js wraps them)
+                roomSel.addEventListener('change', (e) => {
+                    console.log('🔄 Room select changed');
+                    state.room_id = getMultiValues(roomSel);
+                    state.drill_date = null;
+                    state.drill_user_id = null;
+                    updateFilterSummary();
+                    refreshAll();
+                });
+
+                deptSel.addEventListener('change', (e) => {
+                    console.log('🔄 Dept select changed');
+                    state.dept = getMultiValues(deptSel);
+                    state.drill_date = null;
+                    state.drill_user_id = null;
+                    updateFilterSummary();
+                    refreshAll();
+                });
+            }
+        }
+
+        window.__lastSummaries = data;
+        console.log('🎨 Rendering all charts with', data.trend.length, 'days of data...');
+        renderCharts(data);
+        console.log('📋 Refreshing drilldown data...');
+        await refreshDrilldown(true);
+        console.log('✨ All refreshed successfully!');
+    }
+
+    async function refreshDrilldown(silent = false) {
+        setActiveFiltersLabel();
+        const tbody = document.getElementById('drilldown-body');
+
+        if (!silent) {
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4" style="color: rgba(226, 232, 240, 0.6);">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                Ładowanie rezerwacji...
+            </td></tr>`;
+        }
+
+        const data = await fetchDrilldown();
+        let bookings = data.bookings || [];
+
+        // Store original data for filtering/sorting
+        window.drilldownData = bookings;
+
+        // Populate department and room filters
+        populateAdvancedFilters();
+
+        if (!bookings.length) {
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-5" style="color: rgba(226, 232, 240, 0.6);">
+                <i class="bi bi-inbox" style="font-size: 2.5rem; display: block; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <div style="font-size: 1rem; font-weight: 600;">Brak danych dla wybranych filtrów</div>
+                <div style="font-size: 0.85rem; margin-top: 0.5rem;">Spróbuj zmienić kryteria wyszukiwania lub wybrać inny zakres dat</div>
+            </td></tr>`;
+            updateDrilldownStats([], 0);
+            return;
+        }
+
+        // Apply filters and sorting
+        applyDrilldownFilters();
+    }
+
+    function populateAdvancedFilters() {
+        if (!window.drilldownData) return;
+
+        const departmentSelect = document.getElementById('filter-department');
+        const roomSelect = document.getElementById('filter-room-drill');
+
+        // Populate department filter
+        if (departmentSelect) {
+            // Clear existing options except first one
+            while (departmentSelect.options.length > 1) {
+                departmentSelect.remove(1);
+            }
+
+            const departments = [...new Set(window.drilldownData.map(b => b.department).filter(d => d))];
+            departments.sort();
+            departments.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept;
+                option.textContent = dept;
+                departmentSelect.appendChild(option);
+            });
+        }
+
+        // Populate room filter
+        if (roomSelect) {
+            // Clear existing options except first one
+            while (roomSelect.options.length > 1) {
+                roomSelect.remove(1);
+            }
+
+            const rooms = [...new Set(window.drilldownData.map(b => b.room).filter(r => r))];
+            rooms.sort();
+            rooms.forEach(room => {
+                const option = document.createElement('option');
+                option.value = room;
+                option.textContent = room;
+                roomSelect.appendChild(option);
+            });
+        }
+    }
+
+    function applyDrilldownFilters() {
+        if (!window.drilldownData) return;
+
+        const tbody = document.getElementById('drilldown-body');
+        const searchInput = document.getElementById('drilldown-search');
+        const sortButtons = document.querySelectorAll('.drilldown-sort-btn');
+        const limitSelect = document.getElementById('drilldown-limit');
+        const clearSearchBtn = document.getElementById('clear-search-btn');
+
+        // Advanced filters
+        const departmentSelect = document.getElementById('filter-department');
+        const roomSelect = document.getElementById('filter-room-drill');
+        const durationSelect = document.getElementById('filter-duration');
+        const attendeesSelect = document.getElementById('filter-attendees');
+        const dateFromInput = document.getElementById('filter-date-from');
+        const dateToInput = document.getElementById('filter-date-to');
+        const weekdayButtons = document.querySelectorAll('.weekday-filter-btn');
+
+        let bookings = [...window.drilldownData];
+        const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+        // Search filter
+        if (searchTerm) {
+            bookings = bookings.filter(b => {
+                return (b.title?.toLowerCase() || '').includes(searchTerm) ||
+                    (b.room?.toLowerCase() || '').includes(searchTerm) ||
+                    (b.user?.toLowerCase() || '').includes(searchTerm) ||
+                    (b.department?.toLowerCase() || '').includes(searchTerm);
+            });
+            if (clearSearchBtn) clearSearchBtn.style.display = 'block';
+        } else {
+            if (clearSearchBtn) clearSearchBtn.style.display = 'none';
+        }
+
+        // Department filter
+        if (departmentSelect) {
+            const selectedDepts = Array.from(departmentSelect.selectedOptions).map(opt => opt.value).filter(v => v);
+            if (selectedDepts.length > 0) {
+                bookings = bookings.filter(b => selectedDepts.includes(b.department));
+            }
+        }
+
+        // Room filter
+        if (roomSelect) {
+            const selectedRooms = Array.from(roomSelect.selectedOptions).map(opt => opt.value).filter(v => v);
+            if (selectedRooms.length > 0) {
+                bookings = bookings.filter(b => selectedRooms.includes(b.room));
+            }
+        }
+
+        // Duration filter
+        if (durationSelect && durationSelect.value) {
+            const durationType = durationSelect.value;
+            bookings = bookings.filter(b => {
+                const minutes = b.minutes || 0;
+                switch (durationType) {
+                    case 'short': return minutes < 30;
+                    case 'medium': return minutes >= 30 && minutes < 60;
+                    case 'long': return minutes >= 60 && minutes <= 120;
+                    case 'verylong': return minutes > 120;
+                    default: return true;
+                }
+            });
+        }
+
+        // Attendees filter
+        if (attendeesSelect && attendeesSelect.value) {
+            const attendeesType = attendeesSelect.value;
+            bookings = bookings.filter(b => {
+                const attendees = b.attendees || 0;
+                switch (attendeesType) {
+                    case 'small': return attendees >= 1 && attendees <= 5;
+                    case 'medium': return attendees >= 6 && attendees <= 15;
+                    case 'large': return attendees >= 16 && attendees <= 30;
+                    case 'xlarge': return attendees > 30;
+                    default: return true;
+                }
+            });
+        }
+
+        // Date range filter
+        if (dateFromInput && dateToInput && dateFromInput.value && dateToInput.value) {
+            const fromDate = new Date(dateFromInput.value);
+            const toDate = new Date(dateToInput.value);
+            toDate.setHours(23, 59, 59, 999);
+
+            bookings = bookings.filter(b => {
+                const bookingDate = new Date(b.start);
+                return bookingDate >= fromDate && bookingDate <= toDate;
+            });
+        }
+
+        // Weekday filter
+        const selectedWeekdays = Array.from(weekdayButtons)
+            .filter(btn => btn.classList.contains('active'))
+            .map(btn => parseInt(btn.getAttribute('data-weekday')));
+
+        if (selectedWeekdays.length > 0) {
+            bookings = bookings.filter(b => {
+                const bookingDate = new Date(b.start);
+                return selectedWeekdays.includes(bookingDate.getDay());
+            });
+        }
+
+        // Get active sort
+        const activeSort = Array.from(sortButtons).find(btn => btn.classList.contains('active'));
+        const sortType = activeSort ? activeSort.getAttribute('data-sort') : 'date-desc';
+
+        // Sort bookings
+        switch (sortType) {
+            case 'date-desc':
+                bookings.sort((a, b) => new Date(b.start) - new Date(a.start));
+                break;
+            case 'date-asc':
+                bookings.sort((a, b) => new Date(a.start) - new Date(b.start));
+                break;
+            case 'duration-desc':
+                bookings.sort((a, b) => (b.minutes || 0) - (a.minutes || 0));
+                break;
+            case 'attendees-desc':
+                bookings.sort((a, b) => (b.attendees || 0) - (a.attendees || 0));
+                break;
+        }
+
+        // Apply limit
+        const limit = limitSelect ? limitSelect.value : '200';
+        const totalBookings = bookings.length;
+        if (limit !== 'all') {
+            bookings = bookings.slice(0, parseInt(limit));
+        }
+
+        // Render table
+        if (bookings.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-5" style="color: rgba(226, 232, 240, 0.6);">
+                <i class="bi bi-search" style="font-size: 2.5rem; display: block; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <div style="font-size: 1rem; font-weight: 600;">Nie znaleziono rezerwacji</div>
+                <div style="font-size: 0.85rem; margin-top: 0.5rem;">Brak wyników dla wybranych filtrów</div>
+            </td></tr>`;
+        } else {
+            tbody.innerHTML = bookings.map((b, idx) => `
+                <tr style="transition: all 0.3s ease; animation: fadeInRow 0.3s ease ${idx * 0.02}s both;">
+                    <td style="padding: 0.9rem; color: rgba(226, 232, 240, 0.9); font-size: 0.85rem;">
+                        <div style="font-weight: 600;">${b.start.split(' ')[0]}</div>
+                        <div style="font-size: 0.75rem; color: rgba(226, 232, 240, 0.6);">${b.start.split(' ')[1]}</div>
+                    </td>
+                    <td style="padding: 0.9rem; color: rgba(226, 232, 240, 0.9); font-size: 0.85rem;">
+                        <div style="font-weight: 600;">${b.end.split(' ')[0]}</div>
+                        <div style="font-size: 0.75rem; color: rgba(226, 232, 240, 0.6);">${b.end.split(' ')[1]}</div>
+                    </td>
+                    <td style="padding: 0.9rem;">
+                        <span style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.15)); border: 1px solid rgba(37, 99, 235, 0.3); color: rgba(147, 197, 253, 0.95); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="bi bi-door-closed"></i> ${b.room}
+                        </span>
+                    </td>
+                    <td style="padding: 0.9rem;">
+                        <span style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(168, 85, 247, 0.15)); border: 1px solid rgba(124, 58, 237, 0.3); color: rgba(196, 181, 253, 0.95); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="bi bi-person"></i> ${b.user}
+                        </span>
+                    </td>
+                    <td style="padding: 0.9rem;">
+                        ${b.department ? `<span style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); color: rgba(253, 224, 71, 0.95); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="bi bi-diagram-3"></i> ${b.department}
+                        </span>` : '<span style="color: rgba(226, 232, 240, 0.4); font-size: 0.75rem;">—</span>'}
+                    </td>
+                    <td style="padding: 0.9rem; color: rgba(226, 232, 240, 0.85); font-size: 0.85rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${b.title}">${b.title}</td>
+                    <td class="text-end" style="padding: 0.9rem;">
+                        <span style="background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: rgba(134, 239, 172, 0.95); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem;">
+                            <i class="bi bi-people-fill"></i> ${b.attendees}
+                        </span>
+                    </td>
+                    <td class="text-end" style="padding: 0.9rem;">
+                        <span style="background: rgba(96, 165, 250, 0.15); border: 1px solid rgba(96, 165, 250, 0.3); color: rgba(147, 197, 253, 0.95); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem;">
+                            <i class="bi bi-hourglass-split"></i> ${b.minutes}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Update stats
+        updateDrilldownStats(bookings, totalBookings);
+    }
+
+    function updateDrilldownStats(bookings, total) {
+        const showingEl = document.getElementById('drilldown-showing');
+        const totalEl = document.getElementById('drilldown-total');
+        const loadedEl = document.getElementById('drilldown-loaded');
+        const totalMinutesEl = document.getElementById('total-minutes');
+        const avgAttendeesEl = document.getElementById('avg-attendees');
+
+        if (showingEl) showingEl.textContent = bookings.length;
+        if (totalEl) totalEl.textContent = total;
+        if (loadedEl) loadedEl.textContent = window.drilldownData ? window.drilldownData.length : 0;
+
+        // Calculate totals
+        const totalMinutes = bookings.reduce((sum, b) => sum + (b.minutes || 0), 0);
+        const avgAttendees = bookings.length > 0
+            ? (bookings.reduce((sum, b) => sum + (b.attendees || 0), 0) / bookings.length).toFixed(1)
+            : 0;
+
+        if (totalMinutesEl) totalMinutesEl.textContent = totalMinutes.toLocaleString('pl-PL');
+        if (avgAttendeesEl) avgAttendeesEl.textContent = avgAttendees;
+    }
+
+    function initDrilldownFilters() {
+        const searchInput = document.getElementById('drilldown-search');
+        const sortButtons = document.querySelectorAll('.drilldown-sort-btn');
+        const limitSelect = document.getElementById('drilldown-limit');
+        const clearSearchBtn = document.getElementById('clear-search-btn');
+        const exportCsvBtn = document.getElementById('export-csv-btn');
+
+        // Advanced filters
+        const toggleAdvancedBtn = document.getElementById('toggle-advanced-filters');
+        const advancedPanel = document.getElementById('advanced-filters-panel');
+        const departmentSelect = document.getElementById('filter-department');
+        const roomSelect = document.getElementById('filter-room-drill');
+        const durationSelect = document.getElementById('filter-duration');
+        const attendeesSelect = document.getElementById('filter-attendees');
+        const dateFromInput = document.getElementById('filter-date-from');
+        const dateToInput = document.getElementById('filter-date-to');
+        const weekdayButtons = document.querySelectorAll('.weekday-filter-btn');
+        const clearAdvancedBtn = document.getElementById('clear-advanced-filters');
+
+        // Toggle advanced filters
+        if (toggleAdvancedBtn && advancedPanel) {
+            toggleAdvancedBtn.addEventListener('click', function () {
+                if (advancedPanel.style.display === 'none') {
+                    advancedPanel.style.display = 'block';
+                    this.innerHTML = '<i class="bi bi-chevron-up"></i> Ukryj';
+                } else {
+                    advancedPanel.style.display = 'none';
+                    this.innerHTML = '<i class="bi bi-chevron-down"></i> Pokaż';
+                }
+            });
+        }
+
+        // Search
+        let searchTimeout;
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    applyDrilldownFilters();
+                }, 300);
+            });
+        }
+
+        // Clear search
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', function () {
+                if (searchInput) {
+                    searchInput.value = '';
+                    this.style.display = 'none';
+                    applyDrilldownFilters();
+                }
+            });
+        }
+
+        // Sort buttons
+        sortButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                sortButtons.forEach(b => {
+                    b.style.background = 'transparent';
+                    b.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    b.style.color = 'rgba(226, 232, 240, 0.7)';
+                    b.classList.remove('active');
+                });
+                this.style.background = 'rgba(37, 99, 235, 0.25)';
+                this.style.borderColor = 'rgba(37, 99, 235, 0.4)';
+                this.style.color = 'rgba(226, 232, 240, 0.95)';
+                this.classList.add('active');
+                applyDrilldownFilters();
+            });
+        });
+
+        // Limit change
+        if (limitSelect) {
+            limitSelect.addEventListener('change', function () {
+                applyDrilldownFilters();
+            });
+        }
+
+        // Advanced filter changes
+        if (departmentSelect) {
+            departmentSelect.addEventListener('change', applyDrilldownFilters);
+        }
+
+        if (roomSelect) {
+            roomSelect.addEventListener('change', applyDrilldownFilters);
+        }
+
+        if (durationSelect) {
+            durationSelect.addEventListener('change', applyDrilldownFilters);
+        }
+
+        if (attendeesSelect) {
+            attendeesSelect.addEventListener('change', applyDrilldownFilters);
+        }
+
+        if (dateFromInput) {
+            dateFromInput.addEventListener('change', applyDrilldownFilters);
+        }
+
+        if (dateToInput) {
+            dateToInput.addEventListener('change', applyDrilldownFilters);
+        }
+
+        // Weekday buttons
+        weekdayButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                if (this.classList.contains('active')) {
+                    this.style.background = 'rgba(37, 99, 235, 0.25)';
+                    this.style.borderColor = 'rgba(37, 99, 235, 0.4)';
+                    this.style.color = 'rgba(226, 232, 240, 0.95)';
+                } else {
+                    this.style.background = 'transparent';
+                    this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    this.style.color = 'rgba(226, 232, 240, 0.7)';
+                }
+                applyDrilldownFilters();
+            });
+        });
+
+        // Clear advanced filters
+        if (clearAdvancedBtn) {
+            clearAdvancedBtn.addEventListener('click', function () {
+                // Clear department
+                if (departmentSelect) {
+                    Array.from(departmentSelect.options).forEach(opt => opt.selected = false);
+                }
+
+                // Clear room
+                if (roomSelect) {
+                    Array.from(roomSelect.options).forEach(opt => opt.selected = false);
+                }
+
+                // Clear duration
+                if (durationSelect) {
+                    durationSelect.value = '';
+                }
+
+                // Clear attendees
+                if (attendeesSelect) {
+                    attendeesSelect.value = '';
+                }
+
+                // Clear dates
+                if (dateFromInput) dateFromInput.value = '';
+                if (dateToInput) dateToInput.value = '';
+
+                // Clear weekdays
+                weekdayButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.style.background = 'transparent';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.color = 'rgba(226, 232, 240, 0.7)';
+                });
+
+                applyDrilldownFilters();
+            });
+        }
+
+
+        // Export CSV
+        if (exportCsvBtn) {
+            exportCsvBtn.addEventListener('click', function () {
+                exportDrilldownToCSV();
+            });
+        }
+    }
+
+    function exportDrilldownToCSV() {
+        if (!window.drilldownData || window.drilldownData.length === 0) {
+            alert('Brak danych do eksportu');
+            return;
+        }
+
+        const bookings = window.drilldownData;
+        const headers = ['Start', 'Koniec', 'Sala', 'Użytkownik', 'Departament', 'Tytuł', 'Uczestnicy', 'Minuty'];
+
+        let csv = headers.join(';') + '\n';
+        bookings.forEach(b => {
+            const row = [
+                b.start,
+                b.end,
+                b.room,
+                b.user,
+                b.department || '',
+                b.title,
+                b.attendees,
+                b.minutes
+            ];
+            csv += row.map(field => `"${field}"`).join(';') + '\n';
+        });
+
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `rezerwacje_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function updateFilterSummary() {
+        // Daty
+        const datesEl = document.getElementById('filter-info-dates');
+        if (state.start && state.end) {
+            datesEl.textContent = `${state.start} → ${state.end}`;
+        } else {
+            datesEl.textContent = '—';
+        }
+
+        // Helper for formatting lists
+        const formatList = (choicesInstance, stateIds) => {
+            let names = [];
+
+            // 1. Try to get labels from Choices.js if available
+            if (choicesInstance) {
+                try {
+                    // getValue() returns full item objects by default (valueOnly=false)
+                    // We need objects to access .label property
+                    const items = choicesInstance.getValue();
+                    if (Array.isArray(items)) {
+                        names = items.map(i => i.label).filter(l => l);
+                    } else if (items && items.label) {
+                        names = [items.label];
+                    }
+                } catch (e) { console.warn('Choices get value error', e); }
+            }
+
+            // 2. If no names from Choices, try to fallback to metadata lookup (if possible) or raw IDs
+            if (names.length === 0 && stateIds && stateIds.length > 0) {
+                // Try to look up room names if map available
+                if (window.__roomNameToId) {
+                    // Since standard map is Name->ID, we need ID->Name. 
+                    // Let's simpler: just show raw values if no better option, 
+                    // or try to find name in meta lists if really needed.
+                    // For now fallback to stateIds (which are values)
+                }
+                names = stateIds;
+            }
+
+            if (!names || names.length === 0) return 'Wszystkie';
+
+            if (names.length <= 3) {
+                return names.join(', ');
+            } else {
+                return `${names.slice(0, 3).join(', ')} +${names.length - 3}`;
+            }
+        };
+
+        // Sale
+        const roomsEl = document.getElementById('filter-info-rooms');
+        if (roomsEl) {
+            roomsEl.textContent = formatList(
+                window.__choices ? window.__choices.room : null,
+                state.room_id
+            );
+        }
+
+        // Departamenty
+        const deptsEl = document.getElementById('filter-info-depts');
+        if (deptsEl) {
+            deptsEl.textContent = formatList(
+                window.__choices ? window.__choices.dept : null,
+                state.dept
+            );
+        }
+    }
+
+    function bindFilters() {
+        const startEl = document.getElementById('filter-start');
+        const endEl = document.getElementById('filter-end');
+        const roomEl = document.getElementById('filter-room');
+        const deptEl = document.getElementById('filter-dept');
+
+        const presetButtons = () => Array.from(document.querySelectorAll('[data-preset], [data-range], #btn-ytd'));
+
+        function clearPresetActive() {
+            presetButtons().forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
+        }
+
+        function setPresetActive(btn) {
+            clearPresetActive();
+            if (btn) {
+                btn.classList.add('active');
+                btn.setAttribute('aria-pressed', 'true');
+            }
+        }
+
+        function onChange() {
+            state.start = startEl.value || null;
+            state.end = endEl.value || null;
+            state.room_id = getMultiValues(roomEl);
+            state.dept = getMultiValues(deptEl);
+            state.drill_date = null;
+            state.drill_user_id = null;
+            updateFilterSummary();
+            refreshAll();
+        }
+
+        // ...existing code...
+
+        function onManualDateChange() {
+            clearPresetActive();
+            onChange();
+        }
+
+        startEl.addEventListener('change', onManualDateChange);
+        endEl.addEventListener('change', onManualDateChange);
+
+        // Add listeners with delay to ensure Choices is initialized
+        setTimeout(() => {
+            if (roomEl) {
+                roomEl.addEventListener('change', onChange);
+            }
+            if (deptEl) {
+                deptEl.addEventListener('change', onChange);
+            }
+        }, 100);
+
+        // Presets (new)
+        document.querySelectorAll('[data-preset]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setPresetActive(btn);
+                const preset = btn.getAttribute('data-preset');
+                const now = new Date();
+                const iso = (d) => d.toISOString().slice(0, 10);
+                let start = null;
+                let end = null;
+                if (preset === 'today') {
+                    start = new Date(now);
+                    end = new Date(now);
+                } else if (preset === 'this_week') {
+                    const weekday = (now.getDay() + 6) % 7; // Mon=0
+                    start = new Date(now);
+                    start.setDate(start.getDate() - weekday);
+                    end = new Date(start);
+                    end.setDate(end.getDate() + 6);
+                } else if (preset === 'last_2_weeks') {
+                    end = new Date(now);
+                    start = new Date(now);
+                    start.setDate(start.getDate() - 13);
+                } else if (preset === 'last_3_weeks') {
+                    end = new Date(now);
+                    start = new Date(now);
+                    start.setDate(start.getDate() - 20);
+                } else if (preset === 'this_month') {
+                    start = new Date(now.getFullYear(), now.getMonth(), 1);
+                    end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                } else if (preset === 'last_month') {
+                    const m = now.getMonth();
+                    const y = now.getFullYear();
+                    start = new Date(y, m - 1, 1);
+                    end = new Date(y, m, 0);
+                } else if (preset === 'tomorrow') {
+                    start = new Date(now);
+                    start.setDate(start.getDate() + 1);
+                    end = new Date(start);
+                } else if (preset === 'next_week') {
+                    // Next Monday to Next Sunday
+                    const weekday = (now.getDay() + 6) % 7; // Mon=0
+                    start = new Date(now);
+                    start.setDate(start.getDate() + (7 - weekday)); // Next Monday
+                    end = new Date(start);
+                    end.setDate(end.getDate() + 6); // Next Sunday
+                } else if (preset === 'next_2_weeks') {
+                    start = new Date(now);
+                    end = new Date(now);
+                    end.setDate(end.getDate() + 14);
+                } else if (preset === 'next_3_weeks') {
+                    start = new Date(now);
+                    end = new Date(now);
+                    end.setDate(end.getDate() + 21);
+                } else if (preset === 'next_month') {
+                    const m = now.getMonth();
+                    const y = now.getFullYear();
+                    start = new Date(y, m + 1, 1);
+                    end = new Date(y, m + 2, 0); // Last day of next month
+                } else if (preset === 'next_2_months') {
+                    start = new Date(now);
+                    end = new Date(now);
+                    end.setDate(end.getDate() + 60);
+                } else if (preset === 'next_3_months') {
+                    start = new Date(now);
+                    end = new Date(now);
+                    end.setDate(end.getDate() + 90);
+                } else if (preset === 'rest_of_year') {
+                    start = new Date(now);
+                    end = new Date(now.getFullYear(), 11, 31);
+                } else if (preset === 'yesterday') {
+                    start = new Date(now);
+                    start.setDate(start.getDate() - 1);
+                    end = new Date(start);
+                } else if (preset === 'last_week') {
+                    const weekday = (now.getDay() + 6) % 7;
+                    start = new Date(now);
+                    start.setDate(start.getDate() - weekday - 7);
+                    end = new Date(start);
+                    end.setDate(end.getDate() + 6);
+                } else if (preset === 'next_7_days') {
+                    start = new Date(now);
+                    end = new Date(now);
+                    end.setDate(end.getDate() + 7);
+                } else if (preset === 'next_30_days') {
+                    start = new Date(now);
+                    end = new Date(now);
+                    end.setDate(end.getDate() + 30);
+                } else if (preset === 'this_quarter') {
+                    const m = now.getMonth();
+                    const qStartMonth = Math.floor(m / 3) * 3;
+                    start = new Date(now.getFullYear(), qStartMonth, 1);
+                    end = new Date(now.getFullYear(), qStartMonth + 3, 0);
+                } else if (preset === 'last_quarter') {
+                    const m = now.getMonth();
+                    const qStartMonth = Math.floor(m / 3) * 3;
+                    start = new Date(now.getFullYear(), qStartMonth - 3, 1);
+                    end = new Date(now.getFullYear(), qStartMonth, 0);
+                } else if (preset === 'this_year') {
+                    start = new Date(now.getFullYear(), 0, 1);
+                    end = new Date(now.getFullYear(), 11, 31);
+                }
+                if (!start || !end) return;
+                state.start = iso(start);
+                state.end = iso(end);
+                startEl.value = state.start;
+                endEl.value = state.end;
+                if (window.__fpRange) {
+                    __suppressPresetClearOnce = true;
+                    window.__fpRange.setDate([state.start, state.end], true);
+                }
+                onChange();
+            });
+        });
+
+        // Presets
+        document.querySelectorAll('[data-range]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setPresetActive(btn);
+                const days = parseInt(btn.getAttribute('data-range'));
+                const end = new Date();
+                const start = new Date();
+                start.setDate(start.getDate() - days);
+                const iso = (d) => d.toISOString().slice(0, 10);
+                state.start = iso(start);
+                state.end = iso(end);
+                startEl.value = state.start;
+                endEl.value = state.end;
+                if (window.__fpRange) {
+                    __suppressPresetClearOnce = true;
+                    window.__fpRange.setDate([state.start, state.end], true);
+                }
+                onChange();
+            });
+        });
+        document.getElementById('btn-ytd').addEventListener('click', () => {
+            setPresetActive(document.getElementById('btn-ytd'));
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 1);
+            const iso = (d) => d.toISOString().slice(0, 10);
+            state.start = iso(start);
+            state.end = iso(now);
+            startEl.value = state.start;
+            endEl.value = state.end;
+            if (window.__fpRange) {
+                __suppressPresetClearOnce = true;
+                window.__fpRange.setDate([state.start, state.end], true);
+            }
+            onChange();
+        });
+
+        document.getElementById('btn-refresh').addEventListener('click', refreshAll);
+        const clearFiltersBtn = document.getElementById('btn-clear-filters-summary');
+        if (clearFiltersBtn) {
+            clearFiltersBtn.addEventListener('click', () => {
+                clearPresetActive();
+                state.room_id = [];
+                state.dept = [];
+                state.drill_date = null;
+                state.drill_user_id = null;
+                setDefaults();
+                setMultiValues(document.getElementById('filter-room'), []);
+                setMultiValues(document.getElementById('filter-dept'), []);
+                if (window.__choices) {
+                    window.__choices.room.removeActiveItems();
+                    window.__choices.dept.removeActiveItems();
+                }
+                updateFilterSummary();
+                refreshAll();
+            });
+        }
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            clearPresetActive();
+            state.room_id = [];
+            state.dept = [];
+            state.drill_date = null;
+            state.drill_user_id = null;
+            setDefaults();
+            setMultiValues(document.getElementById('filter-room'), []);
+            setMultiValues(document.getElementById('filter-dept'), []);
+            if (window.__choices) {
+                window.__choices.room.removeActiveItems();
+                window.__choices.dept.removeActiveItems();
+            }
+            updateFilterSummary();
+            refreshAll();
+        });
+
+        document.querySelectorAll('[data-stats-mode]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mode = btn.getAttribute('data-stats-mode');
+                state.stats_mode = mode;
+                document.querySelectorAll('[data-stats-mode]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                refreshAll();
+            });
+        });
+    }
+
+    function getSavedViews() {
+        try {
+            return JSON.parse(localStorage.getItem('roombooker_summaries_views') || '{}');
+        } catch {
+            return {};
+        }
+    }
+
+    function setSavedViews(views) {
+        localStorage.setItem('roombooker_summaries_views', JSON.stringify(views || {}));
+    }
+
+    function renderSavedViews() {
+        const wrap = document.getElementById('saved-views');
+        const views = getSavedViews();
+        const names = Object.keys(views);
+        if (!names.length) {
+            wrap.innerHTML = '<div class="text-muted small px-2">Brak zapisanych widoków</div>';
+            return;
+        }
+        wrap.innerHTML = names.map(n => `
+            <div class="d-flex align-items-center justify-content-between gap-2 py-1">
+                <button class="btn btn-sm btn-link text-decoration-none" data-view="${n}">${n}</button>
+                <button class="btn btn-sm btn-outline-danger" data-del="${n}"><i class="bi bi-trash"></i></button>
+            </div>
+        `).join('');
+
+        wrap.querySelectorAll('[data-view]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const v = views[btn.getAttribute('data-view')];
+                if (!v) return;
+                state.start = v.start;
+                state.end = v.end;
+                state.room_id = v.room_id || [];
+                state.dept = v.dept || [];
+                state.drill_date = null;
+                state.drill_weekday = null;
+                state.drill_hour = null;
+                state.drill_user_id = null;
+
+                document.getElementById('filter-start').value = state.start;
+                document.getElementById('filter-end').value = state.end;
+                setMultiValues(document.getElementById('filter-room'), state.room_id);
+                setMultiValues(document.getElementById('filter-dept'), state.dept);
+                if (window.__choices) {
+                    window.__choices.room.setChoiceByValue(state.room_id);
+                    window.__choices.dept.setChoiceByValue(state.dept);
+                }
+                await refreshAll();
+            });
+        });
+
+        wrap.querySelectorAll('[data-del]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const name = btn.getAttribute('data-del');
+                const views2 = getSavedViews();
+                delete views2[name];
+                setSavedViews(views2);
+                renderSavedViews();
+            });
+        });
+    }
+
+    (async () => {
+        ensureCharts();
+        setDefaults();
+        updateFilterSummary();
+        bindFilters();
+        renderSavedViews();
+
+        // Default stats mode button
+        const defaultBtn = document.querySelector('[data-stats-mode="daily"]');
+        if (defaultBtn) defaultBtn.classList.add('active');
+
+        // Inline calendar range
+        try {
+            const calEl = document.getElementById('mini-calendar');
+            if (calEl) {
+                window.__fpRange = flatpickr(calEl, {
+                    mode: 'range',
+                    inline: true,
+                    dateFormat: 'Y-m-d',
+                    defaultDate: [state.start, state.end],
+                    firstDayOfWeek: 1,
+                    locale: {
+                        weekdays: {
+                            shorthand: ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'],
+                            longhand: ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela']
+                        },
+                        months: {
+                            shorthand: ['Sty', 'Lut', 'Mar', 'Kwie', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+                            longhand: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']
+                        }
+                    },
+                    onChange: (selectedDates, dateStr) => {
+                        if (!selectedDates || selectedDates.length < 2) return;
+
+                        // Correctly format local date to YYYY-MM-DD
+                        // Avoid using toISOString() which converts to UTC and can shift dates
+                        const fmt = (d) => {
+                            const year = d.getFullYear();
+                            const month = String(d.getMonth() + 1).padStart(2, '0');
+                            const day = String(d.getDate()).padStart(2, '0');
+                            return `${year}-${month}-${day}`;
+                        };
+
+                        const s = fmt(selectedDates[0]);
+                        const e = fmt(selectedDates[1]);
+
+                        state.start = s;
+                        state.end = e;
+
+                        // Force update inputs
+                        const startInput = document.getElementById('filter-start');
+                        const endInput = document.getElementById('filter-end');
+                        if (startInput) startInput.value = s;
+                        if (endInput) endInput.value = e;
+
+                        // Ensure filter summary is updated (side panel)
+                        updateFilterSummary();
+
+                        if (__suppressPresetClearOnce) {
+                            __suppressPresetClearOnce = false;
+                        } else {
+                            document.querySelectorAll('[data-preset], [data-range], #btn-ytd').forEach(b => b.classList.remove('active'));
+                        }
+                        refreshAll();
+                    }
+                });
+            }
+        } catch (e) {
+            console.log('📅 Calendar init error:', e);
+            // ignore calendar init errors
+        }
+
+        document.getElementById('btn-save-view').addEventListener('click', () => {
+            const name = (document.getElementById('save-view-name').value || '').trim();
+            if (!name) return;
+            const views = getSavedViews();
+            views[name] = {
+                start: state.start,
+                end: state.end,
+                room_id: state.room_id,
+                dept: state.dept,
+            };
+            setSavedViews(views);
+            document.getElementById('save-view-name').value = '';
+            renderSavedViews();
+        });
+
+        // Initialize drilldown filters
+        initDrilldownFilters();
+
+        await refreshAll();
+    })();
+</script>
+
+<style>
+    @keyframes fadeInRow {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        to {
+            opacity: 1;
+            max-height: 1000px;
+            overflow: visible;
+        }
+    }
+
+    #export-csv-btn:hover {
+        background: rgba(34, 197, 94, 0.3) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+
+    #clear-drilldown-btn:hover {
+        background: rgba(239, 68, 68, 0.3) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    #clear-advanced-filters:hover {
+        background: rgba(239, 68, 68, 0.3) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    #toggle-advanced-filters:hover {
+        background: rgba(37, 99, 235, 0.25) !important;
+        transform: translateY(-1px);
+    }
+
+    #drilldown-search:focus {
+        border-color: rgba(37, 99, 235, 0.5);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+
+    #clear-search-btn:hover {
+        color: rgba(239, 68, 68, 0.95);
+        transform: scale(1.2);
+    }
+
+    .drilldown-sort-btn:hover {
+        background: rgba(37, 99, 235, 0.15) !important;
+        border-color: rgba(37, 99, 235, 0.3) !important;
+        transform: translateY(-1px);
+    }
+
+    #drilldown-limit:hover {
+        border-color: rgba(37, 99, 235, 0.4);
+    }
+
+    #drilldown-body tr:hover {
+        background: rgba(37, 99, 235, 0.08);
+        transform: scale(1.01);
+    }
+
+    #filter-department:focus,
+    #filter-room-drill:focus,
+    #filter-duration:focus,
+    #filter-attendees:focus,
+    #filter-date-from:focus,
+    #filter-date-to:focus {
+        border-color: rgba(37, 99, 235, 0.5);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+
+    .weekday-filter-btn:hover {
+        background: rgba(37, 99, 235, 0.15) !important;
+        border-color: rgba(37, 99, 235, 0.3) !important;
+        transform: translateY(-1px);
+    }
+
+    #filter-department option,
+    #filter-room-drill option {
+        background: rgba(17, 24, 39, 0.95);
+        color: rgba(226, 232, 240, 0.9);
+        padding: 0.5rem;
+    }
+
+    #filter-department option:checked,
+    #filter-room-drill option:checked {
+        background: rgba(37, 99, 235, 0.5);
+    }
+
+    /* Premium Flatpickr Calendar Animation */
+    .flatpickr-calendar {
+        animation: fadeInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .flatpickr-day.selected::after {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+        }
+
+        50% {
+            box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
+        }
+    }
+
+    /* Gradient text dla current month */
+    .flatpickr-current-month input.cur-year {
+        background: linear-gradient(135deg, rgba(96, 165, 250, 0.95), rgba(59, 130, 246, 0.95)) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        font-weight: 800 !important;
+    }
+</style>
+
+{% endblock %}

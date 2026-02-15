@@ -1,0 +1,639 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans 'Dashboard' %} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Premium Dashboard Styling */
+    :root {
+        --premium-accent: #2563eb;
+        --premium-accent-light: rgba(37, 99, 235, 0.15);
+        --premium-success: #10b981;
+        --premium-warning: #f59e0b;
+        --premium-danger: #ef4444;
+        --premium-purple: #7c3aed;
+    }
+
+    .dashboard-container {
+        padding: 2.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .welcome-banner {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(124, 58, 237, 0.15) 100%);
+        border-radius: 16px;
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .welcome-banner h1 {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #e2e8f0;
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.5px;
+    }
+
+    .welcome-banner p {
+        color: #94a3b8;
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .action-card {
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--card-color), transparent);
+    }
+
+    .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6),
+                    0 0 20px var(--card-glow);
+        border-color: var(--card-color);
+    }
+
+    .action-card .icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 1rem;
+        background: var(--card-gradient);
+        box-shadow: 0 4px 15px var(--card-glow);
+    }
+
+    .action-card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #e2e8f0;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .action-card p {
+        color: #94a3b8;
+        margin: 0 0 1rem 0;
+        font-size: 0.9rem;
+    }
+
+    .action-card .btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+    .action-card .btn:hover {
+        background: var(--card-color);
+        border-color: var(--card-color);
+        transform: scale(1.05);
+    }
+
+    .action-card.bookings {
+        --card-color: #2563eb;
+        --card-gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        --card-glow: rgba(37, 99, 235, 0.3);
+    }
+
+    .action-card.users {
+        --card-color: #10b981;
+        --card-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        --card-glow: rgba(16, 185, 129, 0.3);
+    }
+
+    .action-card.rooms {
+        --card-color: #7c3aed;
+        --card-gradient: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        --card-glow: rgba(124, 58, 237, 0.3);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .stat-card .number {
+        font-size: 2.5rem;
+        font-weight: 900;
+        background: var(--stat-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+    }
+
+    .stat-card .label {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0.5rem;
+    }
+
+    .stat-card.blue {
+        --stat-gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    }
+
+    .stat-card.green {
+        --stat-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .stat-card.purple {
+        --stat-gradient: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    }
+
+    .stat-card.orange {
+        --stat-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+
+    .recent-activity {
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 3rem;
+    }
+
+    .recent-activity h2 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #e2e8f0;
+        margin: 0 0 1.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .search-box {
+        background: rgba(2, 6, 23, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.25rem 1.75rem;
+        margin-bottom: 3rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-box:focus-within {
+        border-color: rgba(37, 99, 235, 0.5);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        background: rgba(2, 6, 23, 0.7);
+    }
+
+    .search-box input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #e2e8f0;
+        font-size: 1.05rem;
+        outline: none;
+    }
+
+    .search-box input::placeholder {
+        color: #64748b;
+    }
+
+    .search-box i {
+        color: #64748b;
+        font-size: 1.25rem;
+    }
+
+    .search-results {
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        margin-top: -2rem;
+        margin-bottom: 2rem;
+        max-height: 400px;
+        overflow-y: auto;
+        display: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .search-results.active {
+        display: block;
+    }
+
+    .search-result-item {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .search-result-item:hover {
+        background: rgba(37, 99, 235, 0.1);
+        padding-left: 2rem;
+    }
+
+    .search-result-item:last-child {
+        border-bottom: none;
+    }
+
+    .search-result-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .search-result-icon.booking {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    }
+
+    .search-result-icon.user {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .search-result-icon.room {
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    }
+
+    .search-result-content {
+        flex: 1;
+    }
+
+    .search-result-title {
+        color: #e2e8f0;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .search-result-meta {
+        color: #94a3b8;
+        font-size: 0.85rem;
+    }
+
+    .no-results {
+        padding: 2rem;
+        text-align: center;
+        color: #64748b;
+    }
+
+    .recent-activity table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .recent-activity table th {
+        background: rgba(37, 99, 235, 0.1);
+        color: #94a3b8;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .recent-activity table td {
+        padding: 1rem;
+        color: #e2e8f0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .recent-activity table tr:hover {
+        background: rgba(37, 99, 235, 0.05);
+    }
+
+    .recent-activity table tr:last-child td {
+        border-bottom: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <h1>🏢 Witaj w Panelu Administracyjnym RoomBooker</h1>
+        <p>Zarządzaj rezerwacjami, użytkownikami i salami z jednego miejsca</p>
+    </div>
+
+    <!-- Global Search -->
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="global-search" placeholder="Szukaj rezerwacji, użytkowników, sal..." autocomplete="off">
+    </div>
+
+    <!-- Search Results Container -->
+    <div id="search-results" class="search-results"></div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <div class="stat-card blue">
+            <div class="number">{{ total_bookings }}</div>
+            <div class="label">Wszystkie Rezerwacje</div>
+        </div>
+        <div class="stat-card green">
+            <div class="number">{{ total_users }}</div>
+            <div class="label">Użytkownicy</div>
+        </div>
+        <div class="stat-card purple">
+            <div class="number">{{ total_rooms }}</div>
+            <div class="label">Sale</div>
+        </div>
+        <div class="stat-card orange">
+            <div class="number">{{ active_bookings }}</div>
+            <div class="label">Aktywne Dziś</div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <!-- Rezerwacje -->
+        <div class="action-card bookings" onclick="window.location.href='{% url 'admin:bookings_booking_changelist' %}'">
+            <div class="icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <h3>📅 Rezerwacje</h3>
+            <p>Przeglądaj, edytuj i zarządzaj wszystkimi rezerwacjami sal</p>
+            <a href="{% url 'admin:bookings_booking_changelist' %}" class="btn">
+                <i class="fas fa-arrow-right"></i> Zarządzaj
+            </a>
+        </div>
+
+        <!-- Użytkownicy -->
+        <div class="action-card users" onclick="window.location.href='{% url 'admin:bookings_user_changelist' %}'">
+            <div class="icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3>👥 Użytkownicy</h3>
+            <p>Zarządzaj kontami użytkowników i ich uprawnieniami</p>
+            <a href="{% url 'admin:bookings_user_changelist' %}" class="btn">
+                <i class="fas fa-arrow-right"></i> Zarządzaj
+            </a>
+        </div>
+
+        <!-- Sale -->
+        <div class="action-card rooms" onclick="window.location.href='{% url 'admin:bookings_room_changelist' %}'">
+            <div class="icon">
+                <i class="fas fa-door-open"></i>
+            </div>
+            <h3>🚪 Sale</h3>
+            <p>Dodawaj, edytuj i konfiguruj dostępne sale konferencyjne</p>
+            <a href="{% url 'admin:bookings_room_changelist' %}" class="btn">
+                <i class="fas fa-arrow-right"></i> Zarządzaj
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="recent-activity">
+        <h2>📊 Ostatnia aktywność</h2>
+        {% load log %}
+        {% get_admin_log 10 as admin_log %}
+        {% if admin_log %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Akcja</th>
+                    <th>Obiekt</th>
+                    <th>Użytkownik</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in admin_log %}
+                <tr>
+                    <td>
+                        {% if entry.is_addition %}
+                            <span style="color: #10b981;">✓ Dodano</span>
+                        {% elif entry.is_change %}
+                            <span style="color: #f59e0b;">✏ Edytowano</span>
+                        {% elif entry.is_deletion %}
+                            <span style="color: #ef4444;">✗ Usunięto</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ entry.object_repr }}</td>
+                    <td>{{ entry.user }}</td>
+                    <td>{{ entry.action_time|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color: #64748b; text-align: center; padding: 2rem;">Brak ostatnich działań</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Global search functionality
+const searchInput = document.getElementById('global-search');
+const searchResults = document.getElementById('search-results');
+let searchTimeout;
+
+// Mock data - w produkcji to byłoby pobierane przez AJAX
+const searchData = {
+    bookings: [
+        {% for booking in recent_bookings|slice:":10" %}
+        {
+            id: {{ booking.id }},
+            title: '{{ booking.title|escapejs }}',
+            room: '{{ booking.room.name|escapejs }}',
+            user: '{{ booking.user.name|escapejs }}',
+            date: '{{ booking.start_time|date:"Y-m-d H:i" }}',
+            url: '{% url "admin:bookings_booking_change" booking.id %}'
+        },
+        {% endfor %}
+    ],
+    users: [
+        {% for user in all_users|slice:":10" %}
+        {
+            id: {{ user.id }},
+            name: '{{ user.name|escapejs }}',
+            email: '{{ user.email|escapejs }}',
+            department: '{{ user.department|escapejs }}',
+            url: '{% url "admin:bookings_user_change" user.id %}'
+        },
+        {% endfor %}
+    ],
+    rooms: [
+        {% for room in all_rooms|slice:":10" %}
+        {
+            id: {{ room.id }},
+            name: '{{ room.name|escapejs }}',
+            capacity: {{ room.capacity }},
+            department: '{{ room.department|escapejs }}',
+            url: '{% url "admin:bookings_room_change" room.id %}'
+        },
+        {% endfor %}
+    ]
+};
+
+searchInput.addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase().trim();
+
+    // Wyczyść timeout
+    clearTimeout(searchTimeout);
+
+    if (query.length < 2) {
+        searchResults.classList.remove('active');
+        searchResults.innerHTML = '';
+        return;
+    }
+
+    // Dodaj debounce
+    searchTimeout = setTimeout(() => {
+        performSearch(query);
+    }, 300);
+});
+
+// Kliknięcie poza search box zamyka wyniki
+document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.classList.remove('active');
+    }
+});
+
+function performSearch(query) {
+    let results = [];
+
+    // Szukaj w rezerwacjach
+    searchData.bookings.forEach(booking => {
+        if (booking.title.toLowerCase().includes(query) ||
+            booking.room.toLowerCase().includes(query) ||
+            booking.user.toLowerCase().includes(query)) {
+            results.push({
+                type: 'booking',
+                title: booking.title,
+                meta: `${booking.room} • ${booking.user} • ${booking.date}`,
+                url: booking.url,
+                icon: 'fa-calendar-check'
+            });
+        }
+    });
+
+    // Szukaj w użytkownikach
+    searchData.users.forEach(user => {
+        if (user.name.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query) ||
+            user.department.toLowerCase().includes(query)) {
+            results.push({
+                type: 'user',
+                title: user.name,
+                meta: `${user.email} • ${user.department}`,
+                url: user.url,
+                icon: 'fa-user'
+            });
+        }
+    });
+
+    // Szukaj w salach
+    searchData.rooms.forEach(room => {
+        if (room.name.toLowerCase().includes(query) ||
+            room.department.toLowerCase().includes(query)) {
+            results.push({
+                type: 'room',
+                title: room.name,
+                meta: `Pojemność: ${room.capacity} osób • ${room.department}`,
+                url: room.url,
+                icon: 'fa-door-open'
+            });
+        }
+    });
+
+    displayResults(results);
+}
+
+function displayResults(results) {
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="no-results"><i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.3;"></i><br>Brak wyników</div>';
+        searchResults.classList.add('active');
+        return;
+    }
+
+    let html = '';
+    results.forEach(result => {
+        html += `
+            <a href="${result.url}" class="search-result-item" style="text-decoration: none;">
+                <div class="search-result-icon ${result.type}">
+                    <i class="fas ${result.icon}"></i>
+                </div>
+                <div class="search-result-content">
+                    <div class="search-result-title">${result.title}</div>
+                    <div class="search-result-meta">${result.meta}</div>
+                </div>
+            </a>
+        `;
+    });
+
+    searchResults.innerHTML = html;
+    searchResults.classList.add('active');
+}
+
+// Prevent card click when clicking button
+document.querySelectorAll('.action-card .btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+});
+</script>
+{% endblock %}
+

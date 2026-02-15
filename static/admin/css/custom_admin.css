@@ -1,0 +1,2524 @@
+/* RoomBooker Premium Admin - Ultra Dark Theme */
+
+:root {
+    --premium-dark-bg: #0a0e1a;
+    --premium-card-bg: #111827;
+    --premium-accent: #2563eb;
+    --premium-accent-glow: rgba(37, 99, 235, 0.3);
+    --premium-success: #10b981;
+    --premium-warning: #f59e0b;
+    --premium-danger: #ef4444;
+    --premium-text: #e2e8f0;
+    --premium-text-muted: #94a3b8;
+    --premium-border: rgba(255, 255, 255, 0.1);
+    --premium-gradient: linear-gradient(135deg, #2563eb 0%, #1a237e 45%, #7c3aed 100%);
+}
+
+/* Global Premium Styling */
+body {
+    background: radial-gradient(1200px 650px at 10% 0%, rgba(37, 99, 235, 0.15), rgba(0, 0, 0, 0) 60%),
+        radial-gradient(900px 520px at 90% 15%, rgba(124, 58, 237, 0.12), rgba(0, 0, 0, 0) 55%),
+        linear-gradient(135deg, #0a0e1a 0%, #0f172a 45%, #111827 100%) !important;
+    background-attachment: fixed !important;
+    color: var(--premium-text) !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Zapewnienie odstępu od powiększonej nawigacji */
+body.layout-navbar-fixed .wrapper .content-wrapper {
+    margin-top: 70px !important;
+    padding-top: 1.5rem !important;
+}
+
+body.layout-navbar-fixed .main-sidebar {
+    top: 70px !important;
+}
+
+/* Cards & Containers */
+.card,
+.info-box,
+.small-box,
+.content-wrapper,
+.main-panel {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+    border: 1px solid var(--premium-border) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* Premium Buttons */
+.btn-primary {
+    background: var(--premium-gradient) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px var(--premium-accent-glow) !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px var(--premium-accent-glow) !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: none !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    border: none !important;
+}
+
+/* Tables */
+.table {
+    background: transparent !important;
+    color: var(--premium-text) !important;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(124, 58, 237, 0.15) 100%) !important;
+    border-color: var(--premium-border) !important;
+    color: var(--premium-text) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.5px !important;
+}
+
+.table tbody tr {
+    border-color: var(--premium-border) !important;
+    transition: all 0.2s ease !important;
+}
+
+.table tbody tr:hover {
+    background: rgba(37, 99, 235, 0.1) !important;
+    transform: scale(1.01) !important;
+}
+
+/* Forms */
+.form-control,
+.form-select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+    background: rgba(2, 6, 23, 0.5) !important;
+    border: 1px solid var(--premium-border) !important;
+    color: var(--premium-text) !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    background: rgba(2, 6, 23, 0.7) !important;
+    border-color: var(--premium-accent) !important;
+    box-shadow: 0 0 0 3px var(--premium-accent-glow) !important;
+    outline: none !important;
+}
+
+.main-sidebar {
+    background: linear-gradient(180deg, #0a0e1a 0%, #0f172a 100%) !important;
+    border-right: 1px solid var(--premium-border) !important;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5) !important;
+    width: 280px !important;
+}
+
+/* Synchronizacja marginesów dla szerszego panelu */
+.main-header,
+.content-wrapper,
+.main-footer {
+    margin-left: 280px !important;
+    transition: margin-left 0.3s ease-in-out !important;
+}
+
+/* Stan schowany (Collapse) - po kliknięciu hamburgera */
+body.sidebar-collapse .main-sidebar {
+    margin-left: -280px !important;
+    width: 0 !important;
+    visibility: hidden !important;
+    overflow: hidden !important;
+}
+
+body.sidebar-collapse .main-header,
+body.sidebar-collapse .content-wrapper,
+body.sidebar-collapse .main-footer {
+    margin-left: 0 !important;
+}
+
+/* Wyłączenie efektu "sidebar-mini" (ikonki po lewej), aby panel schował się CAŁKIEM */
+body.sidebar-mini.sidebar-collapse .main-sidebar {
+    width: 0 !important;
+    margin-left: -280px !important;
+}
+
+.main-sidebar {
+    transition: margin-left 0.3s ease-in-out !important;
+}
+
+.nav-sidebar .nav-link {
+    color: var(--premium-text-muted) !important;
+    border-radius: 8px !important;
+    margin: 4px 8px !important;
+    transition: all 0.2s ease !important;
+}
+
+.nav-sidebar .nav-link:hover,
+.nav-sidebar .nav-link.active {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(124, 58, 237, 0.15) 100%) !important;
+    color: var(--premium-text) !important;
+    box-shadow: 0 4px 12px var(--premium-accent-glow) !important;
+}
+
+.nav-sidebar .nav-link.active {
+    font-weight: 700 !important;
+    border-left: 3px solid var(--premium-accent) !important;
+}
+
+/* Panel Użytkownika (Admina) - Premium Stylizacja */
+.user-panel {
+    padding: 1.5rem 1rem !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    margin-bottom: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.2rem !important;
+    overflow: visible !important;
+}
+
+.user-panel .image {
+    padding-left: 0 !important;
+}
+
+/* Efektowna ikona admina */
+.user-panel .image i,
+.user-panel .image .img-circle,
+.user-panel .image img {
+    width: 45px !important;
+    height: 45px !important;
+    background: var(--premium-gradient) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    font-size: 1.2rem !important;
+    box-shadow: 0 0 15px var(--premium-accent-glow),
+        inset 0 0 10px rgba(255, 255, 255, 0.3) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+    object-fit: cover !important;
+}
+
+.user-panel:hover .image i,
+.user-panel:hover .image img {
+    transform: rotate(10deg) scale(1.1) !important;
+    box-shadow: 0 0 25px var(--premium-accent) !important;
+}
+
+/* Stylowe imię admina */
+.user-panel .info {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.user-panel .info a {
+    display: block !important;
+    font-size: 1.35rem !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    /* Gwarancja koloru */
+    text-transform: capitalize !important;
+    letter-spacing: 0.5px !important;
+    white-space: nowrap !important;
+    background: none !important;
+    /* Rezygnacja z gradientu na rzecz czytelności */
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.8),
+        0 0 20px rgba(99, 102, 241, 0.4),
+        0 0 5px rgba(255, 255, 255, 0.5) !important;
+    transition: all 0.3s ease !important;
+    overflow: visible !important;
+}
+
+.user-panel:hover .info a {
+    color: #ffffff !important;
+    text-shadow: 0 0 15px rgba(99, 102, 241, 1),
+        0 0 30px rgba(99, 102, 241, 0.6),
+        0 0 10px rgba(255, 255, 255, 0.8) !important;
+    transform: scale(1.05) !important;
+}
+
+/* Navbar Premium - Redesigned & Larger */
+.main-header {
+    background: rgba(10, 14, 26, 0.95) !important;
+    backdrop-filter: blur(15px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6) !important;
+    height: 70px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 1.5rem !important;
+    position: relative !important;
+    /* Dla pozycjonowania menu */
+}
+
+/* Matematycznie wyśrodkowany kontener menu */
+.main-header .navbar-nav:not(.ml-auto):not(.mr-auto) {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.8rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100% !important;
+}
+
+/* Ukrywamy puste kontenery, aby nie psuły layoutu */
+.main-header .navbar-nav.mr-auto {
+    display: flex !important;
+    flex: 0 0 50px !important;
+    /* Dajemy miejsce na hamburgera */
+}
+
+.main-header .nav-link {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: rgba(226, 232, 240, 0.7) !important;
+    padding: 0.6rem 1.25rem !important;
+    border-radius: 12px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Ikony w nawigacji */
+.main-header .nav-link i {
+    font-size: 1.2rem !important;
+    transition: transform 0.3s ease !important;
+}
+
+/* Efekt najechania (Hover) */
+.main-header .nav-link:hover {
+    color: #ffffff !important;
+    background: rgba(37, 99, 235, 0.15) !important;
+    transform: translateY(-2px) !important;
+}
+
+.main-header .nav-link:hover i {
+    transform: scale(1.2) rotate(5deg) !important;
+    color: var(--premium-accent) !important;
+}
+
+/* Aktywna opcja (Active) */
+.main-header .nav-link.active,
+.main-header .nav-link[href="#"]:active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(124, 58, 237, 0.2) 100%) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 4px 15px rgba(37, 99, 235, 0.3) !important;
+}
+
+.main-header .nav-link.active i {
+    color: var(--premium-accent) !important;
+}
+
+/* Podświetlenie spodu dla aktywnego elementu */
+.main-header .nav-link.active::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 40% !important;
+    height: 3px !important;
+    background: var(--premium-accent) !important;
+    border-radius: 3px 3px 0 0 !important;
+    box-shadow: 0 0 10px var(--premium-accent) !important;
+}
+
+.brand-link {
+    background: rgba(10, 14, 26, 0.6) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    height: 70px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 1.5rem !important;
+    transition: all 0.3s ease !important;
+    overflow: visible !important;
+    text-decoration: none !important;
+    width: 280px !important;
+    /* Dopasowanie do szerszego sidebar-u */
+}
+
+/* Stylizacja ikony budynku w logo */
+.brand-link img,
+.brand-link .brand-image {
+    font-size: 1.8rem !important;
+    filter: drop-shadow(0 0 10px var(--premium-accent-glow)) !important;
+    margin-right: 12px !important;
+    transition: transform 0.3s ease !important;
+}
+
+.brand-link:hover .brand-image {
+    transform: scale(1.1) rotate(-5deg) !important;
+}
+
+.brand-text {
+    font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif !important;
+    font-weight: 950 !important;
+    font-size: 1.6rem !important;
+    letter-spacing: -0.8px !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.4),
+        0 0 25px rgba(129, 140, 248, 0.3) !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    white-space: nowrap !important;
+}
+
+/* Specyficzna stylizacja dla członu "Admin" */
+.brand-text::after {
+    content: 'ADMIN' !important;
+    position: static !important;
+    font-size: 0.6rem !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    padding: 2px 8px !important;
+    border-radius: 6px !important;
+    margin-left: 8px !important;
+    letter-spacing: 1px !important;
+    -webkit-text-fill-color: #ffffff !important;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    vertical-align: middle !important;
+    display: inline-block !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Dekoracyjna linia pod logiem - ulepszona */
+.brand-link::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent, var(--premium-accent), transparent) !important;
+}
+
+.brand-link:hover .brand-text::after {
+    width: 100% !important;
+}
+
+/* Info Boxes & Stats */
+.info-box {
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border: 1px solid var(--premium-border) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+.info-box:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6),
+        0 0 20px var(--premium-accent-glow) !important;
+}
+
+.info-box-icon {
+    border-radius: 12px 0 0 12px !important;
+    background: var(--premium-gradient) !important;
+    box-shadow: 0 0 20px var(--premium-accent-glow) !important;
+}
+
+.small-box {
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border: 1px solid var(--premium-border) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+.small-box:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6) !important;
+}
+
+.small-box .icon {
+    font-size: 70px !important;
+    opacity: 0.3 !important;
+}
+
+/* Action Buttons Premium */
+.btn-group .btn {
+    border-radius: 8px !important;
+    margin: 0 4px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-group .btn:hover {
+    transform: translateY(-2px) !important;
+}
+
+/* Pagination */
+.pagination .page-link {
+    background: rgba(17, 24, 39, 0.8) !important;
+    border-color: var(--premium-border) !important;
+    color: var(--premium-text) !important;
+    border-radius: 8px !important;
+    margin: 0 4px !important;
+}
+
+.pagination .page-link:hover {
+    background: var(--premium-accent) !important;
+    border-color: var(--premium-accent) !important;
+    transform: scale(1.1) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--premium-gradient) !important;
+    border-color: var(--premium-accent) !important;
+    box-shadow: 0 4px 12px var(--premium-accent-glow) !important;
+}
+
+/* Alerts & Messages */
+.alert {
+    border-radius: 12px !important;
+    border: 1px solid var(--premium-border) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.15) 100%) !important;
+    border-color: var(--premium-success) !important;
+    color: #d1fae5 !important;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.15) 100%) !important;
+    border-color: var(--premium-warning) !important;
+    color: #fef3c7 !important;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%) !important;
+    border-color: var(--premium-danger) !important;
+    color: #fee2e2 !important;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    background: transparent !important;
+    color: var(--premium-text-muted) !important;
+}
+
+.breadcrumb-item a {
+    color: var(--premium-accent) !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.breadcrumb-item a:hover {
+    color: #60a5fa !important;
+    text-shadow: 0 0 10px var(--premium-accent-glow) !important;
+}
+
+/* Dashboard Widgets */
+.dashboard-widget {
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border: 1px solid var(--premium-border) !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dashboard-widget h3 {
+    color: var(--premium-text) !important;
+    font-weight: 800 !important;
+    margin-bottom: 20px !important;
+    background: var(--premium-gradient) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* Scrollbar Premium */
+::-webkit-scrollbar {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(10, 14, 26, 0.5) !important;
+    border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.5) 0%, rgba(124, 58, 237, 0.5) 100%) !important;
+    border-radius: 10px !important;
+    border: 2px solid rgba(10, 14, 26, 0.5) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.8) 0%, rgba(124, 58, 237, 0.8) 100%) !important;
+}
+
+/* Footer */
+.main-footer {
+    background: linear-gradient(90deg, #0a0e1a 0%, #0f172a 100%) !important;
+    border-top: 1px solid var(--premium-border) !important;
+    color: var(--premium-text-muted) !important;
+}
+
+/* Loading Spinner */
+.spinner-border {
+    border-color: var(--premium-accent) !important;
+    border-right-color: transparent !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .info-box,
+    .small-box {
+        margin-bottom: 16px !important;
+    }
+}
+
+/* Additional Premium Dashboard Styles */
+.content-header {
+    padding: 1.5rem !important;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.08) 100%) !important;
+    border-radius: 12px !important;
+    margin-bottom: 1.5rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.content-header h1 {
+    color: var(--premium-text) !important;
+    font-weight: 900 !important;
+    font-size: 1.8rem !important;
+    letter-spacing: -0.5px !important;
+}
+
+/* Model Admin Links */
+.module h2,
+.module caption {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(124, 58, 237, 0.15) 100%) !important;
+    color: var(--premium-text) !important;
+    font-weight: 800 !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.module table {
+    background: transparent !important;
+}
+
+.module a {
+    color: var(--premium-accent) !important;
+    transition: all 0.2s ease !important;
+}
+
+.module a:hover {
+    color: #60a5fa !important;
+    text-shadow: 0 0 10px var(--premium-accent-glow) !important;
+}
+
+/* Dashboard Grid */
+#content-main {
+    padding: 0 !important;
+}
+
+/* Login Page */
+.login {
+    background: radial-gradient(1200px 650px at 50% 0%, rgba(37, 99, 235, 0.2), rgba(0, 0, 0, 0) 60%),
+        radial-gradient(900px 520px at 50% 50%, rgba(124, 58, 237, 0.15), rgba(0, 0, 0, 0) 55%),
+        linear-gradient(135deg, #0a0e1a 0%, #0f172a 45%, #111827 100%) !important;
+}
+
+.login #content {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+    border: 1px solid var(--premium-border) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+.login h1 {
+    color: var(--premium-text) !important;
+}
+
+.login .form-row {
+    margin-bottom: 1rem !important;
+}
+
+.login label {
+    color: var(--premium-text-muted) !important;
+    font-weight: 600 !important;
+}
+
+/* Submit Row Premium */
+.submit-row {
+    background: linear-gradient(90deg, rgba(17, 24, 39, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border-top: 1px solid var(--premium-border) !important;
+    padding: 16px !important;
+    border-radius: 0 0 12px 12px !important;
+}
+
+/* Change List Premium */
+#changelist {
+    background: transparent !important;
+    padding: 1rem !important;
+}
+
+#changelist .results {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--premium-border) !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
+        0 0 60px rgba(37, 99, 235, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px) !important;
+    padding: 1rem !important;
+}
+
+/* Content wrapper dla lepszego spacingu */
+#content {
+    padding: 2rem !important;
+}
+
+/* Breadcrumbs Premium */
+.breadcrumbs {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.08) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    padding: 1rem 1.5rem !important;
+    margin-bottom: 2rem !important;
+    font-weight: 600 !important;
+}
+
+.breadcrumbs a {
+    color: var(--premium-accent) !important;
+    transition: all 0.2s ease !important;
+}
+
+.breadcrumbs a:hover {
+    color: #60a5fa !important;
+    text-shadow: 0 0 10px var(--premium-accent-glow) !important;
+}
+
+/* ULTRA PREMIUM Results Table */
+#result_list {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
+    width: 100% !important;
+    padding: 0.5rem !important;
+}
+
+#result_list thead th {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.3) 0%, rgba(124, 58, 237, 0.25) 100%) !important;
+    color: var(--premium-text) !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 1.2px !important;
+    padding: 1.5rem 1.5rem !important;
+    border: none !important;
+    border-bottom: 3px solid rgba(37, 99, 235, 0.4) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+#result_list thead th:first-child {
+    border-top-left-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+}
+
+#result_list thead th:last-child {
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+}
+
+#result_list thead th a {
+    color: var(--premium-text) !important;
+    text-decoration: none !important;
+    font-weight: 900 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+#result_list thead th.sorted {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.45) 0%, rgba(124, 58, 237, 0.4) 100%) !important;
+    box-shadow: 0 4px 25px rgba(37, 99, 235, 0.25) !important;
+}
+
+#result_list tbody tr {
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.6) 0%, rgba(15, 23, 42, 0.55) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 10px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+#result_list tbody tr:nth-child(even) {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(17, 24, 39, 0.55) 100%) !important;
+}
+
+#result_list tbody tr:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(124, 58, 237, 0.2) 100%) !important;
+    transform: translateX(8px) translateY(-2px) !important;
+    box-shadow: inset 5px 0 0 var(--premium-accent),
+        0 8px 25px rgba(37, 99, 235, 0.3),
+        0 0 30px rgba(124, 58, 237, 0.2) !important;
+    border-color: rgba(37, 99, 235, 0.3) !important;
+}
+
+#result_list tbody td {
+    padding: 1.5rem 1.5rem !important;
+    color: var(--premium-text) !important;
+    border: none !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+}
+
+#result_list tbody td:first-child {
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+}
+
+#result_list tbody td:last-child {
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}
+
+#result_list tbody th {
+    padding: 1.5rem 1.5rem !important;
+    color: var(--premium-text) !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+}
+
+#result_list tbody td a,
+#result_list tbody th a {
+    color: var(--premium-accent) !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+    transition: all 0.2s ease !important;
+    position: relative !important;
+    display: inline-block !important;
+}
+
+#result_list tbody td a::after,
+#result_list tbody th a::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: -2px !important;
+    left: 0 !important;
+    width: 0 !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, var(--premium-accent), var(--premium-purple)) !important;
+    transition: width 0.3s ease !important;
+}
+
+#result_list tbody td a:hover::after,
+#result_list tbody th a:hover::after {
+    width: 100% !important;
+}
+
+#result_list tbody td a:hover,
+#result_list tbody th a:hover {
+    color: #60a5fa !important;
+    text-shadow: 0 0 15px var(--premium-accent-glow) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Action Checkboxes Premium */
+#result_list .action-checkbox {
+    padding: 1.5rem !important;
+    text-align: center !important;
+}
+
+#result_list input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer !important;
+    accent-color: var(--premium-accent) !important;
+    border-radius: 4px !important;
+    transition: all 0.2s ease !important;
+}
+
+#result_list input[type="checkbox"]:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 0 10px var(--premium-accent-glow) !important;
+}
+
+/* Status Badges Ultra Premium */
+#result_list .badge,
+#result_list span[style*="badge"],
+.badge {
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    font-size: 0.7rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    display: inline-block !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+#result_list .badge:hover,
+#result_list span[style*="badge"]:hover,
+.badge:hover {
+    transform: translateY(-2px) scale(1.05) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Filters Sidebar Premium */
+#changelist-filter {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 16px !important;
+    padding: 2rem !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(37, 99, 235, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+#changelist-filter h2 {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.3) 0%, rgba(124, 58, 237, 0.25) 100%) !important;
+    color: var(--premium-text) !important;
+    font-weight: 900 !important;
+    font-size: 0.9rem !important;
+    padding: 1rem 1.2rem !important;
+    border-radius: 10px !important;
+    margin-bottom: 1.5rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15) !important;
+}
+
+#changelist-filter h3 {
+    color: rgba(226, 232, 240, 0.9) !important;
+    font-weight: 800 !important;
+    font-size: 0.8rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    margin: 2rem 0 1rem 0 !important;
+    padding-bottom: 0.75rem !important;
+    border-bottom: 2px solid rgba(37, 99, 235, 0.2) !important;
+}
+
+#changelist-filter ul {
+    padding: 0 !important;
+    margin: 0 0 1.5rem 0 !important;
+}
+
+#changelist-filter li {
+    list-style: none !important;
+    margin-bottom: 0.4rem !important;
+}
+
+#changelist-filter li a {
+    color: var(--premium-text-muted) !important;
+    text-decoration: none !important;
+    padding: 0.7rem 1rem !important;
+    display: block !important;
+    border-radius: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-weight: 600 !important;
+    position: relative !important;
+}
+
+#changelist-filter li a::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 0 !important;
+    height: 60% !important;
+    background: linear-gradient(135deg, var(--premium-accent), var(--premium-purple)) !important;
+    border-radius: 0 4px 4px 0 !important;
+    transition: width 0.3s ease !important;
+}
+
+#changelist-filter li a:hover {
+    background: rgba(37, 99, 235, 0.15) !important;
+    color: var(--premium-text) !important;
+    padding-left: 1.5rem !important;
+    transform: translateX(4px) !important;
+}
+
+#changelist-filter li a:hover::before {
+    width: 4px !important;
+}
+
+#changelist-filter li.selected a {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(124, 58, 237, 0.2) 100%) !important;
+    color: var(--premium-text) !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2) !important;
+}
+
+#changelist-filter li.selected a::before {
+    width: 4px !important;
+}
+
+/* Search Bar Premium */
+#changelist-search {
+    background: transparent !important;
+    padding: 0 0 2rem 0 !important;
+}
+
+#changelist-search .search-field {
+    background: rgba(2, 6, 23, 0.6) !important;
+    border: 2px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 1rem 1.5rem !important;
+    color: var(--premium-text) !important;
+    font-size: 1rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    width: 100% !important;
+    font-weight: 500 !important;
+}
+
+#changelist-search .search-field:focus {
+    background: rgba(2, 6, 23, 0.8) !important;
+    border-color: var(--premium-accent) !important;
+    box-shadow: 0 0 0 4px var(--premium-accent-glow),
+        0 8px 25px rgba(37, 99, 235, 0.2) !important;
+    transform: translateY(-2px) !important;
+}
+
+#changelist-search input[type="submit"] {
+    background: var(--premium-gradient) !important;
+    border: none !important;
+    padding: 1rem 2rem !important;
+    border-radius: 10px !important;
+    color: white !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 6px 20px var(--premium-accent-glow) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    font-size: 0.85rem !important;
+}
+
+#changelist-search input[type="submit"]:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 30px var(--premium-accent-glow) !important;
+}
+
+/* Actions Row Premium */
+.actions {
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px !important;
+    padding: 1.5rem 2rem !important;
+    margin-bottom: 2rem !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.actions select {
+    background: rgba(2, 6, 23, 0.7) !important;
+    border: 2px solid rgba(255, 255, 255, 0.15) !important;
+    color: var(--premium-text) !important;
+    padding: 0.8rem 1.2rem !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+.actions select:focus {
+    border-color: var(--premium-accent) !important;
+    box-shadow: 0 0 0 3px var(--premium-accent-glow) !important;
+}
+
+.actions button,
+.actions input[type="submit"] {
+    background: linear-gradient(135deg, var(--premium-accent) 0%, var(--premium-purple) 100%) !important;
+    border: none !important;
+    padding: 0.8rem 1.8rem !important;
+    border-radius: 10px !important;
+    color: white !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    font-size: 0.85rem !important;
+}
+
+.actions button:hover,
+.actions input[type="submit"]:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4) !important;
+}
+
+/* Pagination Premium */
+.paginator {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border: 1px solid var(--premium-border) !important;
+    border-radius: 10px !important;
+    padding: 1rem 1.5rem !important;
+    margin-top: 1.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.paginator a {
+    color: var(--premium-accent) !important;
+    text-decoration: none !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    font-weight: 600 !important;
+}
+
+.paginator a:hover {
+    background: rgba(37, 99, 235, 0.15) !important;
+    transform: scale(1.05) !important;
+}
+
+.paginator .this-page {
+    color: var(--premium-text) !important;
+    font-weight: 800 !important;
+    padding: 0.5rem 1rem !important;
+}
+
+/* Date Hierarchy Premium */
+.xfull {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border: 1px solid var(--premium-border) !important;
+    border-radius: 10px !important;
+    padding: 1rem 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.xfull a {
+    color: var(--premium-accent) !important;
+    text-decoration: none !important;
+    padding: 0.4rem 0.8rem !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    font-weight: 600 !important;
+    display: inline-block !important;
+}
+
+.xfull a:hover {
+    background: rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Object Tools */
+.object-tools {
+    margin: 0 0 1rem 0 !important;
+}
+
+.object-tools li {
+    margin-left: 8px !important;
+}
+
+.object-tools a {
+    background: var(--premium-gradient) !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    box-shadow: 0 4px 12px var(--premium-accent-glow) !important;
+    transition: all 0.3s ease !important;
+}
+
+.object-tools a:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px var(--premium-accent-glow) !important;
+}
+
+/* Field Boxes */
+.fieldBox {
+    background: rgba(2, 6, 23, 0.3) !important;
+    border: 1px solid var(--premium-border) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    margin-bottom: 12px !important;
+}
+
+/* Help Text */
+.help,
+.helptext {
+    color: var(--premium-text-muted) !important;
+    font-size: 0.85rem !important;
+}
+
+/* Required Fields */
+.required:after {
+    color: var(--premium-danger) !important;
+}
+
+/* Inline Forms */
+.inline-group {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.7) 0%, rgba(15, 23, 42, 0.75) 100%) !important;
+    border: 1px solid var(--premium-border) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+}
+
+.inline-related h3 {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.1) 100%) !important;
+    color: var(--premium-text) !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+}
+
+/* ULTRA PREMIUM CHANGE FORM */
+
+/* Form Container */
+#content-main {
+    background: transparent !important;
+}
+
+.change-form {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 16px !important;
+    padding: 2rem !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(37, 99, 235, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+/* Fieldsets Premium */
+.module.aligned fieldset,
+fieldset.module {
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.6) 0%, rgba(15, 23, 42, 0.55) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    margin-bottom: 2rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.module.aligned fieldset:hover,
+fieldset.module:hover {
+    border-color: rgba(37, 99, 235, 0.3) !important;
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Fieldset Headers */
+.module.aligned h2,
+fieldset.module h2,
+fieldset h2 {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.3) 0%, rgba(124, 58, 237, 0.25) 100%) !important;
+    color: var(--premium-text) !important;
+    font-weight: 900 !important;
+    font-size: 1rem !important;
+    padding: 1rem 1.5rem !important;
+    border-radius: 10px !important;
+    margin: -2rem -2rem 1.5rem -2rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15) !important;
+    border-bottom: 2px solid rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Form Rows */
+.form-row {
+    padding: 1.8rem 0 !important;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.08) !important;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+    gap: 2.5rem !important;
+    align-items: start !important;
+    position: relative !important;
+}
+
+.form-row:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+.form-row>div {
+    position: relative !important;
+}
+
+/* Enhanced form row styling */
+.form-row.errors {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%) !important;
+    padding: 1.5rem !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Label styling with better spacing */
+label {
+    color: var(--premium-text) !important;
+    font-weight: 800 !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    margin-bottom: 1rem !important;
+    display: block !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Better input field styling */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+input[type="week"],
+input[type="month"],
+textarea,
+select {
+    background: linear-gradient(180deg, rgba(25, 35, 50, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border: 2px solid rgba(37, 99, 235, 0.2) !important;
+    border-radius: 16px !important;
+    color: var(--premium-text) !important;
+    padding: 1.3rem 1.6rem !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    width: 100% !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4),
+        0 0 0 0 rgba(37, 99, 235, 0.1) !important;
+    position: relative !important;
+}
+
+/* Advanced focus state */
+input:focus,
+textarea:focus,
+select:focus {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.3) 0%, rgba(37, 99, 235, 0.15) 100%) !important;
+    border-color: var(--premium-accent) !important;
+    outline: none !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3),
+        0 0 0 4px rgba(37, 99, 235, 0.25),
+        0 0 30px rgba(37, 99, 235, 0.7) !important;
+    transform: translateY(-3px) !important;
+}
+
+/* Fieldset visual improvements */
+fieldset.module,
+.module.aligned {
+    background: linear-gradient(135deg,
+            rgba(37, 99, 235, 0.12) 0%,
+            rgba(124, 58, 237, 0.1) 50%,
+            rgba(37, 99, 235, 0.08) 100%) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.35) !important;
+    border-radius: 20px !important;
+    padding: 3rem !important;
+    margin: 0 0 3rem 0 !important;
+    box-shadow: 0 15px 50px rgba(37, 99, 235, 0.12),
+        inset 0 1px 3px rgba(255, 255, 255, 0.12),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+fieldset.module::before,
+.module.aligned::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.3), transparent) !important;
+    pointer-events: none !important;
+}
+
+fieldset.module:hover,
+.module.aligned:hover {
+    border-color: rgba(37, 99, 235, 0.55) !important;
+    background: linear-gradient(135deg,
+            rgba(37, 99, 235, 0.18) 0%,
+            rgba(124, 58, 237, 0.15) 50%,
+            rgba(37, 99, 235, 0.12) 100%) !important;
+    box-shadow: 0 20px 60px rgba(37, 99, 235, 0.18),
+        inset 0 1px 3px rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-3px) !important;
+}
+
+/* Enhanced fieldset headers */
+fieldset.module>h2,
+.module.aligned>h2,
+fieldset>h2 {
+    background: linear-gradient(135deg,
+            rgba(37, 99, 235, 0.5) 0%,
+            rgba(124, 58, 237, 0.45) 100%) !important;
+    color: var(--premium-text) !important;
+    font-weight: 950 !important;
+    font-size: 1.35rem !important;
+    padding: 1.6rem 2.2rem !important;
+    border-radius: 16px !important;
+    margin: -3rem -3rem 2.2rem -3rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    border-bottom: 3px solid rgba(37, 99, 235, 0.6) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.2rem !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Better submit row */
+.submit-row {
+    display: flex !important;
+    gap: 1.5rem !important;
+    padding: 2.5rem 0 0 0 !important;
+    margin-top: 3rem !important;
+    border-top: 2px solid rgba(37, 99, 235, 0.15) !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+}
+
+/* Primary save button - ultimate premium */
+input[type="submit"][name="_save"],
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]) {
+    background: linear-gradient(135deg, #2563eb 0%, #1a237e 40%, #7c3aed 100%) !important;
+    color: white !important;
+    border: none !important;
+    padding: 1.4rem 3.2rem !important;
+    border-radius: 16px !important;
+    font-weight: 950 !important;
+    font-size: 1.1rem !important;
+    cursor: pointer !important;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5),
+        0 0 30px rgba(37, 99, 235, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.8rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+input[type="submit"][name="_save"]::before {
+    content: '💾' !important;
+    font-size: 1.3rem !important;
+    display: inline-block !important;
+}
+
+input[type="submit"][name="_save"]:hover,
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]):hover {
+    transform: translateY(-5px) scale(1.03) !important;
+    box-shadow: 0 16px 45px rgba(37, 99, 235, 0.6),
+        0 0 40px rgba(37, 99, 235, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+input[type="submit"][name="_save"]:active,
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]):active {
+    transform: translateY(-1px) scale(0.97) !important;
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35) !important;
+}
+
+/* Secondary buttons */
+input[type="submit"][name="_continue"],
+input[type="submit"][name="_addanother"] {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.4) !important;
+    color: var(--premium-text) !important;
+    padding: 1.2rem 2.6rem !important;
+    border-radius: 14px !important;
+    font-weight: 800 !important;
+    font-size: 0.95rem !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.6rem !important;
+    position: relative !important;
+}
+
+input[type="submit"][name="_continue"]::before {
+    content: '⤵️' !important;
+    font-size: 1.1rem !important;
+}
+
+input[type="submit"][name="_addanother"]::before {
+    content: '➕' !important;
+    font-size: 1.1rem !important;
+}
+
+input[type="submit"][name="_continue"]:hover,
+input[type="submit"][name="_addanother"]:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.28) 0%, rgba(124, 58, 237, 0.22) 100%) !important;
+    border-color: var(--premium-accent) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+input[type="submit"][name="_continue"]:active,
+input[type="submit"][name="_addanother"]:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* Delete button */
+.submit-row a.deletelink,
+a.deletelink {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%) !important;
+    color: white !important;
+    padding: 1.2rem 2.6rem !important;
+    border-radius: 14px !important;
+    text-decoration: none !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-size: 0.95rem !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+    margin-left: auto !important;
+    position: relative !important;
+}
+
+.submit-row a.deletelink::before,
+a.deletelink::before {
+    content: '🗑️' !important;
+    font-size: 1.1rem !important;
+}
+
+.submit-row a.deletelink:hover,
+a.deletelink:hover {
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    transform: translateY(-3px) scale(1.03) !important;
+    box-shadow: 0 14px 40px rgba(239, 68, 68, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.submit-row a.deletelink:active,
+a.deletelink:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* Help text enhancement */
+.helptext,
+p.help {
+    color: var(--premium-text-muted) !important;
+    font-size: 0.82rem !important;
+    line-height: 1.7 !important;
+    margin-top: 0.8rem !important;
+    padding: 0.9rem 1.2rem !important;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.08) 100%) !important;
+    border-left: 3.5px solid var(--premium-accent) !important;
+    border-radius: 0 10px 10px 0 !important;
+    display: block !important;
+    font-style: italic !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ========================================== */
+/* PREMIUM BOOKING EDIT FORM STYLES */
+/* ========================================== */
+
+/* Form Container Enhancement */
+#booking-form,
+form.form-container {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+    border: 1px solid rgba(37, 99, 235, 0.2) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+        inset 0 1px 2px rgba(255, 255, 255, 0.05),
+        0 0 40px rgba(37, 99, 235, 0.1) !important;
+    padding: 2rem !important;
+    margin: 1.5rem !important;
+}
+
+/* Fieldset Premium Styling */
+.premium-fieldset {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%) !important;
+    border: 1px solid rgba(37, 99, 235, 0.2) !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    margin: 1rem 0 !important;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.05) !important;
+}
+
+.premium-fieldset>h2 {
+    background: linear-gradient(135deg, var(--premium-accent), #7c3aed) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-weight: 800 !important;
+    font-size: 1.2rem !important;
+    margin-bottom: 1rem !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Premium Input Styling */
+.booking-premium-input,
+form input[type="text"],
+form input[type="email"],
+form input[type="number"],
+form input[type="datetime-local"],
+form input[type="date"],
+form input[type="time"] {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: var(--premium-text) !important;
+    padding: 0.8rem 1rem !important;
+    font-size: 1rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.booking-premium-input:focus,
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="number"]:focus,
+form input[type="datetime-local"]:focus,
+form input[type="date"]:focus,
+form input[type="time"]:focus {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%) !important;
+    border-color: var(--premium-accent) !important;
+    outline: none !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 16px rgba(37, 99, 235, 0.4) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Premium Textarea */
+.booking-premium-textarea,
+form textarea {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: var(--premium-text) !important;
+    padding: 0.8rem 1rem !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    resize: vertical !important;
+}
+
+.booking-premium-textarea:focus,
+form textarea:focus {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%) !important;
+    border-color: var(--premium-accent) !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 16px rgba(37, 99, 235, 0.4) !important;
+}
+
+/* Premium Select */
+.booking-premium-select,
+form select {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: var(--premium-text) !important;
+    padding: 0.8rem 1rem !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    cursor: pointer !important;
+}
+
+.booking-premium-select:focus,
+form select:focus {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%) !important;
+    border-color: var(--premium-accent) !important;
+    outline: none !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 16px rgba(37, 99, 235, 0.4) !important;
+}
+
+/* Form Labels */
+form label {
+    color: var(--premium-text) !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0.5rem !important;
+    display: block !important;
+    letter-spacing: 0.3px !important;
+}
+
+/* Form Rows */
+.form-row {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    gap: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+div.form-row>div {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Help Text Styling */
+.helptext,
+p.help {
+    color: var(--premium-text-muted) !important;
+    font-size: 0.8rem !important;
+    margin-top: 0.4rem !important;
+    padding: 0.5rem 0.8rem !important;
+    background: rgba(37, 99, 235, 0.05) !important;
+    border-left: 2px solid var(--premium-accent) !important;
+    border-radius: 4px !important;
+    display: block !important;
+    line-height: 1.4 !important;
+}
+
+/* Error Messages - Enhanced */
+.errorlist {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.1)) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    border-radius: 10px !important;
+    padding: 1rem !important;
+    margin: 1rem 0 1.5rem 0 !important;
+    list-style: none !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.errorlist li {
+    color: #fca5a5 !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    line-height: 1.5 !important;
+}
+
+.errorlist li::before {
+    content: "⚠️";
+    font-size: 1.2rem !important;
+}
+
+/* Error fields highlight */
+.form-row.errors input,
+.form-row.errors select,
+.form-row.errors textarea {
+    border-color: #ef4444 !important;
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%) !important;
+}
+
+/* Submit Buttons */
+.submit-row {
+    display: flex !important;
+    gap: 1rem !important;
+    padding: 1.5rem 0 0 0 !important;
+    margin-top: 2rem !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+}
+
+.submit-row input[type="submit"],
+.submit-row input[type="button"] {
+    background: var(--premium-gradient) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.8rem 1.8rem !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3) !important;
+    letter-spacing: 0.5px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+.submit-row input[type="submit"]:hover,
+.submit-row input[type="button"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4) !important;
+}
+
+/* Secondary submit button */
+.submit-row input[name="_continue"],
+.submit-row input[name="_addanother"] {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: var(--premium-text) !important;
+    box-shadow: none !important;
+}
+
+.submit-row input[name="_continue"]:hover,
+.submit-row input[name="_addanother"]:hover {
+    background: rgba(37, 99, 235, 0.1) !important;
+    border-color: var(--premium-accent) !important;
+}
+
+/* Delete Button - Premium */
+.submit-row .deletelink,
+a.deletelink {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(220, 38, 38, 0.8)) !important;
+    color: white !important;
+    padding: 0.8rem 1.8rem !important;
+    border-radius: 10px !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    cursor: pointer !important;
+    font-size: 1rem !important;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+.submit-row .deletelink:hover,
+a.deletelink:hover {
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4) !important;
+}
+
+/* History Link */
+.historylink {
+    color: var(--premium-accent) !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+
+.historylink:hover {
+    color: #60a5fa !important;
+    text-decoration: underline !important;
+}
+
+/* Object Tools */
+ul.object-tools {
+    display: flex !important;
+    gap: 0.5rem !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 1.5rem !important;
+}
+
+ul.object-tools li {
+    margin: 0 !important;
+}
+
+ul.object-tools a {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8)) !important;
+    color: white !important;
+    padding: 0.6rem 1.2rem !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    font-size: 0.9rem !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2) !important;
+}
+
+ul.object-tools a:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Multi-select fields */
+select[multiple] {
+    min-height: 150px !important;
+    padding: 0.5rem !important;
+}
+
+select[multiple] option {
+    padding: 0.5rem !important;
+    background: rgba(37, 99, 235, 0.1) !important;
+    color: var(--premium-text) !important;
+}
+
+select[multiple] option:checked {
+    background: var(--premium-gradient) !important;
+    color: white !important;
+}
+
+/* Readonly Fields */
+.readonly {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px dashed rgba(255, 255, 255, 0.1) !important;
+    color: var(--premium-text-muted) !important;
+}
+
+/* Related objects widget */
+.inline-related {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    margin: 1rem 0 !important;
+    padding: 1rem !important;
+    background: rgba(17, 24, 39, 0.5) !important;
+}
+
+.inline-related h3 {
+    color: var(--premium-text) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding-bottom: 0.5rem !important;
+}
+
+/* Animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#booking-form,
+form.form-container {
+    animation: slideInUp 0.5s ease-out !important;
+}
+
+/* ========================================== */
+/* SUPER PREMIUM FORM LAYOUT - BOOKING EDIT */
+/* ========================================== */
+
+/* Enhanced form field containers */
+.form-row {
+    padding: 1.8rem 0 !important;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.08) !important;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+    gap: 2.5rem !important;
+    align-items: start !important;
+    position: relative !important;
+}
+
+.form-row:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+.form-row>div {
+    position: relative !important;
+}
+
+/* Enhanced form row styling */
+.form-row.errors {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%) !important;
+    padding: 1.5rem !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Label styling with better spacing */
+label {
+    color: var(--premium-text) !important;
+    font-weight: 800 !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    margin-bottom: 1rem !important;
+    display: block !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Better input field styling */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+input[type="week"],
+input[type="month"],
+textarea,
+select {
+    background: linear-gradient(180deg, rgba(25, 35, 50, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border: 2px solid rgba(37, 99, 235, 0.2) !important;
+    border-radius: 16px !important;
+    color: var(--premium-text) !important;
+    padding: 1.3rem 1.6rem !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    width: 100% !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4),
+        0 0 0 0 rgba(37, 99, 235, 0.1) !important;
+    position: relative !important;
+}
+
+/* Advanced focus state */
+input:focus,
+textarea:focus,
+select:focus {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.3) 0%, rgba(37, 99, 235, 0.15) 100%) !important;
+    border-color: var(--premium-accent) !important;
+    outline: none !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3),
+        0 0 0 4px rgba(37, 99, 235, 0.25),
+        0 0 30px rgba(37, 99, 235, 0.7) !important;
+    transform: translateY(-3px) !important;
+}
+
+/* Fieldset visual improvements */
+fieldset.module,
+.module.aligned {
+    background: linear-gradient(135deg,
+            rgba(37, 99, 235, 0.12) 0%,
+            rgba(124, 58, 237, 0.1) 50%,
+            rgba(37, 99, 235, 0.08) 100%) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.35) !important;
+    border-radius: 20px !important;
+    padding: 3rem !important;
+    margin: 0 0 3rem 0 !important;
+    box-shadow: 0 15px 50px rgba(37, 99, 235, 0.12),
+        inset 0 1px 3px rgba(255, 255, 255, 0.12),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+fieldset.module::before,
+.module.aligned::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.3), transparent) !important;
+    pointer-events: none !important;
+}
+
+fieldset.module:hover,
+.module.aligned:hover {
+    border-color: rgba(37, 99, 235, 0.55) !important;
+    background: linear-gradient(135deg,
+            rgba(37, 99, 235, 0.18) 0%,
+            rgba(124, 58, 237, 0.15) 50%,
+            rgba(37, 99, 235, 0.12) 100%) !important;
+    box-shadow: 0 20px 60px rgba(37, 99, 235, 0.18),
+        inset 0 1px 3px rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-3px) !important;
+}
+
+/* Enhanced fieldset headers */
+fieldset.module>h2,
+.module.aligned>h2,
+fieldset>h2 {
+    background: linear-gradient(135deg,
+            rgba(37, 99, 235, 0.5) 0%,
+            rgba(124, 58, 237, 0.45) 100%) !important;
+    color: var(--premium-text) !important;
+    font-weight: 950 !important;
+    font-size: 1.35rem !important;
+    padding: 1.6rem 2.2rem !important;
+    border-radius: 16px !important;
+    margin: -3rem -3rem 2.2rem -3rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    border-bottom: 3px solid rgba(37, 99, 235, 0.6) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.2rem !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Better submit row */
+.submit-row {
+    display: flex !important;
+    gap: 1.5rem !important;
+    padding: 2.5rem 0 0 0 !important;
+    margin-top: 3rem !important;
+    border-top: 2px solid rgba(37, 99, 235, 0.15) !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+}
+
+/* Primary save button - ultimate premium */
+input[type="submit"][name="_save"],
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]) {
+    background: linear-gradient(135deg, #2563eb 0%, #1a237e 40%, #7c3aed 100%) !important;
+    color: white !important;
+    border: none !important;
+    padding: 1.4rem 3.2rem !important;
+    border-radius: 16px !important;
+    font-weight: 950 !important;
+    font-size: 1.1rem !important;
+    cursor: pointer !important;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5),
+        0 0 30px rgba(37, 99, 235, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.8rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+input[type="submit"][name="_save"]::before {
+    content: '💾' !important;
+    font-size: 1.3rem !important;
+    display: inline-block !important;
+}
+
+input[type="submit"][name="_save"]:hover,
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]):hover {
+    transform: translateY(-5px) scale(1.03) !important;
+    box-shadow: 0 16px 45px rgba(37, 99, 235, 0.6),
+        0 0 40px rgba(37, 99, 235, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+input[type="submit"][name="_save"]:active,
+input[type="submit"]:not([name="_continue"]):not([name="_addanother"]):active {
+    transform: translateY(-1px) scale(0.97) !important;
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35) !important;
+}
+
+/* Secondary buttons */
+input[type="submit"][name="_continue"],
+input[type="submit"][name="_addanother"] {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.4) !important;
+    color: var(--premium-text) !important;
+    padding: 1.2rem 2.6rem !important;
+    border-radius: 14px !important;
+    font-weight: 800 !important;
+    font-size: 0.95rem !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.6rem !important;
+    position: relative !important;
+}
+
+input[type="submit"][name="_continue"]::before {
+    content: '⤵️' !important;
+    font-size: 1.1rem !important;
+}
+
+input[type="submit"][name="_addanother"]::before {
+    content: '➕' !important;
+    font-size: 1.1rem !important;
+}
+
+input[type="submit"][name="_continue"]:hover,
+input[type="submit"][name="_addanother"]:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.28) 0%, rgba(124, 58, 237, 0.22) 100%) !important;
+    border-color: var(--premium-accent) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+input[type="submit"][name="_continue"]:active,
+input[type="submit"][name="_addanother"]:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* Delete button */
+.submit-row a.deletelink,
+a.deletelink {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%) !important;
+    color: white !important;
+    padding: 1.2rem 2.6rem !important;
+    border-radius: 14px !important;
+    text-decoration: none !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-size: 0.95rem !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+    margin-left: auto !important;
+    position: relative !important;
+}
+
+.submit-row a.deletelink::before,
+a.deletelink::before {
+    content: '🗑️' !important;
+    font-size: 1.1rem !important;
+}
+
+.submit-row a.deletelink:hover,
+a.deletelink:hover {
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    transform: translateY(-3px) scale(1.03) !important;
+    box-shadow: 0 14px 40px rgba(239, 68, 68, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.submit-row a.deletelink:active,
+a.deletelink:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* Help text enhancement */
+.helptext,
+p.help {
+    color: var(--premium-text-muted) !important;
+    font-size: 0.82rem !important;
+    line-height: 1.7 !important;
+    margin-top: 0.8rem !important;
+    padding: 0.9rem 1.2rem !important;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.08) 100%) !important;
+    border-left: 3.5px solid var(--premium-accent) !important;
+    border-radius: 0 10px 10px 0 !important;
+    display: block !important;
+    font-style: italic !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ——— PREMIUM HORIZONTAL FILTERS ——— */
+#change-list-filters .changelist-search-premium {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: rgba(15, 23, 42, 0.4);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
+}
+
+#change-list-filters .filters-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem 1.5rem;
+}
+
+#change-list-filters .form-group {
+    margin: 0 !important;
+    flex: 0 1 auto;
+    min-width: 200px;
+}
+
+#change-list-filters .form-group label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.65rem !important;
+    font-size: 1.05rem !important;
+    /* Wyraźnie i czytelnie */
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    color: #ffffff !important;
+    margin-bottom: 0.9rem !important;
+    font-family: 'Inter', sans-serif !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.filter-icon-span {
+    font-size: 1.25rem !important;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.25));
+}
+
+#change-list-filters select.form-control.search-filter,
+#change-list-filters .select2-container--default .select2-selection--single {
+    min-height: 48px !important;
+    padding: 0.6rem 1.25rem !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: rgba(30, 41, 59, 0.6) !important;
+    color: #f8fafc !important;
+    font-weight: 600 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#change-list-filters .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #f8fafc !important;
+    line-height: 34px !important;
+    padding-left: 0 !important;
+}
+
+#change-list-filters .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 46px !important;
+    right: 12px !important;
+}
+
+#change-list-filters select.form-control.search-filter:focus,
+#change-list-filters .select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: var(--premium-accent) !important;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2) !important;
+    background: rgba(30, 41, 59, 0.85) !important;
+}
+
+/* ——— PREMIUM SELECT2 DROPDOWN ——— */
+.select2-dropdown {
+    background: #0f172a !important;
+    /* Głębszy granat */
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+    overflow: hidden !important;
+    padding: 0.6rem !important;
+    margin-top: 5px !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+.select2-container--default .select2-search--dropdown {
+    padding: 0.75rem !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: #fff !important;
+    padding: 0.65rem 1rem !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+    border-color: var(--premium-accent) !important;
+    outline: none !important;
+    background: rgba(30, 41, 59, 1) !important;
+}
+
+.select2-results__options {
+    max-height: 320px !important;
+}
+
+.select2-container--default .select2-results__option {
+    padding: 0.85rem 1.25rem !important;
+    color: #cbd5e1 !important;
+    font-weight: 500 !important;
+    border-radius: 10px !important;
+    margin-bottom: 2px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.25) 0%, rgba(37, 99, 235, 0.1) 100%) !important;
+    color: #fff !important;
+    padding-left: 1.5rem !important;
+    /* Efekt przesunięcia przy hoverze */
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: var(--premium-accent) !important;
+    font-weight: 700 !important;
+}
+
+/* Custom Scrollbar for Select2 */
+.select2-results__options::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.select2-results__options::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.select2-results__options::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-radius: 10px !important;
+}
+
+.select2-results__options::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
+
+#change-list-filters .search-row {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#change-list-filters .btn-search-premium {
+    min-height: 48px;
+    padding: 0 2.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--premium-accent) 0%, #1d4ed8 100%);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+#change-list-filters .btn-search-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5);
+    filter: brightness(1.1);
+}
+
+/* ——— PREMIUM ACTIONS BAR ——— */
+.actions.actions-premium {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 1.5rem !important;
+    background: rgba(15, 23, 42, 0.45) !important;
+    padding: 1.25rem 1.5rem !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    margin-bottom: 2rem !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+.actions-premium .actions-label {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.8rem !important;
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+}
+
+.actions-premium .actions-label select {
+    min-width: 300px !important;
+    min-height: 48px !important;
+    padding: 0.6rem 1.25rem !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(30, 41, 59, 0.75) !important;
+    color: #f8fafc !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.actions-premium .actions-label select:focus {
+    border-color: var(--premium-accent) !important;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25) !important;
+}
+
+.actions-premium .btn-execute {
+    min-height: 48px !important;
+    height: 48px !important;
+    padding: 0 2.5rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    border-radius: 14px !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3) !important;
+    cursor: pointer !important;
+}
+
+.actions-premium .btn-execute:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.45) !important;
+    filter: brightness(1.15) !important;
+}
+
+.actions-premium .action-counter {
+    color: #94a3b8 !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    padding-top: 1.5rem !important;
+}

@@ -1,0 +1,11 @@
+{% load i18n admin_urls jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+{% block object-tools-items %}
+    {% if has_add_permission %}
+        {% url cl.opts|admin_urlname:'add' as add_url %}
+        <a href="{% add_preserved_filters add_url is_popup to_field %}" class="btn btn-add-booking {{ jazzmin_ui.button_classes.success }}">
+            <i class="fa fa-plus-circle"></i> &nbsp; Dodaj rezerwację
+        </a>
+    {% endif %}
+{% endblock %}

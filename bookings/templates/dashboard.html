@@ -1,0 +1,2952 @@
+{% extends "base.html" %}
+{% load l10n %}
+
+{% block title %}Pulpit - System Rezerwacji{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Custom styles for Flatpickr */
+    .flatpickr-calendar {
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+        font-family: inherit !important;
+    }
+
+    .flatpickr-months {
+        background: transparent !important;
+    }
+
+    .flatpickr-month {
+        color: rgba(226, 232, 240, 0.95) !important;
+        fill: rgba(226, 232, 240, 0.95) !important;
+        font-weight: 700 !important;
+    }
+
+    .flatpickr-weekdays {
+        background: rgba(37, 99, 235, 0.1) !important;
+        color: rgba(56, 189, 248, 0.9) !important;
+        font-weight: 600 !important;
+    }
+
+    .flatpickr-weekday {
+        color: rgba(56, 189, 248, 0.9) !important;
+    }
+
+    .flatpickr-days {
+        background: transparent !important;
+    }
+
+    .flatpickr-day {
+        color: rgba(226, 232, 240, 0.9) !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .flatpickr-day:hover {
+        background: rgba(37, 99, 235, 0.3) !important;
+        color: white !important;
+    }
+
+    .flatpickr-day.selected {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8)) !important;
+        color: white !important;
+        border-color: rgba(37, 99, 235, 0.8) !important;
+    }
+
+    .flatpickr-day.today {
+        border-color: rgba(56, 189, 248, 0.8) !important;
+    }
+
+    .flatpickr-day.inRange {
+        background: rgba(37, 99, 235, 0.2) !important;
+        color: white !important;
+    }
+
+    .flatpickr-day.disabled {
+        color: rgba(226, 232, 240, 0.3) !important;
+    }
+
+    .flatpickr-current-month {
+        color: rgba(226, 232, 240, 0.95) !important;
+        font-weight: 700 !important;
+    }
+
+    .numInputWrapper:hover {
+        background: rgba(37, 99, 235, 0.2) !important;
+    }
+
+    .flatpickr-arrow {
+        fill: rgba(226, 232, 240, 0.8) !important;
+    }
+
+    .flatpickr-arrow:hover {
+        fill: rgba(226, 232, 240, 1) !important;
+    }
+
+    /* Navigation arrows */
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+        color: rgba(226, 232, 240, 0.8) !important;
+        background: rgba(37, 99, 235, 0.1) !important;
+        border-radius: 6px !important;
+        padding: 4px 8px !important;
+    }
+
+    .flatpickr-prev-month:hover,
+    .flatpickr-next-month:hover {
+        background: rgba(37, 99, 235, 0.3) !important;
+        color: white !important;
+    }
+
+    .premium-card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.82) 0%, rgba(15, 23, 42, 0.86) 100%);
+        height: 100%;
+    }
+
+    /* Stylizacja scroll bara dla sekcji rezerwacji */
+    #bookings-list-newest::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    #bookings-list-newest::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    #bookings-list-newest::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(124, 58, 237, 0.6));
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #bookings-list-newest::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8));
+        box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Firefox */
+    #bookings-list-newest {
+        scrollbar-color: rgba(37, 99, 235, 0.6) rgba(255, 255, 255, 0.05);
+        scrollbar-width: thin;
+    }
+
+    .stat-card {
+        border-radius: 16px;
+        padding: 24px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-card i {
+        position: absolute;
+        right: -10px;
+        bottom: -10px;
+        font-size: 5rem;
+        opacity: 0.2;
+    }
+
+    .stat-card h3 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0;
+    }
+
+    .stat-card p {
+        font-size: 1rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0;
+        opacity: 0.9;
+    }
+
+    .gradient-1 {
+        background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+    }
+
+    .gradient-2 {
+        background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+    }
+
+    .gradient-3 {
+        background: linear-gradient(135deg, #e65100 0%, #fb8c00 100%);
+    }
+
+    .gradient-4 {
+        background: linear-gradient(135deg, #4527a0 0%, #7e57c2 100%);
+    }
+
+    .section-title {
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.92);
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 4px;
+        background: var(--premium-gradient);
+        border-radius: 2px;
+    }
+
+    .utilization-bar {
+        height: 12px;
+        background: #edf2f7;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .utilization-fill {
+        height: 100%;
+        border-radius: 6px;
+        transition: width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    }
+
+    .table thead th {
+        background-color: rgba(2, 6, 23, 0.55) !important;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        font-weight: 700;
+        color: rgba(226, 232, 240, 0.85);
+        border-top: none;
+    }
+
+    .report-banner {
+        background: rgba(2, 6, 23, 0.25);
+        border-left: 5px solid #1a237e;
+        border-radius: 12px;
+    }
+
+    .top-user-tile {
+        background: rgba(2, 6, 23, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.10);
+    }
+
+    .top-user-name {
+        color: rgba(226, 232, 240, 0.94);
+    }
+
+    .top-user-dept {
+        color: rgba(226, 232, 240, 0.70);
+    }
+
+    .heatmap-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        padding-top: 10px;
+    }
+
+    .heatmap-legend .legend-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        cursor: pointer;
+        user-select: none;
+        font-weight: 900;
+        font-size: 0.82rem;
+        letter-spacing: 0.2px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(2, 6, 23, 0.22);
+        color: rgba(226, 232, 240, 0.88);
+        transition: all 160ms ease;
+    }
+
+    .heatmap-legend .legend-pill:hover {
+        transform: translateY(-1px);
+        border-color: rgba(147, 197, 253, 0.30);
+        background: rgba(37, 99, 235, 0.14);
+    }
+
+    .heatmap-legend .legend-pill.is-off {
+        opacity: 0.45;
+        filter: grayscale(0.65);
+        background: rgba(2, 6, 23, 0.10);
+    }
+
+    .heatmap-legend .legend-pill.is-on {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.30), rgba(124, 58, 237, 0.18));
+        border-color: rgba(147, 197, 253, 0.35);
+        box-shadow: 0 16px 34px rgba(37, 99, 235, 0.18);
+        color: rgba(255, 255, 255, 0.95);
+    }
+
+    .heatmap-legend .swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.65);
+    }
+
+    /* Premium Interactive Diagrams Styles */
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stats-container .stat-card {
+        background: rgba(2, 6, 23, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 1.5rem;
+        backdrop-filter: blur(10px);
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stats-container .stat-card:hover {
+        background: rgba(2, 6, 23, 0.35);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .stats-container .stat-number {
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .stats-container .stat-label {
+        color: rgba(226, 232, 240, 0.7);
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .progress-container {
+        background: rgba(2, 6, 23, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .progress-title {
+        color: rgba(226, 232, 240, 0.95);
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .progress-bar-container {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        height: 12px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 10px;
+        transition: width 1s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(100%);
+        }
+    }
+
+    .progress-text {
+        color: rgba(226, 232, 240, 0.7);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+
+    .calendar-heatmap {
+        background: rgba(2, 6, 23, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .heatmap-title {
+        color: rgba(226, 232, 240, 0.95);
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        margin-bottom: 1rem;
+    }
+
+    .calendar-day {
+        aspect-ratio: 1;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .calendar-day.empty {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .calendar-day.has-booking {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(124, 58, 237, 0.6));
+        color: white;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+
+    .calendar-day.has-booking:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.5);
+    }
+
+    .booking-timeline {
+        position: relative;
+        padding: 1rem 0;
+        margin: 1rem 0;
+    }
+
+    .timeline-line {
+        position: absolute;
+        left: 20px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8));
+        border-radius: 2px;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-left: 50px;
+        margin-bottom: 1.5rem;
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideIn 0.5s ease forwards;
+        max-width: 100% !important;
+        overflow: visible !important;
+    }
+
+    .timeline-item:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .timeline-item:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .timeline-item:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .timeline-item:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .timeline-item:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInItem {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .timeline-dot {
+        position: absolute;
+        left: 14px;
+        top: 6px;
+        width: 17px;
+        height: 17px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        z-index: 2;
+    }
+
+    .timeline-content {
+        background: rgba(2, 6, 23, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 1.4rem 1.6rem;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        overflow: visible !important;
+        max-width: 100% !important;
+    }
+
+    .timeline-content:hover {
+        background: rgba(2, 6, 23, 0.35);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        border-color: rgba(37, 99, 235, 0.3);
+    }
+
+    .timeline-date {
+        color: rgba(56, 189, 248, 0.95);
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.3px;
+    }
+
+    .timeline-title {
+        color: rgba(226, 232, 240, 0.98);
+        font-weight: 700;
+        font-size: 1.15rem;
+        margin-bottom: 0.4rem;
+        line-height: 1.5 !important;
+        word-wrap: break-word !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    .timeline-details {
+        color: rgba(226, 232, 240, 0.75);
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-800" style="color: rgba(255,255,255,0.92);">Pulpit</h1>
+    <div class="d-flex align-items-center gap-3">
+        <div class="px-3 py-2 rounded-pill"
+            style="background: rgba(2, 6, 23, 0.35); border: 1px solid rgba(255,255,255,0.12); color: rgba(226,232,240,0.92);">
+            <i class="bi bi-clock me-2"></i><span id="dashboard-clock">--:--:--</span>
+        </div>
+        <div class="px-3 py-2 rounded-pill"
+            style="background: rgba(2, 6, 23, 0.35); border: 1px solid rgba(255,255,255,0.12); color: rgba(226,232,240,0.92);">
+            <i class="bi bi-calendar3 me-2"></i><span id="dashboard-date">—</span>
+        </div>
+    </div>
+</div>
+
+<!-- Statystyki -->
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="stat-card gradient-1">
+            <p>Dostępne sale</p>
+            <h3>{{ stats.total_rooms }}</h3>
+            <i class="bi bi-building"></i>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card gradient-2">
+            <p>Aktywne rezerwacje</p>
+            <h3>{{ stats.total_bookings }}</h3>
+            <i class="bi bi-calendar-check"></i>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card gradient-3">
+            <p>Rezerwacje dziś</p>
+            <h3>{{ stats.bookings_today }}</h3>
+            <i class="bi bi-clock-history"></i>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card gradient-4">
+            <p>Użytkownicy</p>
+            <h3>{{ stats.total_users }}</h3>
+            <i class="bi bi-people"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- Najbliższe rezerwacje (timeline) -->
+    <div class="col-lg-6">
+        <div class="premium-card" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+            <div class="card-header p-4 border-0"
+                style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0 fw-800 section-title">📋 Najbliższe rezerwacje</h5>
+                    <button class="btn btn-sm" id="clear-timeline-filters-btn"
+                        style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); color: rgba(248, 180, 180, 0.9); padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer; display: none;">
+                        <i class="bi bi-x-circle me-1"></i>Wyczyść filtry
+                    </button>
+                </div>
+
+                <!-- Czasowe Filtry -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span
+                            style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Zakres:</span>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button class="btn btn-sm timeline-timeframe-filter-btn" data-timeframe="today"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Dziś
+                            </button>
+                            <button class="btn btn-sm timeline-timeframe-filter-btn" data-timeframe="tomorrow"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Jutro
+                            </button>
+                            <button class="btn btn-sm timeline-timeframe-filter-btn" data-timeframe="week"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Tydzień
+                            </button>
+                            <button class="btn btn-sm timeline-timeframe-filter-btn" data-timeframe="month"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Miesiąc
+                            </button>
+                            <button class="btn btn-sm timeline-timeframe-filter-btn active" data-timeframe="all"
+                                style="background: rgba(37, 99, 235, 0.25); border: 1px solid rgba(37, 99, 235, 0.4); color: rgba(226, 232, 240, 0.95); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Wszystkie
+                            </button>
+                            <button class="btn btn-sm timeline-timeframe-filter-btn" data-timeframe="custom"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                <i class="bi bi-calendar3 me-1"></i>Custom
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wyszukiwarka -->
+                <div class="d-flex align-items-center gap-2">
+                    <span
+                        style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Szukaj:</span>
+                    <div style="position: relative; flex: 1;">
+                        <input type="text" id="timeline-search" placeholder="Tytuł, sala, użytkownik..."
+                            style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.4rem 2.5rem 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; width: 100%; transition: all 0.3s ease;">
+                        <i class="bi bi-search"
+                            style="position: absolute; right: 0.8rem; top: 50%; transform: translateY(-50%); color: rgba(226, 232, 240, 0.5); font-size: 0.75rem;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0"
+                style="flex: 1; max-height: 900px; overflow-y: auto; overflow-x: hidden; padding: 1.5rem !important;">
+                <style>
+                    /* Styl dla całego scrollbara */
+                    .card-body::-webkit-scrollbar {
+                        width: 8px;
+                        /* Szerokość scrollbara */
+                    }
+
+                    /* Styl dla tła (track) scrollbara */
+                    .card-body::-webkit-scrollbar-track {
+                        background: rgba(255, 255, 255, 0.15);
+                        /* Ciemniejsze, półprzezroczyste tło */
+                        border-radius: 10px;
+                        /* Zaokrąglone rogi */
+                    }
+
+                    /* Styl dla uchwytu (thumb) scrollbara */
+                    .card-body::-webkit-scrollbar-thumb {
+                        background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(124, 58, 237, 0.6));
+                        /* Gradient pasujący do motywu */
+                        border-radius: 10px;
+                        /* Bardziej zaokrąglone rogi */
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        /* Delikatna ramka */
+                    }
+
+                    /* Styl dla uchwytu (thumb) scrollbara po najechaniu */
+                    .card-body::-webkit-scrollbar-thumb:hover {
+                        background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8));
+                        /* Jaśniejszy gradient po najechaniu */
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        /* Jaśniejsza ramka */
+                        box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+                        /* Delikatny cień */
+                    }
+
+                    /* Styl dla scrollbara timeline */
+                    #dashboard-timeline::-webkit-scrollbar {
+                        width: 8px;
+                    }
+
+                    #dashboard-timeline::-webkit-scrollbar-track {
+                        background: rgba(255, 255, 255, 0.15);
+                        border-radius: 10px;
+                    }
+
+                    #dashboard-timeline::-webkit-scrollbar-thumb {
+                        background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(124, 58, 237, 0.6));
+                        border-radius: 10px;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                    }
+
+                    #dashboard-timeline::-webkit-scrollbar-thumb:hover {
+                        background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8));
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+                    }
+                </style>
+                <div class="booking-timeline" id="dashboard-timeline"
+                    style="position: relative; padding: 1rem 0; margin: 1rem 0; max-height: 850px; overflow-y: auto; overflow-x: hidden;">
+                    <div class="timeline-line"></div>
+                    <div id="timeline-items"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ostatnie rezerwacje - kompaktowa lista przewijana -->
+    <div class="col-lg-6">
+        <div class="premium-card" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+            <div class="card-header p-4 border-0"
+                style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0 fw-800 section-title">Ostatnie rezerwacje</h5>
+                    <button class="btn btn-sm" id="clear-filters-btn"
+                        style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); color: rgba(248, 180, 180, 0.9); padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer; display: none;">
+                        <i class="bi bi-x-circle me-1"></i>Wyczyść filtry
+                    </button>
+                </div>
+
+                <!-- Status Filters -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span
+                            style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Status:</span>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button class="btn btn-sm status-filter-btn active" data-status="all"
+                                style="background: rgba(37, 99, 235, 0.25); border: 1px solid rgba(37, 99, 235, 0.4); color: rgba(226, 232, 240, 0.95); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Wszystkie
+                            </button>
+                            <button class="btn btn-sm status-filter-btn" data-status="confirmed"
+                                style="background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: rgba(134, 239, 172, 0.8); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Aktywne
+                            </button>
+                            <button class="btn btn-sm status-filter-btn" data-status="completed"
+                                style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: rgba(147, 197, 253, 0.8); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Zakończone
+                            </button>
+                            <button class="btn btn-sm status-filter-btn" data-status="cancelled"
+                                style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: rgba(252, 165, 165, 0.8); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Anulowane
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeframe and Additional Filters -->
+                <div class="d-flex gap-3 align-items-center flex-wrap">
+                    <!-- Timeframe Filters -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span
+                            style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Czas:</span>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm timeframe-filter-btn active" data-timeframe="all"
+                                style="background: rgba(37, 99, 235, 0.25); border: 1px solid rgba(37, 99, 235, 0.4); color: rgba(226, 232, 240, 0.95); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Wszystkie
+                            </button>
+                            <button class="btn btn-sm timeframe-filter-btn" data-timeframe="today"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Dziś
+                            </button>
+                            <button class="btn btn-sm timeframe-filter-btn" data-timeframe="tomorrow"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Jutro
+                            </button>
+                            <button class="btn btn-sm timeframe-filter-btn" data-timeframe="week"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Tydzień
+                            </button>
+                            <button class="btn btn-sm timeframe-filter-btn" data-timeframe="month"
+                                style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(226, 232, 240, 0.7); padding: 0.3rem 0.7rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; cursor: pointer;">
+                                Miesiąc
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="d-flex align-items-center gap-2" style="flex: 1; min-width: 200px;">
+                        <span
+                            style="color: rgba(226, 232, 240, 0.7); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Szukaj:</span>
+                        <div style="position: relative; flex: 1;">
+                            <input type="text" id="booking-search" placeholder="Tytuł, sala, użytkownik..."
+                                style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(226, 232, 240, 0.9); padding: 0.4rem 2.5rem 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; width: 100%; transition: all 0.3s ease;">
+                            <i class="bi bi-search"
+                                style="position: absolute; right: 0.8rem; top: 50%; transform: translateY(-50%); color: rgba(226, 232, 240, 0.5); font-size: 0.75rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0"
+                style="flex: 1; max-height: 900px; overflow-y: auto; overflow-x: hidden; padding: 1.5rem !important;">
+                <style>
+                    /* Styl dla całego scrollbara */
+                    .card-body::-webkit-scrollbar {
+                        width: 8px;
+                        /* Szerokość scrollbara */
+                    }
+
+                    /* Styl dla tła (track) scrollbara */
+                    .card-body::-webkit-scrollbar-track {
+                        background: rgba(255, 255, 255, 0.15);
+                        /* Ciemniejsze, półprzezroczyste tło */
+                        border-radius: 10px;
+                        /* Zaokrąglone rogi */
+                    }
+
+                    /* Styl dla uchwytu (thumb) scrollbara */
+                    .card-body::-webkit-scrollbar-thumb {
+                        background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(124, 58, 237, 0.6));
+                        /* Gradient pasujący do motywu */
+                        border-radius: 10px;
+                        /* Bardziej zaokrąglone rogi */
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        /* Delikatna ramka */
+                    }
+
+                    /* Styl dla uchwytu (thumb) scrollbara po najechaniu */
+                    .card-body::-webkit-scrollbar-thumb:hover {
+                        background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8));
+                        /* Jaśniejszy gradient po najechaniu */
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        /* Jaśniejsza ramka */
+                        box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+                        /* Delikatny cień */
+                    }
+                </style>
+                <div class="bookings-list" id="bookings-list-newest"
+                    style="display: flex; flex-direction: column; gap: 1rem;">
+                    {% for booking in recent_bookings %}
+                    <div class="booking-card" data-status="{{ booking.status }}"
+                        data-date="{{ booking.start_time|date:'Y-m-d' }}"
+                        data-time="{{ booking.start_time|date:'H:i' }}" data-room="{{ booking.room.name|lower }}"
+                        data-user="{{ booking.user.name|lower }}" data-title="{{ booking.title|lower }}"
+                        style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(124, 58, 237, 0.05)); border-left: 4px solid {% if booking.status == 'confirmed' %}rgba(34, 197, 94, 0.6){% elif booking.status == 'completed' %}rgba(59, 130, 246, 0.6){% elif booking.status == 'cancelled' %}rgba(239, 68, 68, 0.6){% else %}rgba(37, 99, 235, 0.6){% endif %}; border-radius: 12px; padding: 1.25rem; transition: all 0.25s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+
+                            <!-- Górny rząd: Data, Sala, Tytuł -->
+                            <div
+                                style="display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem; align-items: flex-start;">
+
+                                <!-- Lewą kolumna: Data -->
+                                <div
+                                    style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;">
+                                    <div
+                                        style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(37, 99, 235, 0.7); font-weight: 700;">
+                                        Data</div>
+                                    <div
+                                        style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.4), rgba(124, 58, 237, 0.4)); border-radius: 8px; padding: 0.55rem 1rem; display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 0.9rem; color: rgba(226, 232, 240, 0.98); white-space: nowrap;">
+                                        <i class="bi bi-calendar-event" style="font-size: 1rem;"></i>
+                                        <span>{{ booking.start_time|date:"d.m.Y" }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Środkowa kolumna: Sala i Tytuł -->
+                                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                                    <div>
+                                        <div
+                                            style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(37, 99, 235, 0.7); font-weight: 700; margin-bottom: 0.35rem;">
+                                            Sala</div>
+                                        <div
+                                            style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.15)); border: 1px solid rgba(37, 99, 235, 0.3); color: rgba(226, 232, 240, 0.96); padding: 0.45rem 0.9rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; display: inline-block; max-width: fit-content;">
+                                            {{ booking.room.name }}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div
+                                            style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(37, 99, 235, 0.7); font-weight: 700; margin-bottom: 0.35rem;">
+                                            Tytuł</div>
+                                        <div style="color: rgba(226, 232, 240, 0.92); font-weight: 600; font-size: 0.95rem; word-break: break-word;"
+                                            title="{{ booking.title }}">
+                                            {{ booking.title|truncatechars:45 }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Prawa kolumna: Organizator -->
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                                    <div
+                                        style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(37, 99, 235, 0.7); font-weight: 700;">
+                                        Organizator</div>
+                                    <div
+                                        style="display: flex; align-items: center; gap: 0.8rem; flex-direction: column;">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                            style="width: 40px; height: 40px; font-size: 0.85rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-weight: 700; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); flex-shrink: 0;">
+                                            {{ booking.user.name|slice:":1"|upper }}
+                                        </div>
+                                        <div style="color: rgba(226, 232, 240, 0.88); font-weight: 600; font-size: 0.9rem; text-align: right; max-width: 120px; word-break: break-word;"
+                                            title="{{ booking.user.name }}">
+                                            {{ booking.user.name|truncatechars:15 }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Dolny rząd: Status, Czas trwania -->
+                            <div
+                                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.1);">
+
+                                <!-- Status -->
+                                <div>
+                                    <div
+                                        style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(37, 99, 235, 0.7); font-weight: 700; margin-bottom: 0.35rem;">
+                                        Status</div>
+                                    <div
+                                        style="background: {% if booking.status == 'confirmed' %}linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.15)){% elif booking.status == 'completed' %}linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.15)){% elif booking.status == 'cancelled' %}linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.15)){% else %}linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(37, 99, 235, 0.15)){% endif %}; border: 1px solid {% if booking.status == 'confirmed' %}rgba(34, 197, 94, 0.4){% elif booking.status == 'completed' %}rgba(59, 130, 246, 0.4){% elif booking.status == 'cancelled' %}rgba(239, 68, 68, 0.4){% else %}rgba(37, 99, 235, 0.4){% endif %}; color: {% if booking.status == 'confirmed' %}rgba(134, 239, 172, 0.95){% elif booking.status == 'completed' %}rgba(147, 197, 253, 0.95){% elif booking.status == 'cancelled' %}rgba(252, 165, 165, 0.95){% else %}rgba(226, 232, 240, 0.95){% endif %}; padding: 0.35rem 0.7rem; border-radius: 6px; font-weight: 700; font-size: 0.75rem; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        {% if booking.status == 'confirmed' %}Aktywna{% elif booking.status == 'completed' %}Zakończona{% elif booking.status == 'cancelled' %}Anulowana{% else %}{{ booking.status }}{% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Godzina początkowa -->
+                                <div
+                                    style="display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem; background: rgba(37, 99, 235, 0.12); border-radius: 8px; border: 1px solid rgba(37, 99, 235, 0.2);">
+                                    <i class="bi bi-play-circle-fill"
+                                        style="color: rgba(96, 165, 250, 0.9); font-size: 1.1rem;"></i>
+                                    <div style="display: flex; flex-direction: column; gap: 0.2rem;">
+                                        <div
+                                            style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.07em; color: rgba(37, 99, 235, 0.7); font-weight: 700;">
+                                            Od</div>
+                                        <div
+                                            style="color: rgba(96, 165, 250, 0.95); font-weight: 700; font-size: 1rem;">
+                                            {{ booking.start_time|date:"H:i" }}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Godzina końcowa -->
+                                <div
+                                    style="display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem; background: rgba(124, 58, 237, 0.12); border-radius: 8px; border: 1px solid rgba(124, 58, 237, 0.2);">
+                                    <i class="bi bi-stop-circle-fill"
+                                        style="color: rgba(168, 85, 247, 0.9); font-size: 1.1rem;"></i>
+                                    <div style="display: flex; flex-direction: column; gap: 0.2rem;">
+                                        <div
+                                            style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.07em; color: rgba(124, 58, 237, 0.7); font-weight: 700;">
+                                            Do</div>
+                                        <div
+                                            style="color: rgba(168, 85, 247, 0.95); font-weight: 700; font-size: 1rem;">
+                                            {{ booking.end_time|date:"H:i" }}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Czas trwania -->
+                                <div
+                                    style="display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem; background: rgba(34, 197, 94, 0.12); border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.2);">
+                                    <i class="bi bi-hourglass-split"
+                                        style="color: rgba(34, 197, 94, 0.9); font-size: 1.1rem;"></i>
+                                    <div style="display: flex; flex-direction: column; gap: 0.2rem;">
+                                        <div
+                                            style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.07em; color: rgba(34, 197, 94, 0.7); font-weight: 700;">
+                                            Czas</div>
+                                        <div style="color: rgba(34, 197, 94, 0.95); font-weight: 700; font-size: 1rem;">
+                                            {% widthratio booking.duration_hours 1 60 as minutes %}
+                                            {% if booking.duration_hours >= 1 %}
+                                            {% if booking.duration_hours|add:"0"|stringformat:"d" == booking.duration_hours|stringformat:"d" %}
+                                            {{ booking.duration_hours|floatformat:"0" }}h
+                                            {% else %}
+                                            {{ booking.duration_hours|floatformat:"1" }}h
+                                            {% endif %}
+                                            {% else %}
+                                            {{ minutes }}m
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div style="text-align: center; padding: 3rem 1rem; color: rgba(226, 232, 240, 0.5);">
+                        <i class="bi bi-inbox"
+                            style="font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.6;"></i>
+                        <span style="font-size: 1rem;">Brak rezerwacji</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Wykresy i Statystyki -->
+<div class="row g-4 mb-5">
+    <div class="col-lg-4">
+        <div class="premium-card p-4">
+            <h5 class="fw-800 section-title">Departamenty</h5>
+            <div class="chart-container mt-4" style="position: relative; height:260px;">
+                <canvas id="departmentPieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="premium-card p-4">
+            <h5 class="fw-800 section-title">Trend rezerwacji</h5>
+            <div class="chart-container mt-4" style="position: relative; height:310px;">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Najbardziej aktywni użytkownicy -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="premium-card p-4">
+            <h5 class="fw-800 section-title mb-4">Najbardziej aktywni użytkownicy</h5>
+            <div class="row g-3">
+                {% for user in top_users %}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center p-3 rounded-3 top-user-tile">
+                        <div class="premium-badge me-3 d-flex align-items-center justify-content-center text-white fw-bold rounded-circle"
+                            style="width: 48px; height: 48px; background: var(--premium-gradient); flex-shrink: 0;">
+                            {{ forloop.counter }}
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-800 top-user-name">{{ user.name }}</div>
+                            <div class="small top-user-dept">{{ user.department|default:"Ogólny" }}</div>
+                        </div>
+                        <span class="badge rounded-pill px-3 py-2 fw-800"
+                            style="background: rgba(37, 99, 235, 0.22); border: 1px solid rgba(37, 99, 235, 0.35); color: rgba(226, 232, 240, 0.95);">
+                            {{ user.booking_count }}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Heatmapa - obciążenie systemu -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="premium-card p-4">
+            <h5 class="fw-800 section-title">Obciążenie systemu (ostatnie 7 dni)</h5>
+            <div class="chart-container mt-4" style="position: relative; height:420px;">
+                <canvas id="heatmapChart"></canvas>
+            </div>
+            <div id="heatmapLegend" class="heatmap-legend"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Raporty Miesięczne - przezniesione niżej -->
+<div id="reports" class="row mb-5">
+    <div class="col-12">
+        <div class="premium-card p-4">
+            <h5 class="fw-800 section-title mb-4">📊 Generowanie Raportów Miesięcznych</h5>
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="report-banner p-4 h-100"
+                        style="background: linear-gradient(135deg, rgba(26, 35, 126, 0.05) 0%, rgba(49, 27, 146, 0.05) 100%); border-radius: 16px;">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-danger bg-opacity-10 p-4 rounded-3 me-3">
+                                <i class="bi bi-file-earmark-pdf-fill text-danger fs-2"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-800 text-dark">Raport PDF</h6>
+                                <p class="text-muted small mb-0">Zestawienie analityczne rezerwacji</p>
+                            </div>
+                        </div>
+                        <form class="d-flex flex-column gap-3" onsubmit="event.preventDefault(); downloadReport();">
+                            <div>
+                                <label class="form-label small fw-700 text-muted">Wybierz miesiąc</label>
+                                <input type="month" id="report-month" class="form-control form-control-lg bg-white"
+                                    required style="border: 2px solid #1a237e20;">
+                            </div>
+                            <button type="submit" class="btn btn-premium w-100 py-3">
+                                <i class="bi bi-download me-2"></i> Eksportuj do PDF
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="h-100 p-4 rounded-3"
+                        style="background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);">
+                        <h6 class="fw-700 text-dark mb-3">Dostępne raporty:</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                                <div>
+                                    <strong>Rezerwacje i zajętość</strong>
+                                    <p class="text-muted small mb-0">Szczegółowa analiza wykorzystania sal</p>
+                                </div>
+                            </li>
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                                <div>
+                                    <strong>Departamenty i użytkownicy</strong>
+                                    <p class="text-muted small mb-0">Statystyki aktywności po departamentach</p>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start">
+                                <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                                <div>
+                                    <strong>Trendy i prognozy</strong>
+                                    <p class="text-muted small mb-0">Analiza zmian i prognozowanie zapotrzebowania</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal dla niestandardowego zakresu dat -->
+<div class="modal fade" id="customDateRangeModal" tabindex="-1" aria-labelledby="customDateRangeModalLabel"
+    aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content"
+            style="background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;">
+            <div class="modal-header border-0" style="padding: 1.5rem;">
+                <h5 class="modal-title fw-800" style="color: rgba(226, 232, 240, 0.95);" id="customDateRangeModalLabel">
+                    <i class="bi bi-calendar3 me-2"></i>Wybierz zakres dat
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                    style="filter: invert(1);"></button>
+            </div>
+            <div class="modal-body" style="padding: 0 1.5rem 1.5rem;">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-600"
+                            style="color: rgba(226, 232, 240, 0.9); font-size: 0.9rem;">Data od</label>
+                        <input type="date" id="customDateFrom" class="form-control"
+                            style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(226, 232, 240, 0.95); border-radius: 8px; padding: 0.75rem;">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-600"
+                            style="color: rgba(226, 232, 240, 0.9); font-size: 0.9rem;">Data do</label>
+                        <input type="date" id="customDateTo" class="form-control"
+                            style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(226, 232, 240, 0.95); border-radius: 8px; padding: 0.75rem;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0" style="padding: 0 1.5rem 1.5rem;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(226, 232, 240, 0.8); border-radius: 8px; padding: 0.5rem 1.5rem;">Anuluj</button>
+                <button type="button" class="btn btn-primary" id="applyCustomDateFilter"
+                    style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8)); border: none; color: white; border-radius: 8px; padding: 0.5rem 1.5rem; font-weight: 600;">Zastosuj</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal dla Timeline Custom Date Range -->
+<div id="timelineCustomDateModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); animation: fadeIn 0.3s ease; overflow-y: auto; padding: 2rem 0;">
+    <div
+        style="background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6); max-width: 500px; width: 90%; margin: 0 auto; position: relative; animation: slideUp 0.3s ease;">
+        <!-- Header -->
+        <div style="padding: 2rem 2rem 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); position: relative;">
+            <button id="closeTimelineCustomModalBtn"
+                style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: rgba(252, 165, 165, 0.95); width: 36px; height: 36px; border-radius: 50%; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; font-weight: bold; line-height: 1;">×</button>
+            <h3
+                style="color: rgba(226, 232, 240, 0.98); font-weight: 800; font-size: 1.4rem; margin: 0; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="bi bi-calendar3" style="color: rgba(96, 165, 250, 0.9); font-size: 1.3rem;"></i>
+                Wybierz zakres dat
+            </h3>
+        </div>
+
+        <!-- Body -->
+        <div style="padding: 2rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label
+                        style="color: rgba(226, 232, 240, 0.9); font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Data
+                        od</label>
+                    <input type="text" id="timelineCustomDateFrom" placeholder="Wybierz datę"
+                        style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(226, 232, 240, 0.95); border-radius: 8px; padding: 0.75rem; width: 100%; box-sizing: border-box; font-size: 0.9rem; cursor: pointer;">
+                </div>
+                <div>
+                    <label
+                        style="color: rgba(226, 232, 240, 0.9); font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Data
+                        do</label>
+                    <input type="text" id="timelineCustomDateTo" placeholder="Wybierz datę"
+                        style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(226, 232, 240, 0.95); border-radius: 8px; padding: 0.75rem; width: 100%; box-sizing: border-box; font-size: 0.9rem; cursor: pointer;">
+                </div>
+            </div>
+
+            <!-- Quick Date Ranges -->
+            <div style="margin-bottom: 1rem;">
+                <label
+                    style="color: rgba(226, 232, 240, 0.7); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Szybki
+                    wybór:</label>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="quick-range-btn" data-range="next7"
+                        style="background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.3); color: rgba(147, 197, 253, 0.9); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        Następne 7 dni
+                    </button>
+                    <button class="quick-range-btn" data-range="next14"
+                        style="background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.3); color: rgba(147, 197, 253, 0.9); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        Następne 14 dni
+                    </button>
+                    <button class="quick-range-btn" data-range="next30"
+                        style="background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.3); color: rgba(147, 197, 253, 0.9); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        Następne 30 dni
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div
+            style="padding: 1rem 2rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: flex-end; gap: 1rem;">
+            <button id="cancelTimelineCustomBtn"
+                style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.25); color: rgba(226, 232, 240, 0.9); padding: 0.7rem 1.8rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease;">
+                Anuluj
+            </button>
+            <button id="applyTimelineCustomBtn"
+                style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8)); border: none; color: white; padding: 0.7rem 1.8rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                Zastosuj
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Premium Booking Details Modal -->
+<div id="bookingDetailsModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px); animation: modalFadeIn 0.3s ease; overflow-y: auto; padding: 2rem 0;">
+    <div id="modalContent"
+        style="background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%); border: 2px solid rgba(37, 99, 235, 0.3); border-radius: 24px; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(37, 99, 235, 0.2); max-width: 700px; width: 90%; max-height: calc(100vh - 4rem); overflow-y: auto; margin: 0 auto; position: relative; animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+        <!-- Header -->
+        <div style="padding: 2rem 2rem 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); position: relative; background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.05));">
+            <button id="closeModalBtn"
+                style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: rgba(252, 165, 165, 0.95); width: 40px; height: 40px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; font-weight: bold; line-height: 1; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">×</button>
+            <h3
+                style="color: rgba(226, 232, 240, 0.98); font-weight: 800; font-size: 1.7rem; margin: 0; display: flex; align-items: center; gap: 0.75rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);">
+                <i class="bi bi-calendar-event" style="color: rgba(96, 165, 250, 0.9); font-size: 1.6rem;"></i>
+                Szczegóły rezerwacji
+            </h3>
+        </div>
+
+        <!-- Body -->
+        <div id="bookingDetailsContent" style="padding: 2rem;">
+            <!-- Content will be dynamically inserted here -->
+        </div>
+
+        <!-- Footer -->
+        <div
+            style="padding: 1rem 2rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: flex-end; gap: 1rem; background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.1));">
+            <button id="closeModalBtnBottom"
+                style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.15)); border: 1px solid rgba(37, 99, 235, 0.4); color: rgba(226, 232, 240, 0.95); padding: 0.8rem 2rem; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);">
+                Zamknij
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes modalSlideUp {
+        from {
+            transform: translateY(50px) scale(0.95);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+    }
+
+    #closeModalBtn:hover {
+        background: rgba(239, 68, 68, 0.4);
+        border-color: rgba(239, 68, 68, 0.7);
+        transform: rotate(90deg) scale(1.15);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    }
+
+    #closeModalBtnBottom:hover {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(124, 58, 237, 0.25));
+        border-color: rgba(37, 99, 235, 0.6);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    #bookingDetailsModal #modalContent::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    #bookingDetailsModal #modalContent::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    #bookingDetailsModal #modalContent::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.7), rgba(124, 58, 237, 0.7));
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #bookingDetailsModal #modalContent::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(124, 58, 237, 0.9));
+    }
+
+    .quick-range-btn:hover {
+        background: rgba(37, 99, 235, 0.25) !important;
+        border-color: rgba(37, 99, 235, 0.5) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    #closeTimelineCustomModalBtn:hover {
+        background: rgba(239, 68, 68, 0.35);
+        border-color: rgba(239, 68, 68, 0.6);
+        transform: scale(1.1);
+    }
+
+    #cancelTimelineCustomBtn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.35);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    #applyTimelineCustomBtn:hover {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(124, 58, 237, 0.9));
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    }
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    {% localize off %}
+    // Global variable for timeline data
+    let timelineData = [];
+
+    // Function to show booking details in modal (defined globally)
+    function showBookingDetails(bookingId) {
+        console.log('showBookingDetails called with ID:', bookingId);
+        console.log('Timeline data:', timelineData);
+
+        const booking = timelineData.find(item => item.id == bookingId);
+        console.log('Found booking:', booking);
+
+        if (!booking) {
+            console.error('Booking not found for ID:', bookingId);
+            return;
+        }
+
+        const modalElement = document.getElementById('bookingDetailsModal');
+        const contentElement = document.getElementById('bookingDetailsContent');
+
+        if (!modalElement || !contentElement) {
+            console.error('Modal elements not found!');
+            return;
+        }
+
+        // Format dates
+        const startDate = new Date(booking.date);
+        const endDate = new Date(booking.endDate);
+        const dateStr = startDate.toLocaleDateString('pl-PL', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const startTimeStr = startDate.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+        const endTimeStr = endDate.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+
+        // Calculate duration
+        const durationHours = Math.floor(booking.duration);
+        const durationMinutes = Math.round((booking.duration - durationHours) * 60);
+        let durationStr = '';
+        if (durationHours > 0) durationStr += `${durationHours}h`;
+        if (durationMinutes > 0) {
+            if (durationStr) durationStr += ' ';
+            durationStr += `${durationMinutes}min`;
+        }
+        if (durationStr === '') durationStr = '0min';
+
+        // Determine status badge styling and text
+        let statusBadge = '';
+        let statusText = '';
+        switch (booking.status) {
+            case 'confirmed':
+                statusBadge = 'background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.15)); border: 1px solid rgba(34, 197, 94, 0.5); color: rgba(134, 239, 172, 0.98);';
+                statusText = 'Aktywna';
+                break;
+            case 'completed':
+                statusBadge = 'background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.15)); border: 1px solid rgba(59, 130, 246, 0.5); color: rgba(147, 197, 253, 0.98);';
+                statusText = 'Zakończona';
+                break;
+            case 'cancelled':
+                statusBadge = 'background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.15)); border: 1px solid rgba(239, 68, 68, 0.5); color: rgba(252, 165, 165, 0.98);';
+                statusText = 'Anulowana';
+                break;
+            default:
+                statusBadge = 'background: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(37, 99, 235, 0.15)); border: 1px solid rgba(37, 99, 235, 0.5); color: rgba(147, 197, 253, 0.98);';
+                statusText = booking.status;
+        }
+
+        // Build premium modal content with animations
+        const modalContent = `
+            <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.1)); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; animation: slideInDown 0.4s ease-out;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5); animation: pulse 2s ease-in-out infinite;">
+                        📋
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="color: rgba(226, 232, 240, 0.98); font-weight: 800; font-size: 1.6rem; margin: 0; line-height: 1.3; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);">${booking.title}</h4>
+                    </div>
+                    <div style="${statusBadge} padding: 0.6rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); animation: fadeIn 0.6s ease-out;">
+                        ${statusText}
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="modal-info-card" style="background: rgba(2, 6, 23, 0.4); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 1.2rem; transition: all 0.3s ease; animation: fadeInUp 0.5s ease-out 0.1s both;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+                        <i class="bi bi-calendar3" style="font-size: 1.4rem; color: rgba(96, 165, 250, 0.9);"></i>
+                        <span style="color: rgba(226, 232, 240, 0.7); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">Data</span>
+                    </div>
+                    <div style="color: rgba(226, 232, 240, 0.95); font-size: 1.05rem; font-weight: 600; line-height: 1.4;">${dateStr}</div>
+                </div>
+                <div class="modal-info-card" style="background: rgba(2, 6, 23, 0.4); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 1.2rem; transition: all 0.3s ease; animation: fadeInUp 0.5s ease-out 0.2s both;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+                        <i class="bi bi-hourglass-split" style="font-size: 1.4rem; color: rgba(34, 197, 94, 0.9);"></i>
+                        <span style="color: rgba(226, 232, 240, 0.7); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">Czas trwania</span>
+                    </div>
+                    <div style="color: rgba(226, 232, 240, 0.95); font-size: 1.05rem; font-weight: 600;">${durationStr}</div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="modal-info-card" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(37, 99, 235, 0.05)); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 12px; padding: 1.2rem; transition: all 0.3s ease; animation: fadeInLeft 0.5s ease-out 0.3s both;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+                        <i class="bi bi-play-circle-fill" style="font-size: 1.4rem; color: rgba(96, 165, 250, 0.95);"></i>
+                        <span style="color: rgba(96, 165, 250, 0.8); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">Rozpoczęcie</span>
+                    </div>
+                    <div style="color: rgba(96, 165, 250, 0.98); font-size: 1.5rem; font-weight: 800; text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);">${startTimeStr}</div>
+                </div>
+                <div class="modal-info-card" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(124, 58, 237, 0.05)); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 12px; padding: 1.2rem; transition: all 0.3s ease; animation: fadeInRight 0.5s ease-out 0.3s both;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+                        <i class="bi bi-stop-circle-fill" style="font-size: 1.4rem; color: rgba(168, 85, 247, 0.95);"></i>
+                        <span style="color: rgba(168, 85, 247, 0.8); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">Zakończenie</span>
+                    </div>
+                    <div style="color: rgba(168, 85, 247, 0.98); font-size: 1.5rem; font-weight: 800; text-shadow: 0 0 10px rgba(168, 85, 247, 0.3);">${endTimeStr}</div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="modal-info-card" style="background: rgba(2, 6, 23, 0.4); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 1.2rem; transition: all 0.3s ease; animation: fadeInUp 0.5s ease-out 0.4s both;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+                        <i class="bi bi-building" style="font-size: 1.4rem; color: rgba(251, 191, 36, 0.9);"></i>
+                        <span style="color: rgba(226, 232, 240, 0.7); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">Sala</span>
+                    </div>
+                    <div style="color: rgba(226, 232, 240, 0.95); font-size: 1.15rem; font-weight: 700;">${booking.room}</div>
+                </div>
+                <div class="modal-info-card" style="background: rgba(2, 6, 23, 0.4); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 1.2rem; transition: all 0.3s ease; animation: fadeInUp 0.5s ease-out 0.5s both;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+                        <i class="bi bi-people-fill" style="font-size: 1.4rem; color: rgba(56, 189, 248, 0.9);"></i>
+                        <span style="color: rgba(226, 232, 240, 0.7); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">Uczestników</span>
+                    </div>
+                    <div style="color: rgba(226, 232, 240, 0.95); font-size: 1.15rem; font-weight: 700;">${booking.attendees} osób</div>
+                </div>
+            </div>
+
+            <div class="modal-info-card" style="background: rgba(2, 6, 23, 0.4); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.5rem; transition: all 0.3s ease; animation: fadeInUp 0.5s ease-out 0.6s both;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <i class="bi bi-person-badge" style="font-size: 1.4rem; color: rgba(168, 85, 247, 0.9);"></i>
+                    <span style="color: rgba(226, 232, 240, 0.7); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">Organizator</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5); animation: pulse 2s ease-in-out infinite;">
+                        ${booking.user.charAt(0).toUpperCase()}
+                    </div>
+                    <div style="color: rgba(226, 232, 240, 0.98); font-size: 1.15rem; font-weight: 700;">${booking.user}</div>
+                </div>
+            </div>
+
+            ${booking.description ? `
+            <div class="modal-info-card" style="background: rgba(2, 6, 23, 0.4); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 1.2rem; transition: all 0.3s ease; animation: fadeInUp 0.5s ease-out 0.7s both;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+                    <i class="bi bi-text-paragraph" style="font-size: 1.4rem; color: rgba(251, 191, 36, 0.9);"></i>
+                    <span style="color: rgba(226, 232, 240, 0.7); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">Opis</span>
+                </div>
+                <div style="color: rgba(226, 232, 240, 0.85); font-size: 0.95rem; line-height: 1.6;">${booking.description}</div>
+            </div>
+            ` : ''}
+        `;
+
+        contentElement.innerHTML = modalContent;
+        modalElement.style.display = 'block';
+        setupModalCloseHandlers();
+        console.log('Modal displayed successfully');
+    }
+
+    // Setup modal close handlers (defined globally)
+    function setupModalCloseHandlers() {
+        const modalElement = document.getElementById('bookingDetailsModal');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const closeBtnBottom = document.getElementById('closeModalBtnBottom');
+
+        if (!modalElement) return;
+
+        const newCloseBtn = closeBtn.cloneNode(true);
+        const newCloseBtnBottom = closeBtnBottom.cloneNode(true);
+        closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+        closeBtnBottom.parentNode.replaceChild(newCloseBtnBottom, closeBtnBottom);
+
+        const closeModal = () => { modalElement.style.display = 'none'; };
+
+        newCloseBtn.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+        newCloseBtnBottom.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+        modalElement.addEventListener('click', (e) => { if (e.target === modalElement) closeModal(); });
+
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+    }
+
+    // Header clock + Polish date
+    (function initDashboardDateTime() {
+        const elClock = document.getElementById('dashboard-clock');
+        const elDate = document.getElementById('dashboard-date');
+        if (!elClock || !elDate) return;
+
+        const fmtTime = new Intl.DateTimeFormat('pl-PL', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        const fmtDate = new Intl.DateTimeFormat('pl-PL', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        function tick() {
+            const now = new Date();
+            elClock.textContent = fmtTime.format(now);
+            elDate.textContent = fmtDate.format(now);
+        }
+        tick();
+        setInterval(tick, 1000);
+    })();
+
+    // 1. Wykres kołowy - departamenty
+    const departmentData = {
+        labels: [
+            {% for dept in department_stats %}
+    '{{ dept.department|default:"Brak departamentu" }}',
+        {% endfor %}
+        ],
+    datasets: [{
+        data: [
+            {% for dept in department_stats %}
+                    {{ dept.booking_count }},
+    {% endfor %}
+    ],
+        backgroundColor: [
+            '#667eea', '#764ba2', '#11998e', '#38ef7d', '#fc4a1a',
+            '#f7b733', '#4568dc', '#b06ab3', '#ee0979', '#ff6a00'
+        ]
+        }]
+    };
+
+    new Chart(document.getElementById('departmentPieChart'), {
+        type: 'pie',
+        data: departmentData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: 'rgba(226, 232, 240, 0.86)',
+                        font: { weight: '700' }
+                    }
+                }
+            }
+        }
+    });
+
+    // 2. Trend - ostatnie 30 dni
+    const trendData = {
+        labels: [
+            {% for item in trend_data %}
+    '{{ item.date|date:"Y-m-d" }}',
+        {% endfor %}
+        ],
+    datasets: [{
+        label: 'Liczba rezerwacji',
+        data: [
+            {% for item in trend_data %}
+                    {{ item.count }},
+    {% endfor %}
+    ],
+        borderColor: 'rgba(96, 165, 250, 0.95)',
+            backgroundColor: 'rgba(37, 99, 235, 0.18)',
+                pointRadius: 2,
+                    pointHoverRadius: 5,
+                        borderWidth: 3,
+                            tension: 0.35,
+                                fill: true
+        }]
+    };
+
+    new Chart(document.getElementById('trendChart'), {
+        type: 'line',
+        data: trendData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(2, 6, 23, 0.92)',
+                    borderColor: 'rgba(255,255,255,0.12)',
+                    borderWidth: 1,
+                    titleColor: 'rgba(226, 232, 240, 0.92)',
+                    bodyColor: 'rgba(226, 232, 240, 0.86)',
+                    displayColors: false,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        color: 'rgba(226, 232, 240, 0.78)'
+                    },
+                    grid: { color: 'rgba(255,255,255,0.10)' },
+                    border: { color: 'rgba(255,255,255,0.10)' }
+                },
+                x: {
+                    ticks: {
+                        color: 'rgba(226, 232, 240, 0.78)',
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 10,
+                        callback: function (value) {
+                            const lbl = this.getLabelForValue(value);
+                            // YYYY-MM-DD -> MM-DD
+                            return (lbl && lbl.length >= 10) ? lbl.slice(5) : lbl;
+                        }
+                    },
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    border: { color: 'rgba(255,255,255,0.10)' }
+                }
+            }
+        }
+    });
+
+    // 3. Heatmapa - dzień × godzina
+    const weekdays = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+    const hours = Array.from({ length: 24 }, (_, i) => i);
+    const heatmapMatrix = Array(7).fill(0).map(() => Array(24).fill(0));
+
+    {% for item in heatmap_data %}
+    {% localize off %}
+    heatmapMatrix[{{ item.weekday|add:-1 }}][{{ item.hour }}] = {{ item.count }};
+    {% endlocalize %}
+    {% endfor %}
+
+    const maxCount = Math.max(...heatmapMatrix.flat());
+    const heatmapDatasets = [];
+    for (let day = 0; day < 7; day++) {
+        heatmapDatasets.push({
+            label: weekdays[day],
+            data: heatmapMatrix[day],
+            backgroundColor: heatmapMatrix[day].map(count => {
+                const intensity = maxCount > 0 ? count / maxCount : 0;
+                return `rgba(102, 126, 234, ${intensity})`;
+            }),
+            borderWidth: 1,
+            borderColor: '#fff'
+        });
+    }
+
+    const getOrCreateLegendList = (chart, id) => {
+        const legendContainer = document.getElementById(id);
+        if (!legendContainer) return null;
+        legendContainer.innerHTML = '';
+        return legendContainer;
+    };
+
+    const htmlLegendPlugin = {
+        id: 'htmlLegend',
+        afterUpdate(chart, args, options) {
+            const legendContainer = getOrCreateLegendList(chart, options.containerID);
+            if (!legendContainer) return;
+
+            const items = chart.options.plugins.legend.labels.generateLabels(chart);
+            items.forEach((item) => {
+                const pill = document.createElement('div');
+                pill.className = `legend-pill ${chart.isDatasetVisible(item.datasetIndex) ? 'is-on' : 'is-off'}`;
+                pill.setAttribute('role', 'button');
+                pill.setAttribute('tabindex', '0');
+                pill.setAttribute('aria-pressed', chart.isDatasetVisible(item.datasetIndex) ? 'true' : 'false');
+
+                const sw = document.createElement('span');
+                sw.className = 'swatch';
+                sw.style.background = item.fillStyle;
+
+                const txt = document.createElement('span');
+                txt.textContent = item.text;
+
+                pill.appendChild(sw);
+                pill.appendChild(txt);
+
+                const onToggle = () => {
+                    chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
+                    chart.update();
+                };
+                pill.onclick = onToggle;
+                pill.onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onToggle();
+                    }
+                };
+
+                legendContainer.appendChild(pill);
+            });
+        }
+    };
+
+    new Chart(document.getElementById('heatmapChart'), {
+        type: 'bar',
+        data: {
+            labels: hours.map(h => h + ':00'),
+            datasets: heatmapDatasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: false,
+                    title: {
+                        display: true,
+                        text: 'Godzina',
+                        color: 'rgba(226, 232, 240, 0.80)',
+                        font: { weight: '800' }
+                    },
+                    ticks: { color: 'rgba(226, 232, 240, 0.72)' },
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    border: { color: 'rgba(255,255,255,0.10)' }
+                },
+                y: {
+                    stacked: false,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Liczba rezerwacji',
+                        color: 'rgba(226, 232, 240, 0.80)',
+                        font: { weight: '800' }
+                    },
+                    ticks: { color: 'rgba(226, 232, 240, 0.72)' },
+                    grid: { color: 'rgba(255,255,255,0.10)' },
+                    border: { color: 'rgba(255,255,255,0.10)' }
+                }
+            },
+            plugins: {
+                htmlLegend: {
+                    containerID: 'heatmapLegend'
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        generateLabels: (chart) => {
+                            const base = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                            return base.map((it) => {
+                                const ds = chart.data.datasets[it.datasetIndex];
+                                it.fillStyle = ds?.borderColor || 'rgba(96, 165, 250, 0.95)';
+                                it.text = ds?.label || it.text;
+                                return it;
+                            });
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return context.dataset.label + ': ' + context.parsed.y + ' rezerwacji';
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [htmlLegendPlugin]
+    });
+
+    function downloadReport() {
+        const monthInput = document.getElementById('report-month');
+        const monthValue = monthInput.value;
+        if (!monthValue) {
+            alert('Proszę wybrać miesiąc.');
+            return;
+        }
+        window.location.href = `{% url "monthly_report" %}?month=${monthValue}`;
+    }
+
+    // Ustaw domyślny miesiąc na bieżący
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    document.getElementById('report-month').value = `${year}-${month}`;
+
+    // Premium Interactive Diagrams Initialization
+    function initPremiumDiagrams() {
+        // initCalendarHeatmap(); // Usunięte - nie ma kalendarza w dashboard
+        initTimeline();
+    }
+
+    function initCalendarHeatmap() {
+        console.log('Initializing calendar heatmap...');
+        const calendarGrid = document.getElementById('dashboard-calendar-grid');
+
+        if (!calendarGrid) {
+            console.error('Calendar grid not found');
+            return;
+        }
+
+        const today = new Date();
+        const currentMonth = today.getMonth();
+        const currentYear = today.getFullYear();
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        const lastDay = new Date(currentYear, currentMonth + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startDayOfWeek = firstDay.getDay();
+
+        // Sample booking dates (in real app, this would come from backend)
+        const bookingDates = new Set([5, 8, 12, 15, 19, 22, 26, 28]);
+
+        console.log('Calendar data:', { daysInMonth, startDayOfWeek, bookingDates });
+
+        let html = '';
+
+        // Empty cells for days before month starts
+        for (let i = 0; i < startDayOfWeek; i++) {
+            html += '<div class="calendar-day empty"></div>';
+        }
+
+        // Days of the month
+        for (let day = 1; day <= daysInMonth; day++) {
+            const hasBooking = bookingDates.has(day);
+            const isToday = day === today.getDate();
+            html += `<div class="calendar-day ${hasBooking ? 'has-booking' : 'empty'}"
+                         title="${hasBooking ? 'Masz rezerwację tego dnia' : 'Brak rezerwacji'}"
+                         style="${isToday ? 'border: 2px solid rgba(56, 189, 248, 0.8);' : ''}">
+                         ${day}
+                     </div>`;
+        }
+
+        calendarGrid.innerHTML = html;
+        console.log('Calendar heatmap initialized');
+    }
+
+    function initTimeline() {
+        console.log('Initializing timeline...');
+        const timelineItems = document.getElementById('timeline-items');
+
+        if (!timelineItems) {
+            console.error('Timeline items container not found');
+            return;
+        }
+
+        // Use actual upcoming bookings data
+        timelineData = [
+            {% for booking in upcoming %}
+            {
+                id: {{ booking.id }},
+                date: '{{ booking.start_time|date:"Y-m-d\TH:i:s" }}',
+                endDate: '{{ booking.end_time|date:"Y-m-d\TH:i:s" }}',
+                title: '{{ booking.title|escapejs }}',
+                room: '{{ booking.room.name|escapejs }}',
+                attendees: {{ booking.attendees_count|default:1 }},
+                description: '{{ booking.description|truncatechars:100|escapejs }}',
+                user: '{{ booking.user.name|escapejs }}',
+                status: '{{ booking.status|escapejs }}',
+                duration: {{ booking.duration_hours|default:0 }}
+            },
+            {% endfor %}
+        ];
+
+        console.log('Timeline data:', timelineData);
+        console.log('Timeline data length:', timelineData.length);
+
+        console.log('Timeline initialized');
+    }
+
+
+
+    // Timeline Filters Functionality
+    function initTimelineFilters() {
+        console.log('initTimelineFilters called');
+        console.log('timelineData:', timelineData);
+
+        const timeframeButtons = document.querySelectorAll('.timeline-timeframe-filter-btn');
+        const searchInput = document.getElementById('timeline-search');
+        const clearFiltersBtn = document.getElementById('clear-timeline-filters-btn');
+        const timelineItems = document.getElementById('timeline-items');
+
+        console.log('Timeline elements found:');
+        console.log('- timeframeButtons:', timeframeButtons.length);
+        console.log('- searchInput:', !!searchInput);
+        console.log('- clearFiltersBtn:', !!clearFiltersBtn);
+        console.log('- timelineItems:', !!timelineItems);
+
+        if (!timelineItems) {
+            console.error('Timeline items container not found!');
+            return;
+        }
+
+        let currentFilters = {
+            timeframe: 'all',
+            search: '',
+            customDateFrom: null,
+            customDateTo: null
+        };
+
+        let allTimelineItems = [];
+
+        function storeOriginalItems() {
+            console.log('Storing original items, timelineData length:', timelineData.length);
+            allTimelineItems = timelineData.map(item => ({ ...item }));
+            console.log('Stored items count:', allTimelineItems.length);
+        }
+
+        function updateClearFiltersButton() {
+            const hasActiveFilters = currentFilters.timeframe !== 'all' ||
+                currentFilters.search.trim() !== '' ||
+                (currentFilters.customDateFrom && currentFilters.customDateTo);
+
+            clearFiltersBtn.style.display = hasActiveFilters ? 'block' : 'none';
+        }
+
+        function applyTimelineFilters() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const weekFromNow = new Date(today);
+            weekFromNow.setDate(weekFromNow.getDate() + 7);
+            const monthFromNow = new Date(today);
+            monthFromNow.setMonth(monthFromNow.getMonth() + 1);
+
+            const searchTerm = currentFilters.search.toLowerCase().trim();
+
+            let filteredData = allTimelineItems.filter(item => {
+                const itemDate = new Date(item.date);
+
+                let timeframeMatch = currentFilters.timeframe === 'all';
+                if (currentFilters.timeframe === 'today') {
+                    timeframeMatch = itemDate.toDateString() === today.toDateString();
+                } else if (currentFilters.timeframe === 'tomorrow') {
+                    timeframeMatch = itemDate.toDateString() === tomorrow.toDateString();
+                } else if (currentFilters.timeframe === 'week') {
+                    timeframeMatch = itemDate >= today && itemDate <= weekFromNow;
+                } else if (currentFilters.timeframe === 'month') {
+                    timeframeMatch = itemDate >= today && itemDate <= monthFromNow;
+                } else if (currentFilters.timeframe === 'custom' && currentFilters.customDateFrom && currentFilters.customDateTo) {
+                    const fromDate = new Date(currentFilters.customDateFrom);
+                    const toDate = new Date(currentFilters.customDateTo);
+                    toDate.setHours(23, 59, 59, 999);
+                    timeframeMatch = itemDate >= fromDate && itemDate <= toDate;
+                }
+
+                const itemTitle = (item.title || '').toLowerCase();
+                const itemRoom = (item.room || '').toLowerCase();
+                const itemUser = (item.user || '').toLowerCase();
+
+                let searchMatch = searchTerm === '' ||
+                    itemTitle.includes(searchTerm) ||
+                    itemRoom.includes(searchTerm) ||
+                    itemUser.includes(searchTerm);
+
+                return timeframeMatch && searchMatch;
+            });
+
+            renderFilteredTimeline(filteredData);
+            updateClearFiltersButton();
+        }
+
+        function renderFilteredTimeline(data) {
+            if (!timelineItems) return;
+
+            let html = '';
+            data.forEach((item, index) => {
+                if (item.date) {
+                    const date = new Date(item.date);
+                    const dateStr = date.toLocaleDateString('pl-PL', { weekday: 'short', month: 'short', day: 'numeric' });
+                    const timeStr = date.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+                    const endTimeStr = new Date(item.endDate).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+
+                    const durationHours = Math.floor(item.duration);
+                    const durationMinutes = Math.round((item.duration - durationHours) * 60);
+                    let durationStr = '';
+                    if (durationHours > 0) durationStr += `${durationHours}h`;
+                    if (durationMinutes > 0) durationStr += `${durationMinutes}min`;
+                    if (durationStr === '') durationStr = '0min';
+
+                    html += `<div class="timeline-item booking-item" data-booking-id="${item.id}" style="cursor: pointer; transition: all 0.3s ease; opacity: 0; animation: fadeInItem 0.3s ease forwards ${index * 0.05}s;">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">${dateStr} • ${timeStr} - ${endTimeStr}</div>
+                                    <div class="timeline-title">${item.title}</div>
+                                    <div class="timeline-details">📍 ${item.room} • 👥 ${item.attendees} osób • ⏱️ ${durationStr}</div>
+                                </div>
+                            </div>`;
+                }
+            });
+
+            if (html === '') {
+                html = '<div style="text-align: center; color: rgba(226, 232, 240, 0.6); padding: 2rem; animation: fadeIn 0.3s ease;">Brak rezerwacji spełniających kryteria</div>';
+            }
+
+            timelineItems.innerHTML = html;
+
+            document.querySelectorAll('.booking-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    const bookingId = this.getAttribute('data-booking-id');
+                    showBookingDetails(bookingId);
+                });
+
+                item.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateX(5px)';
+                    this.querySelector('.timeline-content').style.background = 'rgba(37, 99, 235, 0.15)';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateX(0)';
+                    this.querySelector('.timeline-content').style.background = 'rgba(2, 6, 23, 0.22)';
+                });
+            });
+
+            setTimeout(() => {
+                const timelineLine = document.querySelector('.timeline-line');
+                if (timelineLine && timelineItems.children.length > 0) {
+                    const lastItem = timelineItems.lastElementChild;
+                    if (lastItem) {
+                        const lastItemBottom = lastItem.offsetTop + lastItem.offsetHeight;
+                        timelineLine.style.height = lastItemBottom + 'px';
+                    }
+                }
+            }, 100);
+        }
+
+        function updateButtonStyles(buttons, activeButton, baseStyle, activeStyle) {
+            buttons.forEach(btn => Object.assign(btn.style, baseStyle));
+            Object.assign(activeButton.style, activeStyle);
+        }
+
+        timeframeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const timeframe = this.getAttribute('data-timeframe');
+
+                if (timeframe === 'custom') {
+                    showTimelineCustomDateModal();
+                } else {
+                    currentFilters.timeframe = timeframe;
+                    currentFilters.customDateFrom = null;
+                    currentFilters.customDateTo = null;
+
+                    const baseStyle = {
+                        background: 'transparent',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        color: 'rgba(226, 232, 240, 0.7)'
+                    };
+
+                    const activeStyle = {
+                        background: 'rgba(37, 99, 235, 0.25)',
+                        borderColor: 'rgba(37, 99, 235, 0.4)',
+                        color: 'rgba(226, 232, 240, 0.95)'
+                    };
+
+                    updateButtonStyles(timeframeButtons, this, baseStyle, activeStyle);
+                    applyTimelineFilters();
+                }
+            });
+        });
+
+        let searchTimeout;
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentFilters.search = this.value;
+                applyTimelineFilters();
+            }, 300);
+        });
+
+        clearFiltersBtn.addEventListener('click', function () {
+            currentFilters = {
+                timeframe: 'all',
+                search: '',
+                customDateFrom: null,
+                customDateTo: null
+            };
+
+            searchInput.value = '';
+
+            timeframeButtons.forEach(btn => {
+                if (btn.getAttribute('data-timeframe') === 'all') {
+                    btn.click();
+                }
+            });
+        });
+
+        document.addEventListener('applyCustomTimelineDate', function (e) {
+            currentFilters.timeframe = 'custom';
+            currentFilters.customDateFrom = e.detail.fromDate;
+            currentFilters.customDateTo = e.detail.toDate;
+            applyTimelineFilters();
+        });
+
+        storeOriginalItems();
+        applyTimelineFilters();
+    }
+
+
+    // Advanced Booking Filter Functionality
+    function initBookingFilters() {
+        console.log('initBookingFilters called');
+
+        const statusButtons = document.querySelectorAll('.status-filter-btn');
+        const timeframeButtons = document.querySelectorAll('.timeframe-filter-btn');
+        const searchInput = document.getElementById('booking-search');
+        const clearFiltersBtn = document.getElementById('clear-filters-btn');
+        const bookingsList = document.getElementById('bookings-list-newest');
+
+        console.log('Status buttons found:', statusButtons.length);
+        console.log('Timeframe buttons found:', timeframeButtons.length);
+        console.log('Search input found:', !!searchInput);
+        console.log('Clear filters button found:', !!clearFiltersBtn);
+        console.log('Bookings list found:', !!bookingsList);
+
+        if (!bookingsList) {
+            console.error('Bookings list not found!');
+            return;
+        }
+
+        let currentFilters = {
+            status: 'all',
+            timeframe: 'all',
+            search: ''
+        };
+
+        function updateClearFiltersButton() {
+            const hasActiveFilters = currentFilters.status !== 'all' ||
+                currentFilters.timeframe !== 'all' ||
+                currentFilters.search.trim() !== '';
+
+            clearFiltersBtn.style.display = hasActiveFilters ? 'block' : 'none';
+        }
+
+        function applyFilters() {
+            console.log('applyFilters called with:', currentFilters);
+
+            const allBookingCards = Array.from(document.querySelectorAll('.booking-card'));
+            console.log('Booking cards found:', allBookingCards.length);
+
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const weekFromNow = new Date(today);
+            weekFromNow.setDate(weekFromNow.getDate() + 7);
+            const monthFromNow = new Date(today);
+            monthFromNow.setMonth(monthFromNow.getMonth() + 1);
+
+            let visibleCount = 0;
+
+            allBookingCards.forEach((card, index) => {
+                const cardStatus = card.getAttribute('data-status');
+                const cardDateStr = card.getAttribute('data-date');
+                const cardDate = new Date(cardDateStr);
+                const cardRoom = card.getAttribute('data-room') || '';
+                const cardUser = card.getAttribute('data-user') || '';
+                const cardTitle = card.getAttribute('data-title') || '';
+                const searchTerm = currentFilters.search.toLowerCase().trim();
+
+                // Status filter
+                let statusMatch = currentFilters.status === 'all' || cardStatus === currentFilters.status;
+
+                // Timeframe filter
+                let timeframeMatch = currentFilters.timeframe === 'all';
+                if (currentFilters.timeframe === 'today') {
+                    timeframeMatch = cardDate.toDateString() === today.toDateString();
+                } else if (currentFilters.timeframe === 'tomorrow') {
+                    timeframeMatch = cardDate.toDateString() === tomorrow.toDateString();
+                } else if (currentFilters.timeframe === 'week') {
+                    timeframeMatch = cardDate >= today && cardDate <= weekFromNow;
+                } else if (currentFilters.timeframe === 'month') {
+                    timeframeMatch = cardDate >= today && cardDate <= monthFromNow;
+                }
+
+                // Search filter
+                let searchMatch = searchTerm === '';
+                if (!searchMatch && searchTerm) {
+                    const titleLower = (cardTitle || '').toLowerCase();
+                    const roomLower = (cardRoom || '').toLowerCase();
+                    const userLower = (cardUser || '').toLowerCase();
+                    searchMatch = titleLower.includes(searchTerm) ||
+                        roomLower.includes(searchTerm) ||
+                        userLower.includes(searchTerm);
+                }
+
+                // Show/hide card
+                if (statusMatch && timeframeMatch && searchMatch) {
+                    visibleCount++;
+                    card.style.display = 'block';
+                    card.style.transition = 'all 0.2s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                } else {
+                    card.style.transition = 'all 0.2s ease';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 200);
+                }
+            });
+
+            // Show "no results" message if needed
+            const existingNoResults = bookingsList.querySelector('.no-results-message');
+            if (existingNoResults) {
+                existingNoResults.remove();
+            }
+
+            if (visibleCount === 0) {
+                const noResultsDiv = document.createElement('div');
+                noResultsDiv.className = 'no-results-message';
+                noResultsDiv.style.cssText = `
+                    text-align: center;
+                    padding: 3rem 2rem;
+                    color: rgba(226, 232, 240, 0.6);
+                    font-size: 1.1rem;
+                    font-weight: 500;
+                `;
+                noResultsDiv.innerHTML = `
+                    <i class="bi bi-search" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
+                    Brak rezerwacji pasujących do wybranych filtrów
+                `;
+                bookingsList.appendChild(noResultsDiv);
+            }
+
+            updateClearFiltersButton();
+        }
+
+        function updateButtonStyles(buttons, activeButton, baseStyle, activeStyle) {
+            buttons.forEach(btn => {
+                Object.assign(btn.style, baseStyle);
+            });
+            Object.assign(activeButton.style, activeStyle);
+        }
+
+        // Status filter handlers
+        statusButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                currentFilters.status = this.getAttribute('data-status');
+
+                const baseStyle = {
+                    background: 'transparent',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    color: 'rgba(226, 232, 240, 0.7)'
+                };
+
+                const activeStyle = {
+                    background: 'rgba(37, 99, 235, 0.25)',
+                    borderColor: 'rgba(37, 99, 235, 0.4)',
+                    color: 'rgba(226, 232, 240, 0.95)'
+                };
+
+                updateButtonStyles(statusButtons, this, baseStyle, activeStyle);
+                applyFilters();
+            });
+        });
+
+        // Timeframe filter handlers
+        timeframeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                currentFilters.timeframe = this.getAttribute('data-timeframe');
+
+                const baseStyle = {
+                    background: 'transparent',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    color: 'rgba(226, 232, 240, 0.7)'
+                };
+
+                const activeStyle = {
+                    background: 'rgba(37, 99, 235, 0.25)',
+                    borderColor: 'rgba(37, 99, 235, 0.4)',
+                    color: 'rgba(226, 232, 240, 0.95)'
+                };
+
+                updateButtonStyles(timeframeButtons, this, baseStyle, activeStyle);
+                applyFilters();
+            });
+        });
+
+        // Search handler
+        let searchTimeout;
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentFilters.search = this.value;
+                applyFilters();
+            }, 300);
+        });
+
+        // Clear filters handler
+        clearFiltersBtn.addEventListener('click', function () {
+            currentFilters = {
+                status: 'all',
+                timeframe: 'all',
+                search: ''
+            };
+
+            searchInput.value = '';
+
+            // Reset button styles
+            statusButtons.forEach(btn => {
+                if (btn.getAttribute('data-status') === 'all') {
+                    btn.style.background = 'rgba(37, 99, 235, 0.25)';
+                    btn.style.borderColor = 'rgba(37, 99, 235, 0.4)';
+                    btn.style.color = 'rgba(226, 232, 240, 0.95)';
+                } else {
+                    btn.style.background = 'transparent';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.color = 'rgba(226, 232, 240, 0.7)';
+                }
+            });
+
+            timeframeButtons.forEach(btn => {
+                if (btn.getAttribute('data-timeframe') === 'all') {
+                    btn.style.background = 'rgba(37, 99, 235, 0.25)';
+                    btn.style.borderColor = 'rgba(37, 99, 235, 0.4)';
+                    btn.style.color = 'rgba(226, 232, 240, 0.95)';
+                } else {
+                    btn.style.background = 'transparent';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.color = 'rgba(226, 232, 240, 0.7)';
+                }
+            });
+
+            applyFilters();
+        });
+
+        // Initial filter application
+        applyFilters();
+    }
+
+
+
+    // Initialize premium diagrams when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('Dashboard loaded, initializing premium diagrams...');
+
+        // Wait a bit for everything to render
+        setTimeout(() => {
+            try {
+                initPremiumDiagrams();
+                initBookingFilters();
+                initTimelineFilters();
+                console.log('Premium diagrams initialized successfully');
+            } catch (error) {
+                console.error('Error initializing premium diagrams:', error);
+            }
+        }, 1000);
+    });
+
+    // Date Filtering Functionality
+    function initDateFilters() {
+        const filterButtons = document.querySelectorAll('.date-filter-btn');
+        const customDateModal = document.getElementById('customDateRangeModal');
+        const applyCustomFilterBtn = document.getElementById('applyCustomDateFilter');
+
+        console.log('Date filters initialization...');
+        console.log('Filter buttons found:', filterButtons.length);
+        console.log('Custom date modal found:', !!customDateModal);
+        console.log('Apply button found:', !!applyCustomFilterBtn);
+
+        if (!customDateModal) {
+            console.error('Custom date modal not found in DOM!');
+            return;
+        }
+
+        let currentFilter = 'today';
+        let allTimelineData = [];
+
+        // Pobierz wszystkie dane timeline
+        function getAllTimelineData() {
+            return [
+                {% for booking in upcoming %}
+                {
+                    date: '{{ booking.start_time|date:"Y-m-d H:i" }}',
+                    title: '{{ booking.title|escapejs }}',
+                    room: '{{ booking.room.name|escapejs }}',
+                    attendees: {{ booking.attendees_count|default:1 }}
+                },
+                {% endfor %}
+            ];
+        }
+
+    // Inicjalizuj dane
+    allTimelineData = getAllTimelineData();
+
+    // Obsługa przycisków filtrów
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const filterType = this.getAttribute('data-filter');
+
+            if (filterType === 'custom') {
+                console.log('Creating custom modal dynamically...');
+
+                // Stwórz nowy modal od zera
+                const modalHTML = `
+                        <div id="dynamicCustomModal" style="
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(0, 0, 0, 0.5);
+                            z-index: 99999;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <div style="
+                                background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+                                border: 1px solid rgba(255, 255, 255, 0.1);
+                                border-radius: 16px;
+                                padding: 2rem;
+                                min-width: 400px;
+                                max-width: 500px;
+                            ">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                                    <h5 style="color: rgba(226, 232, 240, 0.95); margin: 0; font-weight: 800;">
+                                        <i class="bi bi-calendar3 me-2"></i>Wybierz zakres dat
+                                    </h5>
+                                    <button onclick="closeDynamicModal()" style="
+                                        background: none;
+                                        border: none;
+                                        color: white;
+                                        font-size: 1.5rem;
+                                        cursor: pointer;
+                                        filter: invert(1);
+                                    ">×</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                    <div>
+                                        <label style="color: rgba(226, 232, 240, 0.9); font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">Data od</label>
+                                        <input type="date" id="dynamicDateFrom" style="
+                                            background: rgba(255, 255, 255, 0.1);
+                                            border: 1px solid rgba(255, 255, 255, 0.2);
+                                            color: rgba(226, 232, 240, 0.95);
+                                            border-radius: 8px;
+                                            padding: 0.75rem;
+                                            width: 100%;
+                                            box-sizing: border-box;
+                                            cursor: pointer;
+                                        ">
+                                    </div>
+                                    <div>
+                                        <label style="color: rgba(226, 232, 240, 0.9); font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">Data do</label>
+                                        <input type="date" id="dynamicDateTo" style="
+                                            background: rgba(255, 255, 255, 0.1);
+                                            border: 1px solid rgba(255, 255, 255, 0.2);
+                                            color: rgba(226, 232, 240, 0.95);
+                                            border-radius: 8px;
+                                            padding: 0.75rem;
+                                            width: 100%;
+                                            box-sizing: border-box;
+                                            cursor: pointer;
+                                        ">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                                    <button onclick="closeDynamicModal()" style="
+                                        background: rgba(255, 255, 255, 0.1);
+                                        border: 1px solid rgba(255, 255, 255, 0.2);
+                                        color: rgba(226, 232, 240, 0.8);
+                                        border-radius: 8px;
+                                        padding: 0.5rem 1.5rem;
+                                        cursor: pointer;
+                                    ">Anuluj</button>
+                                    <button onclick="applyDynamicFilter()" style="
+                                        background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8));
+                                        border: none;
+                                        color: white;
+                                        border-radius: 8px;
+                                        padding: 0.5rem 1.5rem;
+                                        font-weight: 600;
+                                        cursor: pointer;
+                                    ">Zastosuj</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                // Dodaj modal do body
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+                // Zainicjalizuj Flatpickr po dodaniu modala do DOM
+                setTimeout(() => {
+                    try {
+                        // Inicjalizuj Flatpickr dla pola "Data od"
+                        const dateFromInput = document.getElementById('dynamicDateFrom');
+                        if (dateFromInput && typeof flatpickr !== 'undefined') {
+                            flatpickr(dateFromInput, {
+                                dateFormat: "Y-m-d",
+                                locale: "pl",
+                                minDate: "today",
+                                theme: "dark",
+                                static: true,
+                                position: "auto center",
+                                disableMobile: true
+                            });
+                        }
+
+                        // Inicjalizuj Flatpickr dla pola "Data do"
+                        const dateToInput = document.getElementById('dynamicDateTo');
+                        if (dateToInput && typeof flatpickr !== 'undefined') {
+                            flatpickr(dateToInput, {
+                                dateFormat: "Y-m-d",
+                                locale: "pl",
+                                minDate: "today",
+                                theme: "dark",
+                                static: true,
+                                position: "auto center",
+                                disableMobile: true
+                            });
+                        }
+
+                        console.log('Flatpickr initialized');
+                    } catch (error) {
+                        console.error('Error initializing Flatpickr:', error);
+                    }
+                }, 100);
+
+                // Dodaj funkcje globalne
+                window.closeDynamicModal = function () {
+                    const modal = document.getElementById('dynamicCustomModal');
+                    if (modal) modal.remove();
+                };
+
+                window.applyDynamicFilter = function () {
+                    const dateFrom = document.getElementById('dynamicDateFrom').value;
+                    const dateTo = document.getElementById('dynamicDateTo').value;
+
+                    if (dateFrom && dateTo) {
+                        applyCustomDateFilter(dateFrom, dateTo);
+
+                        // Znajdź i aktywuj przycisk custom
+                        const customBtn = document.querySelector('[data-filter="custom"]');
+                        updateButtonStyles(customBtn);
+
+                        closeDynamicModal();
+                    }
+                };
+
+                console.log('Dynamic modal created');
+            } else {
+                // Zastosuj filtr
+                applyDateFilter(filterType);
+                updateButtonStyles(this);
+            }
+        });
+    });
+
+    // Obsługa zamykania modala
+    customDateModal.addEventListener('click', function (e) {
+        if (e.target === this || e.target.classList.contains('btn-close')) {
+            closeModal();
+        }
+    });
+
+    // Obsługa przycisku Anuluj
+    const cancelBtn = customDateModal.querySelector('[data-bs-dismiss="modal"]');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+    }
+
+    function closeModal() {
+        customDateModal.style.display = 'none';
+        customDateModal.setAttribute('aria-hidden', 'true');
+        customDateModal.setAttribute('tabindex', '-1');
+    }
+
+    // Zastosuj custom filtr
+    applyCustomFilterBtn.addEventListener('click', function () {
+        const dateFrom = document.getElementById('customDateFrom').value;
+        const dateTo = document.getElementById('customDateTo').value;
+
+        if (dateFrom && dateTo) {
+            applyCustomDateFilter(dateFrom, dateTo);
+
+            // Znajdź i aktywuj przycisk custom
+            const customBtn = document.querySelector('[data-filter="custom"]');
+            updateButtonStyles(customBtn);
+
+            // Zamknij modal
+            closeModal();
+        }
+    });
+
+    // Funkcja do aktualizacji stylów przycisków
+    function updateButtonStyles(activeButton) {
+        filterButtons.forEach(btn => {
+            btn.style.background = 'transparent';
+            btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            btn.style.color = 'rgba(226, 232, 240, 0.7)';
+        });
+
+        activeButton.style.background = 'rgba(37, 99, 235, 0.25)';
+        activeButton.style.borderColor = 'rgba(37, 99, 235, 0.4)';
+        activeButton.style.color = 'rgba(226, 232, 240, 0.95)';
+    }
+
+    // Funkcja do stosowania filtrów daty
+    function applyDateFilter(filterType) {
+        const now = new Date();
+        let startDate, endDate;
+
+        switch (filterType) {
+            case 'today':
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                break;
+            case 'tomorrow':
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
+                break;
+            case 'week':
+                const dayOfWeek = now.getDay();
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOfWeek);
+                endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+                break;
+            case 'month':
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                break;
+        }
+
+        filterTimelineData(startDate, endDate);
+    }
+
+    // Funkcja do custom filtru daty
+    function applyCustomDateFilter(dateFrom, dateTo) {
+        const startDate = new Date(dateFrom + 'T00:00:00');
+        const endDate = new Date(dateTo + 'T23:59:59');
+        filterTimelineData(startDate, endDate);
+    }
+
+    // Funkcja do filtrowania i renderowania danych
+    function filterTimelineData(startDate, endDate) {
+        const filteredData = allTimelineData.filter(item => {
+            const itemDate = new Date(item.date);
+            return itemDate >= startDate && itemDate <= endDate;
+        });
+
+        renderTimeline(filteredData);
+    }
+
+    // Funkcja do renderowania timeline
+    function renderTimeline(data) {
+        const timelineItems = document.getElementById('timeline-items');
+        if (!timelineItems) return;
+
+        let html = '';
+        data.forEach((item, index) => {
+            if (item.date) {
+                const date = new Date(item.date);
+                const dateStr = date.toLocaleDateString('pl-PL', { weekday: 'short', month: 'short', day: 'numeric' });
+                const timeStr = date.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+
+                html += `<div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">${dateStr} • ${timeStr}</div>
+                                    <div class="timeline-title">${item.title}</div>
+                                    <div class="timeline-details">📍 ${item.room} • 👥 ${item.attendees} osób</div>
+                                </div>
+                            </div>`;
+            }
+        });
+
+        if (html === '') {
+            html = '<div style="text-align: center; color: rgba(226, 232, 240, 0.6); padding: 2rem; animation: fadeIn 0.3s ease;">Brak rezerwacji w wybranym okresie</div>';
+        }
+
+        timelineItems.innerHTML = html;
+
+        // Re-add click handlers
+        document.querySelectorAll('.booking-item').forEach(item => {
+            item.addEventListener('click', function () {
+                const bookingId = this.getAttribute('data-booking-id');
+                showBookingDetails(bookingId);
+            });
+
+            item.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateX(5px)';
+                this.querySelector('.timeline-content').style.background = 'rgba(37, 99, 235, 0.15)';
+            });
+
+            item.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateX(0)';
+                this.querySelector('.timeline-content').style.background = 'rgba(2, 6, 23, 0.22)';
+            });
+        });
+
+        // Update timeline line height
+        setTimeout(() => {
+            const timelineLine = document.querySelector('.timeline-line');
+            if (timelineLine && timelineItems.children.length > 0) {
+                const lastItem = timelineItems.lastElementChild;
+                if (lastItem) {
+                    const lastItemBottom = lastItem.offsetTop + lastItem.offsetHeight;
+                    timelineLine.style.height = lastItemBottom + 'px';
+                }
+            }
+        }, 100);
+    }
+    } // KONIEC initDateFilters - TO BYŁ BRAKUJĄCY NAWIAS!
+
+
+    // Timeline Custom Date Modal
+    function showTimelineCustomDateModal() {
+        const modal = document.getElementById('timelineCustomDateModal');
+        const fromInput = document.getElementById('timelineCustomDateFrom');
+        const toInput = document.getElementById('timelineCustomDateTo');
+        const closeBtn = document.getElementById('closeTimelineCustomModalBtn');
+        const cancelBtn = document.getElementById('cancelTimelineCustomBtn');
+        const applyBtn = document.getElementById('applyTimelineCustomBtn');
+        const quickRangeBtns = document.querySelectorAll('.quick-range-btn');
+
+        if (!modal) return;
+
+        // Show modal
+        modal.style.display = 'block';
+
+        // Initialize Flatpickr for date inputs
+        let fromPicker = null;
+        let toPicker = null;
+
+        // Destroy existing instances if any
+        if (fromInput._flatpickr) fromInput._flatpickr.destroy();
+        if (toInput._flatpickr) toInput._flatpickr.destroy();
+
+        // Initialize "from" date picker
+        fromPicker = flatpickr(fromInput, {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            locale: {
+                firstDayOfWeek: 1,
+                weekdays: {
+                    shorthand: ['Nd', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So'],
+                    longhand: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota']
+                },
+                months: {
+                    shorthand: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+                    longhand: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']
+                }
+            },
+            onChange: function (selectedDates, dateStr) {
+                // Update "to" picker minimum date
+                if (toPicker && selectedDates[0]) {
+                    toPicker.set('minDate', selectedDates[0]);
+                }
+            }
+        });
+
+        // Initialize "to" date picker
+        toPicker = flatpickr(toInput, {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            locale: {
+                firstDayOfWeek: 1,
+                weekdays: {
+                    shorthand: ['Nd', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So'],
+                    longhand: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota']
+                },
+                months: {
+                    shorthand: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+                    longhand: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']
+                }
+            }
+        });
+
+        // Quick range buttons
+        quickRangeBtns.forEach(btn => {
+            btn.onclick = function () {
+                const range = this.getAttribute('data-range');
+                const today = new Date();
+                const fromDate = new Date(today);
+                let toDate = new Date(today);
+
+                if (range === 'next7') {
+                    toDate.setDate(today.getDate() + 7);
+                } else if (range === 'next14') {
+                    toDate.setDate(today.getDate() + 14);
+                } else if (range === 'next30') {
+                    toDate.setDate(today.getDate() + 30);
+                }
+
+                fromPicker.setDate(fromDate);
+                toPicker.setDate(toDate);
+            };
+        });
+
+        // Close modal function
+        const closeModal = () => {
+            modal.style.display = 'none';
+            if (fromPicker) fromPicker.destroy();
+            if (toPicker) toPicker.destroy();
+        };
+
+        // Close button
+        closeBtn.onclick = closeModal;
+
+        // Cancel button
+        cancelBtn.onclick = closeModal;
+
+        // Backdrop click
+        modal.onclick = function (e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        };
+
+        // ESC key
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+
+        // Apply button
+        applyBtn.onclick = function () {
+            const fromDate = fromInput.value;
+            const toDate = toInput.value;
+
+            if (fromDate && toDate) {
+                // Update filters
+                const timeframeButtons = document.querySelectorAll('.timeline-timeframe-filter-btn');
+                const customBtn = Array.from(timeframeButtons).find(btn => btn.getAttribute('data-timeframe') === 'custom');
+
+                // Update current filters (need to access from initTimelineFilters scope)
+                // We'll dispatch a custom event to communicate with initTimelineFilters
+                const event = new CustomEvent('applyCustomTimelineDate', {
+                    detail: { fromDate, toDate }
+                });
+                document.dispatchEvent(event);
+
+                // Update button styles
+                timeframeButtons.forEach(btn => {
+                    btn.style.background = 'transparent';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.color = 'rgba(226, 232, 240, 0.7)';
+                });
+
+                if (customBtn) {
+                    customBtn.style.background = 'rgba(37, 99, 235, 0.25)';
+                    customBtn.style.borderColor = 'rgba(37, 99, 235, 0.4)';
+                    customBtn.style.color = 'rgba(226, 232, 240, 0.95)';
+                }
+
+                closeModal();
+            } else {
+                alert('Proszę wybrać obie daty');
+            }
+        };
+    } // Zamknięcie showTimelineCustomDateModal()
+
+    {% endlocalize %}
+</script>
+{% endblock %}

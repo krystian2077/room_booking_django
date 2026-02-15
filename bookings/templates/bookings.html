@@ -1,0 +1,460 @@
+{% extends "base.html" %}
+
+{% block title %}Nowa rezerwacja{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .booking-form-container {
+            background:
+                radial-gradient(900px 420px at 15% 0%, rgba(37, 99, 235, 0.30), rgba(0,0,0,0) 60%),
+                radial-gradient(700px 360px at 90% 15%, rgba(124, 58, 237, 0.26), rgba(0,0,0,0) 55%),
+                linear-gradient(180deg, rgba(17, 24, 39, 0.82) 0%, rgba(15, 23, 42, 0.90) 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+            backdrop-filter: blur(10px);
+        }
+
+        .booking-form-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(56, 189, 248, 0.10);
+            border-radius: 50%;
+        }
+
+        .booking-form-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-section-title {
+            color: white;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items-center;
+            gap: 10px;
+        }
+
+        .form-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 2rem 0;
+        }
+
+        .form-group-card {
+            background: rgba(2, 6, 23, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .booking-form-container .form-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .booking-form-container .form-control,
+        .booking-form-container .form-select {
+            background: rgba(2, 6, 23, 0.35);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            transition: all 0.3s;
+            color: rgba(226, 232, 240, 0.92);
+            font-weight: 500;
+        }
+
+        .booking-form-container .form-control:focus,
+        .booking-form-container .form-select:focus {
+            background: rgba(2, 6, 23, 0.42);
+            border-color: rgba(37, 99, 235, 0.55);
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.18);
+        }
+
+        /* Stylizacja pól datetime-local i time */
+        .booking-form-container input[type="datetime-local"],
+        .booking-form-container input[type="date"],
+        .booking-form-container input[type="time"] {
+            background: rgba(2, 6, 23, 0.35) !important;
+            color: rgba(226, 232, 240, 0.92) !important;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.14);
+            transition: all 0.3s;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .booking-form-container input[type="datetime-local"]:focus,
+        .booking-form-container input[type="date"]:focus,
+        .booking-form-container input[type="time"]:focus {
+            background: rgba(2, 6, 23, 0.42) !important;
+            border-color: rgba(37, 99, 235, 0.55);
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.18);
+            outline: none;
+        }
+
+        /* Stylizacja calendaru w Chrome */
+        .booking-form-container input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+        .booking-form-container input[type="date"]::-webkit-calendar-picker-indicator,
+        .booking-form-container input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.2);
+            cursor: pointer;
+        }
+
+        .booking-form-container input[type="number"] {
+            background: rgba(2, 6, 23, 0.35);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(226, 232, 240, 0.92);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            transition: all 0.3s;
+        }
+
+        .booking-form-container input[type="number"]:focus {
+            background: rgba(2, 6, 23, 0.42);
+            border-color: rgba(37, 99, 235, 0.55);
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.18);
+        }
+
+        .booking-form-container .input-group-text {
+            background: rgba(2, 6, 23, 0.30) !important;
+            border: 1px solid rgba(255,255,255,0.10);
+            color: rgba(226, 232, 240, 0.92);
+        }
+
+        .counter-controls {
+            background: rgba(2, 6, 23, 0.22);
+            border-radius: 12px;
+            padding: 0.5rem;
+            display: inline-flex;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 200px;
+            border: 1px solid rgba(255,255,255,0.10);
+        }
+
+        .counter-controls button {
+            background: rgba(37, 99, 235, 0.18);
+            border: none;
+            color: rgba(226, 232, 240, 0.95);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .counter-controls button:hover {
+            background: rgba(37, 99, 235, 0.30);
+        }
+
+        .counter-controls input {
+            background: transparent;
+            border: none;
+            color: rgba(226, 232, 240, 0.95);
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .btn-submit-booking {
+            background: var(--premium-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-submit-booking:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 50px rgba(37, 99, 235, 0.28);
+        }
+
+        .btn-back-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .btn-back-link:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .booking-header {
+            text-align: center;
+            color: rgba(226, 232, 240, 0.92);
+            margin-bottom: 3rem;
+        }
+
+        .booking-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .booking-header p {
+            color: rgba(226, 232, 240, 0.70);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="booking-header">
+    <h1>📅 Nowa Rezerwacja</h1>
+    <p>Szybka i łatwa rezerwacja sali konferencyjnej</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="booking-form-container">
+            <div class="booking-form-inner">
+                <form id="booking-form">
+                                {% csrf_token %}
+
+                                <!-- Sekcja 1: Podstawowe dane -->
+                                <div class="form-section-title">
+                                    <i class="bi bi-person-badge"></i> Dane Organizatora
+                                </div>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="user_id" class="form-label">Organizator</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                            <select class="form-select" id="user_id" name="user_id" required data-no-enhance>
+                                                <option value="" selected disabled>Wybierz użytkownika...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="room_id" class="form-label">Sala Konferencyjna</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-door-open"></i></span>
+                                            <select class="form-select" id="room_id" name="room_id" required data-no-enhance>
+                                                <option value="" selected disabled>Wybierz salę...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-divider"></div>
+
+                                <!-- Sekcja 2: Szczegóły spotkania -->
+                                <div class="form-section-title">
+                                    <i class="bi bi-chat-dots"></i> Szczegóły Spotkania
+                                </div>
+                                <div class="form-group-card">
+                                    <label for="title" class="form-label">Tytuł spotkania</label>
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="Np. Standup zespołu IT" required>
+                                </div>
+
+                                <div class="form-group-card">
+                                    <label for="description" class="form-label">Opis i Agenda (opcjonalnie)</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Dodaj detale, agendę lub cele spotkania..."></textarea>
+                                </div>
+
+                                <div class="form-divider"></div>
+
+                                <!-- Sekcja 3: Czas i uczestnicy -->
+                                <div class="form-section-title">
+                                    <i class="bi bi-calendar-event"></i> Czas i Uczestnicy
+                                </div>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="start_time" class="form-label">Początek</label>
+                                        <input type="text" class="form-control" id="start_time" name="start_time" required data-flatpickr="datetime" placeholder="Wybierz datę i godzinę" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="end_time" class="form-label">Koniec</label>
+                                        <input type="text" class="form-control" id="end_time" name="end_time" required data-flatpickr="datetime" placeholder="Wybierz datę i godzinę" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="form-group-card">
+                                    <label for="attendees_count" class="form-label">Przewidywana liczba osób</label>
+                                    <div class="counter-controls">
+                                        <button type="button" onclick="adjustCount(-1)" title="Zmniejsz">
+                                            <i class="bi bi-dash-lg"></i>
+                                        </button>
+                                        <input type="number" class="form-control" id="attendees_count" name="attendees_count" min="1" value="1" required>
+                                        <button type="button" onclick="adjustCount(1)" title="Zwiększ">
+                                            <i class="bi bi-plus-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 mt-4">
+                                    <button type="submit" class="btn-submit-booking">
+                                        <i class="bi bi-check-circle me-2"></i> Potwierdź Rezerwację
+                                    </button>
+                                    <a href="{% url 'dashboard' %}" class="btn-back-link">
+                                        <i class="bi bi-arrow-left me-2"></i>Powrót do Dashboardu
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal sukcesu - upiększony -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border: none; border-radius: 20px; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center; position: relative;">
+                <div style="position: absolute; top: 20px; right: 20px; cursor: pointer;" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg" style="color: white; font-size: 1.5rem;"></i>
+                </div>
+                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                <h5 style="color: white; font-weight: 800; margin-bottom: 0.5rem; font-size: 1.5rem;">Sukces!</h5>
+                <p style="color: rgba(255,255,255,0.9); margin: 0;">Rezerwacja została pomyślnie utworzona</p>
+            </div>
+            <div class="modal-body p-4" style="text-align: center;">
+                <p class="text-muted mb-0">Sala została zarezerwowana. Możesz przejść do dashboardu, aby zobaczyć swoją rezerwację.</p>
+            </div>
+            <div class="modal-footer border-0 p-4">
+                <a href="{% url 'dashboard' %}" class="btn btn-primary w-100 py-2" style="border-radius: 10px; font-weight: 600;">
+                    Wróć do dashboardu
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Inicjalizacja daty (domyślnie następna godzina)
+    const now = new Date();
+    now.setMinutes(0, 0, 0);
+    now.setHours(now.getHours() + 1);
+    
+    const startInput = document.getElementById('start_time');
+    const endInput = document.getElementById('end_time');
+    
+    startInput.value = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    now.setHours(now.getHours() + 1);
+    endInput.value = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+
+    if (window.initFlatpickrs) {
+        window.initFlatpickrs(document);
+    }
+
+    // Ładowanie list
+    async function loadData() {
+        try {
+            const [roomsRes, usersRes] = await Promise.all([
+                fetch('{% url "get_rooms_api" %}'),
+                fetch('{% url "get_users_api" %}')
+            ]);
+            
+            if (roomsRes.ok) {
+                const rooms = await roomsRes.json();
+                const select = document.getElementById('room_id');
+                rooms.forEach(r => {
+                    const opt = document.createElement('option');
+                    opt.value = r.id;
+                    opt.textContent = `${r.name} (poj. ${r.capacity})`;
+                    select.appendChild(opt);
+                });
+            }
+
+            if (usersRes.ok) {
+                const users = await usersRes.json();
+                const select = document.getElementById('user_id');
+                users.forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u.id;
+                    opt.textContent = `${u.name} (${u.department})`;
+                    select.appendChild(opt);
+                });
+            }
+
+            // Enhance selects only after options are loaded (prevents broken dropdown UX)
+            document.querySelectorAll('#room_id, #user_id').forEach((el) => el.removeAttribute('data-no-enhance'));
+            if (window.initEnhancedSelects) {
+                window.initEnhancedSelects(document);
+            }
+        } catch (e) {
+            console.error('Błąd ładowania danych:', e);
+        }
+    }
+
+    document.getElementById('booking-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        try {
+            const response = await fetch('{% url "create_booking" %}', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            const result = await response.json();
+            if (response.ok) {
+                new bootstrap.Modal(document.getElementById('successModal')).show();
+
+                // Po 2 sekundach przekieruj na dashboard z user_id aby pokazać powiadomienia
+                setTimeout(() => {
+                    if (result.user_id) {
+                        window.location.href = `/?user_id=${result.user_id}`;
+                    } else {
+                        window.location.href = '/';
+                    }
+                }, 2000);
+            } else {
+                alert('Błąd: ' + (result.error || 'Nieznany błąd'));
+            }
+        } catch (error) {
+            alert('Wystąpił błąd podczas wysyłania żądania.');
+        }
+    });
+
+    loadData();
+
+    // Funkcja do obsługi przycisków +/- dla liczby uczestników
+    function adjustCount(delta) {
+        const input = document.getElementById('attendees_count');
+        const currentValue = parseInt(input.value) || 1;
+        const newValue = Math.max(1, currentValue + delta);
+        input.value = newValue;
+    }
+</script>
+{% endblock %}
