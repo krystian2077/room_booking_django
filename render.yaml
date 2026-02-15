@@ -1,0 +1,22 @@
+﻿services:
+  - type: web
+    name: roombooker-app
+    runtime: python
+    buildCommand: bash build.sh
+    startCommand: gunicorn room_booking_django.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        sync: false
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: roombooker-db
+          property: connectionString
+databases:
+  - name: roombooker-db
+    databaseName: roombooker
+    plan: free
+    region: frankfurt
