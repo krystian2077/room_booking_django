@@ -20,6 +20,23 @@ if [ -f "db_backup.json" ]; then
     echo "✅ Próba załadowania danych zakończona"
 fi
 
+# Tworzenie superusera jeśli nie istnieje
+echo "👤 Sprawdzanie/tworzenie superusera..."
+python manage.py shell << EOF
+from django.contrib.auth.models import User
+if not User.objects.filter(username='krystian').exists():
+    User.objects.create_superuser('krystian', 'krystian@example.com', 'admin')
+    print('✅ Utworzono superusera: krystian')
+else:
+    # Aktualizacja hasła dla istniejącego użytkownika
+    user = User.objects.get(username='krystian')
+    user.set_password('admin')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+    print('✅ Zaktualizowano hasło dla użytkownika: krystian')
+EOF
+
 echo "✅ Build zakończony pomyślnie!"
 
 
