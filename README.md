@@ -206,7 +206,7 @@ MIT License – Copyright (c) 2026
 
 ## 👤 Autor
 
-**Krystian Kowalski**
+**Krystian Potaczek**
 
 - GitHub: [@krystian2077](https://github.com/krystian2077)
-- Email: krystian@example.com
+- Email: krystian.potaczek07@gmail.com
