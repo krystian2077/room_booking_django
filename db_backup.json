@@ -1,0 +1,2104 @@
+[
+  {
+    "model": "bookings.room",
+    "pk": 2,
+    "fields": {
+      "name": "Sala B2",
+      "capacity": 20,
+      "floor": 2,
+      "description": "Średnia sala z projektorem",
+      "is_active": true,
+      "hourly_rate": "80.00",
+      "equipment": [
+        1,
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "bookings.room",
+    "pk": 3,
+    "fields": {
+      "name": "Sala Konferencyjna",
+      "capacity": 50,
+      "floor": 3,
+      "description": "Duża sala na prezentacje",
+      "is_active": true,
+      "hourly_rate": "150.00",
+      "equipment": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "bookings.room",
+    "pk": 4,
+    "fields": {
+      "name": "Pokój Kreatywny",
+      "capacity": 8,
+      "floor": 1,
+      "description": "Sala do burzy mózgów z tablicami",
+      "is_active": true,
+      "hourly_rate": "60.00",
+      "equipment": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "bookings.room",
+    "pk": 1,
+    "fields": {
+      "name": "Sala A1",
+      "capacity": 15,
+      "floor": 1,
+      "description": "Mała sala do spotkań zespołowych",
+      "is_active": true,
+      "hourly_rate": "50.00",
+      "equipment": [
+        2,
+        4
+      ]
+    }
+  },
+  {
+    "model": "bookings.room",
+    "pk": 9,
+    "fields": {
+      "name": "Premium Sala",
+      "capacity": 150,
+      "floor": 2,
+      "description": "",
+      "is_active": true,
+      "hourly_rate": "1000.00",
+      "equipment": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "bookings.room",
+    "pk": 10,
+    "fields": {
+      "name": "Dyskoteka",
+      "capacity": 300,
+      "floor": 3,
+      "description": "",
+      "is_active": true,
+      "hourly_rate": "2000.00",
+      "equipment": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "bookings.user",
+    "pk": 2,
+    "fields": {
+      "email": "anna@firma.pl",
+      "name": "Anna Nowak",
+      "department": "HR",
+      "is_admin": false,
+      "created_at": "2026-02-12T00:05:12.371"
+    }
+  },
+  {
+    "model": "bookings.user",
+    "pk": 4,
+    "fields": {
+      "email": "maria@firma.pl",
+      "name": "Maria Dąbrowska",
+      "department": "IT",
+      "is_admin": false,
+      "created_at": "2026-02-12T00:05:12.372"
+    }
+  },
+  {
+    "model": "bookings.user",
+    "pk": 3,
+    "fields": {
+      "email": "piotr@firma.pl",
+      "name": "Piotr Wiśniewski",
+      "department": "Marketing",
+      "is_admin": false,
+      "created_at": "2026-02-11T23:05:12.371"
+    }
+  },
+  {
+    "model": "bookings.user",
+    "pk": 1,
+    "fields": {
+      "email": "jan@firma.pl",
+      "name": "Jan Kowalski",
+      "department": "IT",
+      "is_admin": false,
+      "created_at": "2026-02-11T21:05:12"
+    }
+  },
+  {
+    "model": "bookings.user",
+    "pk": 9,
+    "fields": {
+      "email": "krystian.kowalski@gmail.com",
+      "name": "Krystian Kowalski",
+      "department": "Zarząd",
+      "is_admin": false,
+      "created_at": "2026-02-15T00:35:11"
+    }
+  },
+  {
+    "model": "bookings.equipment",
+    "pk": 1,
+    "fields": {
+      "name": "Projektor",
+      "icon": "projector"
+    }
+  },
+  {
+    "model": "bookings.equipment",
+    "pk": 2,
+    "fields": {
+      "name": "Tablica",
+      "icon": "chalkboard"
+    }
+  },
+  {
+    "model": "bookings.equipment",
+    "pk": 3,
+    "fields": {
+      "name": "Wideokonferencja",
+      "icon": "video"
+    }
+  },
+  {
+    "model": "bookings.equipment",
+    "pk": 4,
+    "fields": {
+      "name": "Klimatyzacja",
+      "icon": "snowflake"
+    }
+  },
+  {
+    "model": "bookings.equipment",
+    "pk": 5,
+    "fields": {
+      "name": "Nagłośnienie",
+      "icon": "volume-up"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 1,
+    "fields": {
+      "room": 2,
+      "user": 1,
+      "title": "Spotkanie zespołu",
+      "description": "Spotkanie statusowe.",
+      "start_time": "2026-02-16T12:00:00",
+      "end_time": "2026-02-16T14:00:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.384",
+      "updated_at": "2026-02-12T00:05:12.384"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 2,
+    "fields": {
+      "room": 4,
+      "user": 1,
+      "title": "Retrospektywa",
+      "description": "Ustalenie kolejnych kroków.",
+      "start_time": "2026-02-18T10:00:00",
+      "end_time": "2026-02-18T11:00:00",
+      "status": "confirmed",
+      "attendees_count": 7,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.390",
+      "updated_at": "2026-02-12T00:05:12.390"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 4,
+    "fields": {
+      "room": 4,
+      "user": 3,
+      "title": "Prezentacja projektu",
+      "description": "Spotkanie statusowe.",
+      "start_time": "2026-02-17T09:00:00",
+      "end_time": "2026-02-17T12:00:00",
+      "status": "confirmed",
+      "attendees_count": 1,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.397",
+      "updated_at": "2026-02-12T00:05:12.397"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 5,
+    "fields": {
+      "room": 1,
+      "user": 2,
+      "title": "Spotkanie zespołu",
+      "description": "Ustalenie kolejnych kroków.",
+      "start_time": "2026-02-24T11:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "status": "confirmed",
+      "attendees_count": 3,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.402",
+      "updated_at": "2026-02-12T00:05:12.402"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 6,
+    "fields": {
+      "room": 3,
+      "user": 3,
+      "title": "Szkolenie",
+      "description": "Spotkanie statusowe.",
+      "start_time": "2026-02-22T14:00:00",
+      "end_time": "2026-02-22T16:00:00",
+      "status": "confirmed",
+      "attendees_count": 10,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.404",
+      "updated_at": "2026-02-12T00:05:12.404"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 7,
+    "fields": {
+      "room": 2,
+      "user": 1,
+      "title": "Code review",
+      "description": "Ustalenie kolejnych kroków.",
+      "start_time": "2026-02-26T13:00:00",
+      "end_time": "2026-02-26T16:00:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.407",
+      "updated_at": "2026-02-12T00:05:12.407"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 8,
+    "fields": {
+      "room": 1,
+      "user": 3,
+      "title": "Code review",
+      "description": "Ustalenie kolejnych kroków.",
+      "start_time": "2026-02-26T15:00:00",
+      "end_time": "2026-02-26T16:00:00",
+      "status": "confirmed",
+      "attendees_count": 1,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.409",
+      "updated_at": "2026-02-12T00:05:12.409"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 10,
+    "fields": {
+      "room": 4,
+      "user": 2,
+      "title": "Demo dla klienta",
+      "description": "Omówienie postępów i blokad.",
+      "start_time": "2026-02-20T10:00:00",
+      "end_time": "2026-02-20T11:00:00",
+      "status": "confirmed",
+      "attendees_count": 4,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.414",
+      "updated_at": "2026-02-12T00:05:12.414"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 11,
+    "fields": {
+      "room": 1,
+      "user": 2,
+      "title": "Demo dla klienta",
+      "description": "Sesja Q&A i podsumowanie.",
+      "start_time": "2026-02-15T16:00:00",
+      "end_time": "2026-02-15T19:00:00",
+      "status": "confirmed",
+      "attendees_count": 7,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.416",
+      "updated_at": "2026-02-12T00:05:12.416"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 12,
+    "fields": {
+      "room": 1,
+      "user": 2,
+      "title": "Spotkanie zespołu",
+      "description": "Sesja Q&A i podsumowanie.",
+      "start_time": "2026-02-23T16:00:00",
+      "end_time": "2026-02-23T17:00:00",
+      "status": "confirmed",
+      "attendees_count": 8,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.419",
+      "updated_at": "2026-02-12T00:05:12.419"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 13,
+    "fields": {
+      "room": 3,
+      "user": 4,
+      "title": "Prezentacja projektu",
+      "description": "Przegląd zadań i priorytetów.",
+      "start_time": "2026-02-24T09:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "status": "confirmed",
+      "attendees_count": 6,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.422",
+      "updated_at": "2026-02-12T00:05:12.422"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 14,
+    "fields": {
+      "room": 2,
+      "user": 4,
+      "title": "Spotkanie zespołu",
+      "description": "Spotkanie statusowe.",
+      "start_time": "2026-02-20T09:00:00",
+      "end_time": "2026-02-20T12:00:00",
+      "status": "confirmed",
+      "attendees_count": 12,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.425",
+      "updated_at": "2026-02-12T00:05:12.425"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 15,
+    "fields": {
+      "room": 4,
+      "user": 4,
+      "title": "Retrospektywa",
+      "description": "Omówienie postępów i blokad.",
+      "start_time": "2026-02-21T15:00:00",
+      "end_time": "2026-02-21T16:00:00",
+      "status": "confirmed",
+      "attendees_count": 2,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.427",
+      "updated_at": "2026-02-12T00:05:12.427"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 16,
+    "fields": {
+      "room": 4,
+      "user": 3,
+      "title": "Spotkanie zespołu",
+      "description": "Ustalenie kolejnych kroków.",
+      "start_time": "2026-02-19T10:00:00",
+      "end_time": "2026-02-19T13:00:00",
+      "status": "confirmed",
+      "attendees_count": 7,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.429",
+      "updated_at": "2026-02-12T00:05:12.429"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 17,
+    "fields": {
+      "room": 2,
+      "user": 4,
+      "title": "Code review",
+      "description": "Sesja Q&A i podsumowanie.",
+      "start_time": "2026-02-23T09:00:00",
+      "end_time": "2026-02-23T11:00:00",
+      "status": "confirmed",
+      "attendees_count": 8,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.432",
+      "updated_at": "2026-02-12T00:05:12.432"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 18,
+    "fields": {
+      "room": 1,
+      "user": 1,
+      "title": "Demo dla klienta",
+      "description": "Ustalenie kolejnych kroków.",
+      "start_time": "2026-02-18T14:00:00",
+      "end_time": "2026-02-18T15:00:00",
+      "status": "confirmed",
+      "attendees_count": 1,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.435",
+      "updated_at": "2026-02-12T00:05:12.435"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 19,
+    "fields": {
+      "room": 2,
+      "user": 2,
+      "title": "Rozmowa rekrutacyjna",
+      "description": "Przegląd zadań i priorytetów.",
+      "start_time": "2026-02-26T11:00:00",
+      "end_time": "2026-02-26T13:00:00",
+      "status": "confirmed",
+      "attendees_count": 11,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.437",
+      "updated_at": "2026-02-12T00:05:12.437"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 20,
+    "fields": {
+      "room": 1,
+      "user": 1,
+      "title": "Demo dla klienta",
+      "description": "Ustalenie kolejnych kroków.",
+      "start_time": "2026-02-16T16:00:00",
+      "end_time": "2026-02-16T17:00:00",
+      "status": "confirmed",
+      "attendees_count": 4,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.440",
+      "updated_at": "2026-02-12T00:05:12.440"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 41,
+    "fields": {
+      "room": 1,
+      "user": 2,
+      "title": "koleżanki spotkanie",
+      "description": "test",
+      "start_time": "2026-02-19T20:46:00",
+      "end_time": "2026-02-19T23:47:00",
+      "status": "confirmed",
+      "attendees_count": 8,
+      "recurrence_rule": "BIWEEKLY",
+      "series_id": "2b5d8631-3591-4e56-aa73-f6f195b0b28b",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:43:20.758",
+      "updated_at": "2026-02-12T00:43:20.758"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 42,
+    "fields": {
+      "room": 1,
+      "user": 2,
+      "title": "koleżanki spotkanie",
+      "description": "test",
+      "start_time": "2026-03-05T20:46:00",
+      "end_time": "2026-03-05T23:47:00",
+      "status": "confirmed",
+      "attendees_count": 8,
+      "recurrence_rule": "BIWEEKLY",
+      "series_id": "2b5d8631-3591-4e56-aa73-f6f195b0b28b",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:43:20.760",
+      "updated_at": "2026-02-12T00:43:20.760"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 43,
+    "fields": {
+      "room": 1,
+      "user": 2,
+      "title": "koleżanki spotkanie",
+      "description": "test",
+      "start_time": "2026-03-19T20:46:00",
+      "end_time": "2026-03-19T23:47:00",
+      "status": "confirmed",
+      "attendees_count": 8,
+      "recurrence_rule": "BIWEEKLY",
+      "series_id": "2b5d8631-3591-4e56-aa73-f6f195b0b28b",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:43:20.763",
+      "updated_at": "2026-02-12T00:43:20.763"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 44,
+    "fields": {
+      "room": 1,
+      "user": 2,
+      "title": "koleżanki spotkanie",
+      "description": "test",
+      "start_time": "2026-04-02T20:46:00",
+      "end_time": "2026-04-02T23:47:00",
+      "status": "confirmed",
+      "attendees_count": 8,
+      "recurrence_rule": "BIWEEKLY",
+      "series_id": "2b5d8631-3591-4e56-aa73-f6f195b0b28b",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:43:20.766",
+      "updated_at": "2026-02-12T00:43:20.766"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 45,
+    "fields": {
+      "room": 2,
+      "user": 1,
+      "title": "SPOTKANIE PASJONATÓW PYTHON",
+      "description": "piwko i luźne rozmowy",
+      "start_time": "2026-02-19T18:00:00",
+      "end_time": "2026-02-19T23:50:00",
+      "status": "confirmed",
+      "attendees_count": 10,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:53:47.675",
+      "updated_at": "2026-02-12T00:53:47.675"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 47,
+    "fields": {
+      "room": 3,
+      "user": 2,
+      "title": "ploteczki",
+      "description": "",
+      "start_time": "2026-02-20T13:00:00",
+      "end_time": "2026-02-20T20:00:00",
+      "status": "confirmed",
+      "attendees_count": 20,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "13fb295f-3811-4229-a993-a6de5f462987",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:55:12.096",
+      "updated_at": "2026-02-12T00:55:12.096"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 48,
+    "fields": {
+      "room": 3,
+      "user": 2,
+      "title": "ploteczki",
+      "description": "",
+      "start_time": "2026-02-27T13:00:00",
+      "end_time": "2026-02-27T20:00:00",
+      "status": "confirmed",
+      "attendees_count": 20,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "13fb295f-3811-4229-a993-a6de5f462987",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:55:12.100",
+      "updated_at": "2026-02-12T00:55:12.100"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 49,
+    "fields": {
+      "room": 3,
+      "user": 2,
+      "title": "ploteczki",
+      "description": "",
+      "start_time": "2026-03-06T13:00:00",
+      "end_time": "2026-03-06T20:00:00",
+      "status": "confirmed",
+      "attendees_count": 20,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "13fb295f-3811-4229-a993-a6de5f462987",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:55:12.103",
+      "updated_at": "2026-02-12T00:55:12.103"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 52,
+    "fields": {
+      "room": 3,
+      "user": 1,
+      "title": "spotkanie ze znajomymi",
+      "description": "test",
+      "start_time": "2026-02-28T06:31:00",
+      "end_time": "2026-02-28T22:33:00",
+      "status": "confirmed",
+      "attendees_count": 20,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "43c954c1-f945-4560-93da-f14a75b51692",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T01:28:52.909",
+      "updated_at": "2026-02-12T01:28:52.909"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 53,
+    "fields": {
+      "room": 3,
+      "user": 1,
+      "title": "spotkanie ze znajomymi",
+      "description": "test",
+      "start_time": "2026-03-07T06:31:00",
+      "end_time": "2026-03-07T22:33:00",
+      "status": "confirmed",
+      "attendees_count": 20,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "43c954c1-f945-4560-93da-f14a75b51692",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T01:28:52.916",
+      "updated_at": "2026-02-12T01:28:52.916"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 54,
+    "fields": {
+      "room": 3,
+      "user": 1,
+      "title": "spotkanie ze znajomymi",
+      "description": "test",
+      "start_time": "2026-03-14T06:31:00",
+      "end_time": "2026-03-14T22:33:00",
+      "status": "confirmed",
+      "attendees_count": 20,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "43c954c1-f945-4560-93da-f14a75b51692",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T01:28:52.920",
+      "updated_at": "2026-02-12T01:28:52.920"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 55,
+    "fields": {
+      "room": 3,
+      "user": 1,
+      "title": "spotkanie ze znajomymi",
+      "description": "test",
+      "start_time": "2026-03-21T06:31:00",
+      "end_time": "2026-03-21T22:33:00",
+      "status": "confirmed",
+      "attendees_count": 20,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "43c954c1-f945-4560-93da-f14a75b51692",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T01:28:52.924",
+      "updated_at": "2026-02-12T01:28:52.924"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 57,
+    "fields": {
+      "room": 2,
+      "user": 2,
+      "title": "mecz",
+      "description": "test",
+      "start_time": "2026-02-18T19:12:00",
+      "end_time": "2026-02-18T21:15:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "792b06cc-1fcd-417a-8a2e-c2ad8a37390b",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T17:12:46.667",
+      "updated_at": "2026-02-12T17:12:46.667"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 58,
+    "fields": {
+      "room": 2,
+      "user": 2,
+      "title": "mecz",
+      "description": "test",
+      "start_time": "2026-02-25T19:12:00",
+      "end_time": "2026-02-25T21:15:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "792b06cc-1fcd-417a-8a2e-c2ad8a37390b",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T17:12:46.671",
+      "updated_at": "2026-02-12T17:12:46.671"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 59,
+    "fields": {
+      "room": 2,
+      "user": 2,
+      "title": "mecz",
+      "description": "test",
+      "start_time": "2026-03-04T19:12:00",
+      "end_time": "2026-03-04T21:15:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "792b06cc-1fcd-417a-8a2e-c2ad8a37390b",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T17:12:46.676",
+      "updated_at": "2026-02-12T17:12:46.676"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 60,
+    "fields": {
+      "room": 2,
+      "user": 2,
+      "title": "mecz",
+      "description": "test",
+      "start_time": "2026-03-11T19:12:00",
+      "end_time": "2026-03-11T21:15:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "792b06cc-1fcd-417a-8a2e-c2ad8a37390b",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T17:12:46.680",
+      "updated_at": "2026-02-12T17:12:46.680"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 65,
+    "fields": {
+      "room": 4,
+      "user": 1,
+      "title": "piwko",
+      "description": "",
+      "start_time": "2026-03-06T00:18:00",
+      "end_time": "2026-03-06T04:22:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": "BIWEEKLY",
+      "series_id": "a0be7251-51d1-4240-a759-015006cb0ed3",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T22:17:54.546",
+      "updated_at": "2026-02-12T22:17:54.546"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 66,
+    "fields": {
+      "room": 4,
+      "user": 1,
+      "title": "piwko",
+      "description": "",
+      "start_time": "2026-03-20T00:18:00",
+      "end_time": "2026-03-20T04:22:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": "BIWEEKLY",
+      "series_id": "a0be7251-51d1-4240-a759-015006cb0ed3",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T22:17:54.549",
+      "updated_at": "2026-02-12T22:17:54.549"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 67,
+    "fields": {
+      "room": 4,
+      "user": 1,
+      "title": "piwko",
+      "description": "",
+      "start_time": "2026-04-03T00:18:00",
+      "end_time": "2026-04-03T04:22:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": "BIWEEKLY",
+      "series_id": "a0be7251-51d1-4240-a759-015006cb0ed3",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T22:17:54.551",
+      "updated_at": "2026-02-12T22:17:54.551"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 68,
+    "fields": {
+      "room": 4,
+      "user": 1,
+      "title": "piwko",
+      "description": "",
+      "start_time": "2026-04-17T00:18:00",
+      "end_time": "2026-04-17T04:22:00",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": "BIWEEKLY",
+      "series_id": "a0be7251-51d1-4240-a759-015006cb0ed3",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T22:17:54.553",
+      "updated_at": "2026-02-12T22:17:54.553"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 73,
+    "fields": {
+      "room": 3,
+      "user": 3,
+      "title": "Spotkanie muzykantów",
+      "description": "",
+      "start_time": "2026-03-02T08:00:00",
+      "end_time": "2026-03-02T23:00:00",
+      "status": "confirmed",
+      "attendees_count": 40,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-13T21:48:53.618",
+      "updated_at": "2026-02-13T21:48:53.618"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 3,
+    "fields": {
+      "room": 3,
+      "user": 3,
+      "title": "Retrospektywa",
+      "description": "Przegląd zadań i priorytetów.",
+      "start_time": "2026-02-14T12:00:00",
+      "end_time": "2026-02-14T15:00:00",
+      "status": "completed",
+      "attendees_count": 4,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.395",
+      "updated_at": "2026-02-12T00:05:12.395"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 9,
+    "fields": {
+      "room": 2,
+      "user": 1,
+      "title": "Szkolenie",
+      "description": "Omówienie postępów i blokad.",
+      "start_time": "2026-02-13T10:00:00",
+      "end_time": "2026-02-13T12:00:00",
+      "status": "completed",
+      "attendees_count": 12,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:05:12.412",
+      "updated_at": "2026-02-12T00:05:12.412"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 40,
+    "fields": {
+      "room": 1,
+      "user": 1,
+      "title": "spotkanie",
+      "description": "koledzy",
+      "start_time": "2026-02-12T05:00:00",
+      "end_time": "2026-02-12T09:00:00",
+      "status": "completed",
+      "attendees_count": 4,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:42:40.707",
+      "updated_at": "2026-02-12T00:42:40.707"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 46,
+    "fields": {
+      "room": 3,
+      "user": 2,
+      "title": "ploteczki",
+      "description": "",
+      "start_time": "2026-02-13T13:00:00",
+      "end_time": "2026-02-13T20:00:00",
+      "status": "completed",
+      "attendees_count": 20,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "13fb295f-3811-4229-a993-a6de5f462987",
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:55:12.091",
+      "updated_at": "2026-02-12T00:55:12.091"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 50,
+    "fields": {
+      "room": 2,
+      "user": 3,
+      "title": "KAWKA",
+      "description": "",
+      "start_time": "2026-02-12T04:00:00",
+      "end_time": "2026-02-12T08:00:00",
+      "status": "completed",
+      "attendees_count": 4,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T00:59:58.004",
+      "updated_at": "2026-02-12T00:59:58.004"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 51,
+    "fields": {
+      "room": 1,
+      "user": 1,
+      "title": "kawka",
+      "description": "plotki",
+      "start_time": "2026-02-12T03:00:00",
+      "end_time": "2026-02-12T04:00:00",
+      "status": "completed",
+      "attendees_count": 8,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T01:27:48.460",
+      "updated_at": "2026-02-12T01:27:48.460"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 56,
+    "fields": {
+      "room": 2,
+      "user": 2,
+      "title": "ogladanie meczu",
+      "description": "test",
+      "start_time": "2026-02-12T21:00:00",
+      "end_time": "2026-02-12T22:01:00",
+      "status": "completed",
+      "attendees_count": 8,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T17:11:53.805",
+      "updated_at": "2026-02-12T17:11:53.805"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 99,
+    "fields": {
+      "room": 4,
+      "user": 2,
+      "title": "Prezentacja projektu",
+      "description": "Generowanie nowych koncepcji",
+      "start_time": "2026-02-21T05:00:43.005",
+      "end_time": "2026-02-21T06:00:43.005",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.005",
+      "updated_at": "2026-02-15T09:00:43.006"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 100,
+    "fields": {
+      "room": 1,
+      "user": 4,
+      "title": "Stand-up dzienny",
+      "description": "Omówienie bieżących zadań i postępów",
+      "start_time": "2026-03-11T08:00:43.011",
+      "end_time": "2026-03-11T12:00:43.011",
+      "status": "confirmed",
+      "attendees_count": 10,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.012",
+      "updated_at": "2026-02-15T09:00:43.012"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 64,
+    "fields": {
+      "room": 3,
+      "user": 1,
+      "title": "piwko",
+      "description": "",
+      "start_time": "2026-02-13T02:00:00",
+      "end_time": "2026-02-13T04:02:00",
+      "status": "completed",
+      "attendees_count": 45,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T22:17:17.743",
+      "updated_at": "2026-02-12T22:17:17.743"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 71,
+    "fields": {
+      "room": 1,
+      "user": 3,
+      "title": "spotkanie",
+      "description": "",
+      "start_time": "2026-02-13T00:00:00",
+      "end_time": "2026-02-13T01:00:00",
+      "status": "completed",
+      "attendees_count": 3,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-12T22:28:03.678",
+      "updated_at": "2026-02-12T22:28:03.679"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 72,
+    "fields": {
+      "room": 2,
+      "user": 3,
+      "title": "Spotkanie działu IT",
+      "description": "",
+      "start_time": "2026-02-14T15:00:00",
+      "end_time": "2026-02-14T20:00:00",
+      "status": "completed",
+      "attendees_count": 5,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-13T19:38:36.467",
+      "updated_at": "2026-02-13T19:38:36.467"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 74,
+    "fields": {
+      "room": 2,
+      "user": 3,
+      "title": "Omówienie projektu dla klienta",
+      "description": "Kawa i mały poczęstunek ",
+      "start_time": "2026-02-15T09:00:00",
+      "end_time": "2026-02-15T17:00:00",
+      "status": "confirmed",
+      "attendees_count": 16,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-14T23:01:01.340",
+      "updated_at": "2026-02-14T23:01:01.340"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 75,
+    "fields": {
+      "room": 4,
+      "user": 4,
+      "title": "Kółko programistyczne",
+      "description": "Miła atmosfera",
+      "start_time": "2026-02-15T11:00:00",
+      "end_time": "2026-02-15T19:00:00",
+      "status": "confirmed",
+      "attendees_count": 6,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "b95dbdfb-8bbb-4e80-8cec-75c574270a4e",
+      "recurring_end_date": null,
+      "created_at": "2026-02-14T23:08:31.469",
+      "updated_at": "2026-02-14T23:08:31.469"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 76,
+    "fields": {
+      "room": 4,
+      "user": 4,
+      "title": "Kółko programistyczne",
+      "description": "Miła atmosfera",
+      "start_time": "2026-02-22T11:00:00",
+      "end_time": "2026-02-22T19:00:00",
+      "status": "confirmed",
+      "attendees_count": 6,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "b95dbdfb-8bbb-4e80-8cec-75c574270a4e",
+      "recurring_end_date": null,
+      "created_at": "2026-02-14T23:08:31.473",
+      "updated_at": "2026-02-14T23:08:31.473"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 77,
+    "fields": {
+      "room": 4,
+      "user": 4,
+      "title": "Kółko programistyczne",
+      "description": "Miła atmosfera",
+      "start_time": "2026-03-01T11:00:00",
+      "end_time": "2026-03-01T19:00:00",
+      "status": "confirmed",
+      "attendees_count": 6,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "b95dbdfb-8bbb-4e80-8cec-75c574270a4e",
+      "recurring_end_date": null,
+      "created_at": "2026-02-14T23:08:31.475",
+      "updated_at": "2026-02-14T23:08:31.475"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 78,
+    "fields": {
+      "room": 4,
+      "user": 4,
+      "title": "Kółko programistyczne",
+      "description": "Miła atmosfera",
+      "start_time": "2026-03-08T11:00:00",
+      "end_time": "2026-03-08T19:00:00",
+      "status": "confirmed",
+      "attendees_count": 6,
+      "recurrence_rule": "WEEKLY",
+      "series_id": "b95dbdfb-8bbb-4e80-8cec-75c574270a4e",
+      "recurring_end_date": null,
+      "created_at": "2026-02-14T23:08:31.478",
+      "updated_at": "2026-02-14T23:08:31.478"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 81,
+    "fields": {
+      "room": 3,
+      "user": 2,
+      "title": "Integracja zespołu",
+      "description": "",
+      "start_time": "2026-02-16T13:00:00",
+      "end_time": "2026-02-16T22:00:00",
+      "status": "confirmed",
+      "attendees_count": 32,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T00:24:47.669",
+      "updated_at": "2026-02-15T00:24:47.669"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 84,
+    "fields": {
+      "room": 2,
+      "user": 4,
+      "title": "Powitanie pracownika",
+      "description": "",
+      "start_time": "2026-02-17T09:00:00",
+      "end_time": "2026-02-17T13:00:00",
+      "status": "cancelled",
+      "attendees_count": 12,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T00:28:12.876",
+      "updated_at": "2026-02-15T00:28:12.876"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 83,
+    "fields": {
+      "room": 3,
+      "user": 4,
+      "title": "Standup",
+      "description": "miła atmosfera",
+      "start_time": "2026-02-15T11:00:00",
+      "end_time": "2026-02-15T18:00:00",
+      "status": "confirmed",
+      "attendees_count": 15,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-14T23:27:02.046",
+      "updated_at": "2026-02-15T00:33:06.983"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 85,
+    "fields": {
+      "room": 9,
+      "user": 9,
+      "title": "Powitanie prezesa",
+      "description": "poczęstunek i alkohol",
+      "start_time": "2026-02-18T17:00:00",
+      "end_time": "2026-02-18T22:59:00",
+      "status": "confirmed",
+      "attendees_count": 100,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T00:50:33.658",
+      "updated_at": "2026-02-15T00:50:33.659"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 89,
+    "fields": {
+      "room": 9,
+      "user": 9,
+      "title": "Urodziny",
+      "description": "",
+      "start_time": "2026-02-19T05:00:00",
+      "end_time": "2026-02-19T06:00:00",
+      "status": "confirmed",
+      "attendees_count": 77,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T01:04:54.007",
+      "updated_at": "2026-02-15T01:04:54.008"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 101,
+    "fields": {
+      "room": 1,
+      "user": 3,
+      "title": "Kick-off projektu",
+      "description": "Prezentacja online dla uczestników zdalnych",
+      "start_time": "2026-02-22T03:00:43.015",
+      "end_time": "2026-02-22T04:00:43.015",
+      "status": "confirmed",
+      "attendees_count": 6,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.015",
+      "updated_at": "2026-02-15T09:00:43.015"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 102,
+    "fields": {
+      "room": 4,
+      "user": 4,
+      "title": "Onboarding nowych pracowników",
+      "description": "Prezentacja online dla uczestników zdalnych",
+      "start_time": "2026-02-23T23:00:43.018",
+      "end_time": "2026-02-24T03:00:43.018",
+      "status": "confirmed",
+      "attendees_count": 8,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.019",
+      "updated_at": "2026-02-15T09:00:43.019"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 103,
+    "fields": {
+      "room": 9,
+      "user": 4,
+      "title": "Stand-up dzienny",
+      "description": "Rozmowa z kluczowym klientem",
+      "start_time": "2026-02-25T19:00:43.022",
+      "end_time": "2026-02-25T21:00:43.022",
+      "status": "confirmed",
+      "attendees_count": 85,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.022",
+      "updated_at": "2026-02-15T09:00:43.022"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 104,
+    "fields": {
+      "room": 2,
+      "user": 1,
+      "title": "Spotkanie zarządu",
+      "description": "Rozpoczęcie nowego projektu",
+      "start_time": "2026-02-24T02:00:43.025",
+      "end_time": "2026-02-24T04:00:43.025",
+      "status": "confirmed",
+      "attendees_count": 17,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.025",
+      "updated_at": "2026-02-15T09:00:43.025"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 105,
+    "fields": {
+      "room": 2,
+      "user": 1,
+      "title": "Onboarding nowych pracowników",
+      "description": "Generowanie nowych koncepcji",
+      "start_time": "2026-02-18T21:00:43.029",
+      "end_time": "2026-02-19T01:00:43.029",
+      "status": "confirmed",
+      "attendees_count": 14,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.029",
+      "updated_at": "2026-02-15T09:00:43.029"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 106,
+    "fields": {
+      "room": 1,
+      "user": 3,
+      "title": "Warsztat kreatywny",
+      "description": "Rozpoczęcie nowego projektu",
+      "start_time": "2026-02-27T06:00:43.032",
+      "end_time": "2026-02-27T10:00:43.032",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.032",
+      "updated_at": "2026-02-15T09:00:43.032"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 107,
+    "fields": {
+      "room": 4,
+      "user": 2,
+      "title": "Spotkanie zarządu",
+      "description": "Spotkanie kadry zarządzającej",
+      "start_time": "2026-02-18T22:00:43.035",
+      "end_time": "2026-02-19T02:00:43.035",
+      "status": "confirmed",
+      "attendees_count": 4,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.035",
+      "updated_at": "2026-02-15T09:00:43.035"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 108,
+    "fields": {
+      "room": 4,
+      "user": 3,
+      "title": "Kick-off projektu",
+      "description": "Planowanie działań na najbliższe miesiące",
+      "start_time": "2026-03-16T20:00:43.039",
+      "end_time": "2026-03-16T23:00:43.039",
+      "status": "confirmed",
+      "attendees_count": 3,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:00:43.039",
+      "updated_at": "2026-02-15T09:00:43.039"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 110,
+    "fields": {
+      "room": 1,
+      "user": 1,
+      "title": "Spotkanie testowe - sprawdzenie systemu powiadomień",
+      "description": "Test systemu powiadomień",
+      "start_time": "2026-02-15T11:18:16.317",
+      "end_time": "2026-02-15T12:18:16.317",
+      "status": "confirmed",
+      "attendees_count": 5,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:18:16.317",
+      "updated_at": "2026-02-15T09:18:16.317"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 111,
+    "fields": {
+      "room": 9,
+      "user": 9,
+      "title": "urodziny 50",
+      "description": "",
+      "start_time": "2026-02-15T14:00:00",
+      "end_time": "2026-02-15T21:00:00",
+      "status": "confirmed",
+      "attendees_count": 66,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:19:43.149",
+      "updated_at": "2026-02-15T09:19:43.149"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 112,
+    "fields": {
+      "room": 3,
+      "user": 4,
+      "title": "Prezentacja kwartalna",
+      "description": "Omówienie wyników Q1",
+      "start_time": "2026-02-15T12:20:24.103",
+      "end_time": "2026-02-15T13:20:24.103",
+      "status": "confirmed",
+      "attendees_count": 8,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T09:20:24.105",
+      "updated_at": "2026-02-15T09:20:24.105"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 113,
+    "fields": {
+      "room": 3,
+      "user": 4,
+      "title": "test edycji",
+      "description": "",
+      "start_time": "2026-03-04T09:00:00",
+      "end_time": "2026-03-04T10:00:00",
+      "status": "confirmed",
+      "attendees_count": 3,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T08:27:21.010",
+      "updated_at": "2026-02-15T10:24:26.068"
+    }
+  },
+  {
+    "model": "bookings.booking",
+    "pk": 114,
+    "fields": {
+      "room": 10,
+      "user": 9,
+      "title": "Impreza dla całej firmy",
+      "description": "",
+      "start_time": "2026-02-15T11:00:00",
+      "end_time": "2026-02-15T22:00:00",
+      "status": "confirmed",
+      "attendees_count": 299,
+      "recurrence_rule": null,
+      "series_id": null,
+      "recurring_end_date": null,
+      "created_at": "2026-02-15T10:27:43.208",
+      "updated_at": "2026-02-15T10:27:43.208"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 343,
+    "fields": {
+      "user": 2,
+      "message": "Przypomnienie: Rezerwacja 'urodziny 50' w sali Premium Sala zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T13:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 344,
+    "fields": {
+      "user": 4,
+      "message": "Przypomnienie: Rezerwacja 'urodziny 50' w sali Premium Sala zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T13:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 345,
+    "fields": {
+      "user": 3,
+      "message": "Przypomnienie: Rezerwacja 'urodziny 50' w sali Premium Sala zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T13:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 346,
+    "fields": {
+      "user": 1,
+      "message": "Przypomnienie: Rezerwacja 'urodziny 50' w sali Premium Sala zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T13:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 347,
+    "fields": {
+      "user": 9,
+      "message": "Przypomnienie: Rezerwacja 'urodziny 50' w sali Premium Sala zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T13:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 341,
+    "fields": {
+      "user": 1,
+      "message": "Nowa rezerwacja: 'urodziny 50' w sali Premium Sala przez Krystian Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:19:43.155"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 340,
+    "fields": {
+      "user": 3,
+      "message": "Nowa rezerwacja: 'urodziny 50' w sali Premium Sala przez Krystian Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:19:43.154"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 342,
+    "fields": {
+      "user": 9,
+      "message": "Nowa rezerwacja: 'urodziny 50' w sali Premium Sala przez Krystian Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:19:43.155"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 339,
+    "fields": {
+      "user": 4,
+      "message": "Nowa rezerwacja: 'urodziny 50' w sali Premium Sala przez Krystian Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:19:43.153"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 338,
+    "fields": {
+      "user": 2,
+      "message": "Nowa rezerwacja: 'urodziny 50' w sali Premium Sala przez Krystian Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:19:43.151"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 353,
+    "fields": {
+      "user": 2,
+      "message": "Przypomnienie: Rezerwacja 'Prezentacja kwartalna' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T11:20:24.103"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 354,
+    "fields": {
+      "user": 4,
+      "message": "Przypomnienie: Rezerwacja 'Prezentacja kwartalna' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T11:20:24.103"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 355,
+    "fields": {
+      "user": 3,
+      "message": "Przypomnienie: Rezerwacja 'Prezentacja kwartalna' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T11:20:24.103"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 356,
+    "fields": {
+      "user": 1,
+      "message": "Przypomnienie: Rezerwacja 'Prezentacja kwartalna' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T11:20:24.103"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 357,
+    "fields": {
+      "user": 9,
+      "message": "Przypomnienie: Rezerwacja 'Prezentacja kwartalna' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T11:20:24.103"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 352,
+    "fields": {
+      "user": 9,
+      "message": "Nowa rezerwacja: 'Prezentacja kwartalna' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:20:24.108"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 351,
+    "fields": {
+      "user": 1,
+      "message": "Nowa rezerwacja: 'Prezentacja kwartalna' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T06:20:24.107"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 349,
+    "fields": {
+      "user": 4,
+      "message": "Nowa rezerwacja: 'Prezentacja kwartalna' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:20:24.107"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 348,
+    "fields": {
+      "user": 2,
+      "message": "Nowa rezerwacja: 'Prezentacja kwartalna' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:20:24.106"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 350,
+    "fields": {
+      "user": 3,
+      "message": "Nowa rezerwacja: 'Prezentacja kwartalna' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:20:24.107"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 363,
+    "fields": {
+      "user": 2,
+      "message": "Przypomnienie: Rezerwacja 'test' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-03-04T09:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 364,
+    "fields": {
+      "user": 4,
+      "message": "Przypomnienie: Rezerwacja 'test' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-03-04T09:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 365,
+    "fields": {
+      "user": 3,
+      "message": "Przypomnienie: Rezerwacja 'test' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-03-04T09:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 366,
+    "fields": {
+      "user": 1,
+      "message": "Przypomnienie: Rezerwacja 'test' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-03-04T09:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 367,
+    "fields": {
+      "user": 9,
+      "message": "Przypomnienie: Rezerwacja 'test' w sali Sala Konferencyjna zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-03-04T09:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 362,
+    "fields": {
+      "user": 9,
+      "message": "Nowa rezerwacja: 'test' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:27:21.019"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 361,
+    "fields": {
+      "user": 1,
+      "message": "Nowa rezerwacja: 'test' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:27:21.019"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 360,
+    "fields": {
+      "user": 3,
+      "message": "Nowa rezerwacja: 'test' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:27:21.018"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 359,
+    "fields": {
+      "user": 4,
+      "message": "Nowa rezerwacja: 'test' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:27:21.018"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 358,
+    "fields": {
+      "user": 2,
+      "message": "Nowa rezerwacja: 'test' w sali Sala Konferencyjna przez Maria Dąbrowska",
+      "is_read": true,
+      "created_at": "2026-02-15T08:27:21.012"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 328,
+    "fields": {
+      "user": 2,
+      "message": "Nowa rezerwacja: 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 przez Jan Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:18:16.320"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 329,
+    "fields": {
+      "user": 4,
+      "message": "Nowa rezerwacja: 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 przez Jan Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:18:16.325"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 330,
+    "fields": {
+      "user": 3,
+      "message": "Nowa rezerwacja: 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 przez Jan Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:18:16.326"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 331,
+    "fields": {
+      "user": 1,
+      "message": "Nowa rezerwacja: 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 przez Jan Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:18:16.326"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 332,
+    "fields": {
+      "user": 9,
+      "message": "Nowa rezerwacja: 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 przez Jan Kowalski",
+      "is_read": true,
+      "created_at": "2026-02-15T08:18:16.326"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 368,
+    "fields": {
+      "user": 2,
+      "message": "Nowa rezerwacja: 'Impreza dla całej firmy' w sali Dyskoteka przez Krystian Kowalski",
+      "is_read": false,
+      "created_at": "2026-02-15T10:27:43.215"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 369,
+    "fields": {
+      "user": 4,
+      "message": "Nowa rezerwacja: 'Impreza dla całej firmy' w sali Dyskoteka przez Krystian Kowalski",
+      "is_read": false,
+      "created_at": "2026-02-15T10:27:43.220"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 370,
+    "fields": {
+      "user": 3,
+      "message": "Nowa rezerwacja: 'Impreza dla całej firmy' w sali Dyskoteka przez Krystian Kowalski",
+      "is_read": false,
+      "created_at": "2026-02-15T10:27:43.220"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 371,
+    "fields": {
+      "user": 1,
+      "message": "Nowa rezerwacja: 'Impreza dla całej firmy' w sali Dyskoteka przez Krystian Kowalski",
+      "is_read": false,
+      "created_at": "2026-02-15T10:27:43.221"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 372,
+    "fields": {
+      "user": 9,
+      "message": "Nowa rezerwacja: 'Impreza dla całej firmy' w sali Dyskoteka przez Krystian Kowalski",
+      "is_read": false,
+      "created_at": "2026-02-15T10:27:43.222"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 373,
+    "fields": {
+      "user": 2,
+      "message": "Przypomnienie: Rezerwacja 'Impreza dla całej firmy' w sali Dyskoteka zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 333,
+    "fields": {
+      "user": 2,
+      "message": "Przypomnienie: Rezerwacja 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:18:16.317"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 334,
+    "fields": {
+      "user": 4,
+      "message": "Przypomnienie: Rezerwacja 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:18:16.317"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 335,
+    "fields": {
+      "user": 3,
+      "message": "Przypomnienie: Rezerwacja 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:18:16.317"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 336,
+    "fields": {
+      "user": 1,
+      "message": "Przypomnienie: Rezerwacja 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:18:16.317"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 337,
+    "fields": {
+      "user": 9,
+      "message": "Przypomnienie: Rezerwacja 'Spotkanie testowe - sprawdzenie systemu powiadomień' w sali Sala A1 zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:18:16.317"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 374,
+    "fields": {
+      "user": 4,
+      "message": "Przypomnienie: Rezerwacja 'Impreza dla całej firmy' w sali Dyskoteka zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 375,
+    "fields": {
+      "user": 3,
+      "message": "Przypomnienie: Rezerwacja 'Impreza dla całej firmy' w sali Dyskoteka zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 376,
+    "fields": {
+      "user": 1,
+      "message": "Przypomnienie: Rezerwacja 'Impreza dla całej firmy' w sali Dyskoteka zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:00:00"
+    }
+  },
+  {
+    "model": "bookings.notification",
+    "pk": 377,
+    "fields": {
+      "user": 9,
+      "message": "Przypomnienie: Rezerwacja 'Impreza dla całej firmy' w sali Dyskoteka zaczyna się za godzinę!",
+      "is_read": false,
+      "created_at": "2026-02-15T10:00:00"
+    }
+  }
+]
